@@ -1,0 +1,45 @@
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>mc</title>
+	</head>
+	<body>
+		<h2>Forge</h2>
+		<h3>MDK</h3>
+		<div class="byjs">forge_mdk</div>
+		<h3>Installer</h3>
+		<div class="byjs">forge_installer</div>
+		<script>
+var rss = {
+	"forge_mdk": [
+		'resources/Forge/mdk',
+		'forge-1.8.9-11.15.1.2318-1.8.9-mdk.zip',
+		'forge-1.10-12.18.0.2000-1.10.0-mdk.zip',
+		'forge-1.12.2-14.23.5.2854-mdk.zip',
+		'forge-1.15.2-31.2.47-mdk.zip',
+		'forge-1.16.4-35.1.13-mdk.zip',
+	]
+}
+		</script>
+		<script>
+var a = document.getElementsByClassName('byjs')
+for(let i=0;i<a.length;i++){
+	let ele = a[i];
+	switch(ele.innerHTML){
+		case 'forge_mdk':
+			let hp = rss.forge_mdk[0];
+			let txt = '';
+			for(let j=1;j<rss.forge_mdk.length;j++){
+				txt += `<a href=${rss.forge_mdk[0]}/${rss.forge_mdk[j]}>${rss.forge_mdk[j]}<a><br>`;
+			}
+			ele.innerHTML = txt;
+			break;
+		case 'forge_installer':
+			break;
+	}
+}
+		</script>
+	</body>
+	</html>
