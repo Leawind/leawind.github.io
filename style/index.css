@@ -1,0 +1,111 @@
+*{
+	padding: 0;
+	margin: 0;
+	text-decoration: none;
+	background: none;
+	border: none;
+	outline: none;
+	list-style: none;
+	box-sizing: border-box;
+	image-rendering: pixelated;
+	transition-duration: 100ms;
+	/* outline: 1px solid #ff0; */
+}
+*::-webkit-scrollbar{
+	width: 0px;
+}
+body{
+	font-size: 20px;
+	font-family: 'Courier New', Courier, monospace;
+}
+h1{
+	font-size: 3.2rem;
+	line-height: 3.8rem;
+	margin: 2rem 0.5rem 1rem 0;
+}
+h2{
+	font-size: 2.5rem;
+	line-height: 2.9rem;
+	margin-top: 0.5rem;
+
+}
+h3{
+	font-size: 2.2rem;
+	line-height: 2.6rem;
+	margin-top: 0.3rem;
+}
+a{
+	text-decoration: none;
+	color: inherit;
+}
+button{
+	border: none;
+}
+
+/* computer */
+.c .sidebarbtn{
+	position: fixed;
+	width: 6vmin;
+	height: 5vmin;
+	background: #226;
+	left: 2vmin;
+	top: 2vmin;
+	z-index: 128;
+	border-radius: 0.5vmin;
+}
+.c .sidebarbtn div{
+	width: 1.2vmin;
+	height: 1vmin;
+	background:#fff;
+	margin: 2vmin auto;
+}
+.c .sidebarbtn:hover{
+	background: #337;
+	cursor:pointer;
+}
+.c .sidebar{
+	width: 17rem;
+	height: 100vh;
+	background: #226;
+	box-shadow: 0 0 1vmin 0 #000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	color: #fff;
+	padding: 2rem;
+	z-index: 64;
+	overflow: auto;
+	scroll-behavior: smooth;
+}
+.c .hidedsidebar{
+	left: -17rem;
+}
+.c .sidebar .sidebarholder{
+	width: 100%;
+	height: 8vmin;
+}
+.c .introframe{
+	display: block;
+	width: calc(100vw - 10vmin);
+	height: auto;
+	border: none;
+	position: fixed;
+	height: 100vh;
+	right: 0;
+	/* transition-property: width; */
+	transition: width 100ms;
+}
+.c .withsidebar{
+	width: calc(100vw - 17rem);
+}
+.c .fa{
+	line-height: 1.7em;
+	display: block;
+	width:fit-content;
+}
+.c .fa:hover{
+	cursor: pointer;
+	text-decoration: underline;
+	/* font-weight: 900; */
+}
+/* mobile */

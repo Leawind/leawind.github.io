@@ -1,0 +1,364 @@
+<!--//介绍\\
+-->
+
+<!--
+粒子类型：
+f:	fixed固定
+s:	solid固体
+l:	liquid液体
+g:	gas气体
+
+临时类型：
+sl
+-->
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>particle</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="user-scalable=0">
+		<script>var cmpt={p0:	0,p1:	0,ps:	[]},i,j,len,jen,ken,num,obj,txt,arr</script>
+	<style>
+@keyframes flash-bg{
+    0%{background:	#000}/*
+   25%{background:	#111}
+   50%{background:	#111}
+   75%{background:	#111}*/
+  100%{background:	#888}
+}
+*{
+	padding:	0;
+	margin:	0;
+	transition-duration:	0s;
+	font-size:	3.6vmin;
+	font-family:	'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	/*
+	'Courier New', Courier, monospace;
+	'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+	'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	*/
+	color:	#ccc;
+	box-sizing:	border-box;
+	-webkit-font-smoothing:	antialiased;
+	-moz-osx-font-smoothing:	grayscale;
+}
+body{
+	background:	#00f;
+	position:	fixed;
+	width:	100vw;
+	height:	100vh;
+	left:	0;top:	0;
+}
+face{
+	position:	fixed;
+	left:	0;top:	0;
+	width:	100vw;
+	height:	100vh;
+	background:	#282828;
+}
+#start{
+	font-size:	2rem;
+	font-family:	'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+	letter-spacing:	0em;
+	background:	none;#1e1e1e;
+	height:	auto;
+	display:	block;
+	line-height:	2em;
+	margin:	34vh auto;
+	width:	6em;
+	color:	#fff;
+}#start:	hover{
+	cursor:	cell;
+	color:	#fff;
+	background:	#333;
+}
+.curtain-shadow{
+	display:	none;
+	position:	fixed;
+	left:	50vw;top:	0;
+	width:	0;
+	height:	100vh;
+	background:	none;
+	box-shadow:	0 0 20vh 15vmin #000;
+	z-index:	140;
+}
+.curtain-dontclick{
+	display:	none;
+	position:	fixed;
+	left:	0;top:	0;
+	width:	100vw;height:	100vh;
+	opacity:	0;
+	background:	#000;
+	z-index:	140;
+}
+.curtain-nightnow{
+	display:	none;
+	position:	fixed;
+	left:	0;top:	0;
+	width:	100vw;height:	100vh;
+	opacity:	0.8;
+	background:	#000;
+	z-index:	140;
+}
+.curtain-werblind{
+	display:	block;
+	position:	fixed;
+	left:	0;top:	0;
+	width:	100vw;height:	100vh;
+	opacity:	1;
+	background:	#000;
+	z-index:	9999999999;
+}
+#cvsbox{
+	position:	fixed;
+}
+#cvs{
+	display:	block;
+	width:	0;height:	0;
+	background:	#1e1e1e;
+	position:	fixed;
+	top:	50vh;left:	50vw;
+	z-index:	50;
+}#cvs:	hover{
+	cursor:	cell
+}
+btn{
+	font-size:	1.2rem;
+	line-height:	2em;
+	padding:	0 0.3em;
+	min-width:	1.6em;
+	text-align:	center;
+	display:	inline-block;
+	border:	0;
+	border-radius:	0.2em;
+	background:	rgba(50,50,50,200);
+}btn:	hover{
+	cursor:	pointer;
+	background:	rgba(60,60,60,255);
+}
+#showmenu{
+	padding:	0;
+	position:	fixed;
+	min-width:	0;
+	top:	0;right:	0;
+	background:	none;
+	border-radius:	0 0 0 50%;
+	opacity:	0.9;
+	z-index:	200;
+}#showmenu div{
+	width:	2vmin;
+	height:	2vmin;
+	margin:	7vmin;
+	background:	#fff;
+	box-shadow:	0 0 2vmin 0.1vmin #000;
+	border-radius:	100%;
+}
+#menubox{
+	/*display:	none;*/
+	position:	fixed;
+	left:	calc(100vw + 15px);
+	top:	0;
+	width:	calc(100vw + 15px);
+	height:	calc(100vh + 18px);
+	padding:	16vmin 5vw 10vmin 5vw;
+	overflow:	scroll;
+	background:	rgba(0,0,0,0.6);
+	font-family:	Arial, Helvetica, sans-serif;
+	transition-duration:	0ms;
+	transition-timing-function:	ease-in;
+	z-index:	150;
+}
+#menubox #hidemenu{
+	position:	absolute;
+	right:	15px;top:	0;
+	width:	16vmin;
+	height:	16vmin;
+	z-index:	201;
+}#hidemenu:	hover{
+	cursor:	pointer;
+}
+#menubox #infbox{
+	position:	absolute;
+	top:	0.5em;left:	0.5em;
+	width:	87vmin;
+	overflow:	visible;
+	z-index:	201;
+	line-height:	1em;
+	font-size:	1.8rem;
+	background:	none;
+	color:	#fff;
+	opacity:	0.9;	
+}
+#menubox btn{
+	display:	block;float:	left;
+	position:	relative;
+	width:	18vmin;
+	height:	18vmin;
+	border-radius:	100%;
+	margin:	3vmin 2.1vmin;
+	padding:	0;
+	background:	none;
+	color:	rgba(200,200,200,1);
+	overflow:	visible;
+	text-align:	center;
+	line-height:	18vmin;
+	font-size:	4vmin;
+	font-weight:	900;
+	letter-spacing:	-0.05em;
+	white-space:	 nowrap;
+	box-shadow:	0 0 2em -0.7 #000;
+}#menubox btn:	hover{
+	background:	rgba(255,255,255,0.2);
+	color:	#fff;
+}	
+#menuboxssssssssssssss btn *{
+	display:	block;
+	position:	absolute;
+	top:	1.4em;left:	0;
+	width:	100%;
+	text-align:	center;
+	font-size:	0.9em;
+	color:	#ffc;
+}
+#menubox #optafterstart{
+	display:	none
+}
+slide{
+	display:	block;float:	left;
+	height:	auto;
+	width:	80vw;
+	margin:	2vmin 4.3vmin;
+}
+slide *:	first-child,slide *:	nth-child(2){
+	font-size:	4.4vmin;
+	line-height:	1.4em;
+	margin:	2vmin 0;
+	overflow:	visible;
+	color:	#fff;
+}
+slide *:	first-child{
+	float:	left;
+	line-height:	1.3em;
+}
+slide *:	nth-child(2){
+	float:	right;
+}
+slide canvas{
+	display:	block;
+	width:	100%;
+	height:	2vmin;
+	background:	rgba(0,0,0,0.4);
+	border-radius:	0.4em;
+	border-left:	0.5vmin solid #fff;
+	border-right:	0.5vmin solid #fff;
+}
+
+	</style>
+	</head>
+	<body onclick="document.body.requestFullscreen()">
+		<face>
+			<btn id='start' onclick="Df.start()">B E G I N</btn>
+			<pre>                version:	 v0.31.4 Beta (开发中)</pre>
+		</face>
+		<dv id="cvsbox">
+			<btn id="showmenu" onclick="Df.showmenu()"><div></div></btn>
+			<canvas id="cvs" width="1280" height="720">cvs</canvas>
+		</dv>
+		<dv id="menubox" onclick="Df.hidemenu()">
+			<canvas id="hidemenu" onclick="Df.hidemenu()">hidemenu</canvas>
+			<dv id="infbox">partical</dv>
+			<!--////  BUTTONS  \\\\ -->
+		<dv id="optbeforestart">
+			<pre><dv id=heyy style="
+position:	absolute;bottom:	5vh;left:	0;font-size:	3.2vmin;text-align:	center;width:	100vw;color:	#777
+			">灵感来自Particle sandbox(smellymoo.com)
+联系我们|意见建议|隐私声明|法律声明|网站地图|皆不存在
+©Copyright 2020 LEAWIND no rights reserved.
+E-mail:	leawind@yeah.net
+京ICP证tan(π/2)号</dy></pre>
+		</dv>
+			<btn onclick="location.reload(true)">刷新</btn>
+		<dv id="optafterstart">
+			<btn onclick="Df.format()">清空</btn>
+			<btn onclick="Df.toggleViewmode()"><sta>viewmode</sta></btn>
+			<btn onclick="Df.togglePause()"><sta>pause</sta></btn>
+			<dv id="utslides"></dv>
+			<dv id="utbuttons">待加入的按钮们</dv>
+		</dv>
+			<btn onclick="showIntroToThisGuy();">???</btn>
+			<!--\\\\  BUTTONS  ////-->
+		</dv>
+		<dv class="curtain-nightnow" id="darker"></dv>
+
+		<script src="dom.js"></script>
+		<script src="main.js"></script>
+		<script src="ut.js"></script>
+		<script>
+//For introduction
+window.showIntroToThisGuy = ()=>{
+	intro_Ch=
+`
+提示：建议用触屏设备玩。
+ 电脑端请在浏览器中按F12进入开发者模式并打开模拟手机的触屏模式。
+
+食用帮助：
+ 点击屏幕右上角以弹出菜单,
+ 各种颜色的圆形按钮对应不同粒子。
+ 选定后关闭菜单,把手指按在屏幕上放置粒子(˙ω˙)
+ 粒子有默认的温度,可相互进行热传递。
+ 环境温度和火焰粒子的默认温度可以通过滑动条设置(单位:	 K)。
+ 点击第一行中的"视觉"可以切换显示模式(正常normal|热成像thermal|物理状态state)
+ eraser是橡皮擦
+ 很多粒子都有熔点,沸点。
+ 火焰粒子在每一帧中都有一定几率消失,所以不会一直存在。
+
+目前这只是测试版,可能存在一些bug,粒子种类也不多。以后(可能)会慢慢加入新特性(例如燃烧,腐蚀,植物等)。
+
+按键:	
+	E-菜单
+	F-开始
+	Q-暂停/继续
+	R-刷新
+	V-切换视觉
+不过没键盘也问题不大
+`
+intro_En=
+`
+Tip：recommend to play with touch screen.
+ If u're using PC,press F12(developer mode)and click the button looks like a phone.
+
+Help:	
+ Click the upper right corner of the screen,then you'll get a menu.
+ The round buttons with different colors mean different particles
+ Click one of them and close the menu,touch the screen to place the particles.(˙ω˙)
+ Particles have their temperature.There are Heat transfer between them.
+ You can set the temp of environment and temp of fire through slider(Unit:	 K.Not℉.Not℃).
+ Click the button "视觉" in the 1st line to toggle the view mode(normal|thermal|physics state)
+ Eraser is eraser...
+ Most particles have their melting point,boiling point.
+ The particles of fire are possible to disappear in each frame.So they don't exist forever.
+
+This is just a development version.Maybe there're some bugs.
+The kinds of particles are not much now.
+I will add some new functions in the future.(such as burning,corrosion,plants)
+
+keys：
+	E-menu
+	F-BEGIN
+	Q-pause/continue
+	R-refresh
+	V-switch view mode
+But it doesn't matter without keyboard.
+`
+alert(intro_Ch+`
+Chinese/
+____________________________
+____________________________
+
+/English
+`+intro_En)
+}
+		</script>
+	</body>
+</html>
