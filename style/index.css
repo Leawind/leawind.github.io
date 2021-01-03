@@ -8,7 +8,7 @@
 	list-style: none;
 	box-sizing: border-box;
 	image-rendering: pixelated;
-	transition-duration: 100ms;
+	transition-duration: 60ms;
 	/* outline: 1px solid #ff0; */
 }
 *::-webkit-scrollbar{
@@ -17,6 +17,7 @@
 body{
 	font-size: 20px;
 	font-family: 'Courier New', Courier, monospace;
+	background: #226;
 }
 h1{
 	font-size: 3.2rem;
@@ -41,7 +42,9 @@ a{
 button{
 	border: none;
 }
-
+iframe{
+	background: #fff;
+}
 /* computer */
 .c .sidebarbtn{
 	position: fixed;
@@ -93,7 +96,7 @@ button{
 	height: 100vh;
 	right: 0;
 	/* transition-property: width; */
-	transition: width 100ms;
+	transition: width 80ms;
 }
 .c .withsidebar{
 	width: calc(100vw - 17rem);
