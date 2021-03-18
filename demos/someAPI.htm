@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>APIs</title>
+		<meta charset="utf-8">
+		<meta>
+		<style>
+*{
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+body{
+	padding:1em;
+	font-size: 3.6vmin;
+	font-family:'Courier New', Courier, monospace;
+	font-weight: 900;
+}
+		</style>
+	</head>
+	<body>
+		<div id="apis">
+		</div>
+		<script>
+//DOM
+var box = document.getElementById('apis')
+
+
+//----------------
+var list = [
+	['new Date()',''],
+	['new Date()*1',''],
+	['screen.width',''],
+	['screen.height',''],
+	['innerWidth',''],
+	['innerHeight',''],
+	['outerWidth',''],
+	['outerHeight',''],
+	['navigator.language','language'],
+	['navigator.onLine',''],
+	['navigator.geolocation',''],
+	['navigator.platform',''],
+	['navigator.appName',''],
+	//['navigator.appVersion',''],
+	['BTY.charging',''],
+	['BTY.chargingTime',''],
+	['BTY.level',''],
+	['navigator.clipboard',''],
+	['',''],
+	['',''],
+	['',''],
+	['',''],
+	['',''],
+	['',''],
+	['',''],
+	['',''],
+	['',''],
+]
+function inr(){
+	let txt = '',i = 0
+	while(i<list.length){
+		let e = list[i]
+		if(e[0]||e[1])	
+		txt += `${e[1]?e[1]:e[0]} : ${eval(e[0])} <br>`
+		box.innerHTML = txt
+		i++
+	}
+}
+setInterval(inr,11)
+
+navigator.getBattery().then(function(battery) {     
+	window.BTY = battery
+})
+/*
+navigator.getUserMedia({
+		video: true, //使用摄像头对象
+		audio: false  //不适用音频
+	}, function(strem){
+	}, ()=>{});
+*/
+		</script>
+	</body>
+</html>

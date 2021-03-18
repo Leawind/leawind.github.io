@@ -1,0 +1,481 @@
+<!--
+	待解决:
+	inperson模式
+	镜头的移动和转动
+	绘制线条
+-->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>3D-viewer</title>
+	<script>'strict';
+`插件:向量运算`
+window.Vector = {
+	plus : function(v0, v1){
+		this.i = v0.length - 1
+		this.v = []
+		while(this.i>=0){
+			this.v[this.i] = v0[this.i] + v1[this.i]
+			this.i --
+		}
+		return this.v
+	},
+	sub : function(v0, v1){
+		this.i = v0.length - 1
+		this.v = []
+		while(this.i>=0){
+			this.v[this.i] = v0[this.i] - v1[this.i]
+			this.i --
+		}
+		return this.v
+	},
+	VVmul : function(v0, v1){
+		this.v = 0
+		this.i = v0.length - 1
+		while(this.i >= 0){
+			this.v += v0[this.i] * v1[this.i]
+			this.i --
+		}
+		return this.v
+	},
+	NVmul : function(a0, v1){
+		this.v = []
+		this.i = v1.length - 1
+		while(this.i >= 0){
+			this.v[this.i] = v1[this.i] * a0
+			this.i --
+		}
+		return this.v
+	},
+	VNmul : function(v0, a1){
+		return this.NVmul(a1, v0)
+	},
+	tp : function(v0, v1){	//|>
+		var a2 = (v0[0]*v1[0]+v0[1]*v1[1]+v0[2]*v1[2])/(v1[0]*v1[0]+v1[1]*v1[1]+v1[2]*v1[2])
+		this.v = [
+			v1[0] * a2,
+			v1[1] * a2,
+			v1[2] * a2,
+		]
+		return this.v
+	},
+	tv : function(v0, v1){	//|-
+		return this.sub(v0, this.tp(v0, v1))
+		/* IT IS WRONG !!!
+		var a2 = v1[0]*v1[0] + v1[1]*v1[1] + v1[2]*v1[2]
+		return [
+			(v1[1]*(v0[0]*v1[1]-v1[0]*v0[1])+v1[2]*(v0[0]*v1[2]-v1[0]*v0[2])) / a2,
+			(v1[0]*(v1[0]*v0[1]-v0[0]*v1[1])+v1[2]*(v0[1]*v1[2]-v1[1]*v0[2])) / a2,
+			(v1[1]*(v1[0]*v0[2]-v0[0]*v1[2])+v1[1]*(v1[1]*v0[2]-v0[1]*v1[2])) / a2,
+		]
+		*/
+	},
+	abs : function(a0){
+		this.i = a0.length - 1
+		this.v = 0
+		while(this.i>=0){
+			this.v += a0[this.i]*a0[this.i]
+			this.i --
+		}
+		return Math.sqrt(this.v)
+	},
+	toUnit : function(v0){
+		if(this.abs(v0)===0)return v0
+		return this.NVmul(1/this.abs(v0), v0)
+	},
+	$ : function(a0, a1, a2){
+		switch(a1){
+			case '+':
+				return this.plus(a0, a2)
+			case '-':
+				return this.sub(a0, a2)
+			case '*':
+				if(typeof a0 === "number"){
+					return this.NVmul(a0, a2)
+				}else if(typeof a2 === "number"){
+					return this.NVmul(a2, a0)
+				}else{
+					return this.VVmul(a0, a2)
+				}
+			case '|-':
+				return this.tv(a0, a2)
+			case '|>':
+				return this.tp(a0, a2)
+		}
+		return
+	},
+	v : null,
+	i : null,
+}
+	</script>
+	<script>
+window.e =		Math.E
+window.pi =		Math.PI
+window.sin =	Math.sin
+window.cos =	Math.cos
+window.tan =	Math.tan
+window.pow =	Math.pow
+window.round =	Math.round
+window.sqrt =	Math.sqrt
+window.ln =		Math.log
+window.log =	(x, y)=>Math.log(y)/Math.log(x)
+window.random =	Math.random
+window.abs =	Math.abs
+window.min =	Math.min
+window.max =	Math.max
+	</script>
+	<style>
+*{
+	padding:	0;
+	margin:	0;
+	transition-duration: 200ms;
+}
+canvas{
+	image-rendering: pixelated;
+}
+body{
+	background:	#00f;
+}
+#scrn{
+	width:	100vw;
+	height:	auto;
+	margin:	auto;
+	background:	#000;
+	position:	fixed;
+	left:0; top:0;
+}
+	</style>
+</head>
+<body>
+	<canvas id="scrn"></canvas>
+	<script>'strict';
+window.t = 0	//inr运行时在每一帧初始时增加(每秒增加1)，时间变量
+window.viewer = {
+	Space : function(obj){
+		this.func = [
+			{
+				visible : true,
+				_ : (x, y) => Math.sin(x* y)
+			}
+		]
+		this.tR= [-1,1]	//window.t的变化范围
+		//The points to show:
+		this.P = [
+			{
+				p : [0, 0, 0],
+				r : 'auto',		//num | auto
+				col: 'auto',	//#000 | auto
+			},
+		]
+		//The lines to show:
+		this.L = [
+			{
+				P0 : [0, 0, 0],
+				P1 : [10, 0, 0],
+				col : '#f00',
+			},
+			{
+				P0 : [0, 0, 0],
+				P1 : [0, 10, 0],
+				col : '#0f0',
+			},
+			{
+				P0 : [0, 0, 0],
+				P1 : [0, 0, 10],
+				col : '#00f',
+			},
+		]
+		//visible range(可视范围，即采样点范围):
+		this.vrX = [-10,10]
+		this.vrY = [-10,10]
+		//采样sampling:
+		this.targetFPS = 0		//目标帧率，如果不为0则改变 sampleCount 或 sampleDensity 以使帧率达到该值
+		this.samplingMode = 'byUnit'	//采样模式，(byUnit:固定间隔 | byCount:固定数量)
+		this.sampleDensity = 0.4	//采样密度，相邻采样点的最小间距	#仅当this.samplingMode为byUnit时有效
+		this.sampleCount = [100, 100]	//采样点数量(X, Y)	#仅当this.samplingMode为byCount时有效
+		//摄像机camera:
+		this.viewMode = 'parallel'	//parallel:从无限远处观察|inperson:身临其境
+		this.camera = {
+			P : [0, 0, 0],		//parallel:投影平面中心点 | inperson:镜头坐标
+			a : [0, 0, 0],		// real moving acculation
+			v : [0, 0, 0],		// real moving speed
+			d : [-6, 0.1, -10],	//parallel:投影平面法向量 | inperson:镜头所指方向
+			//only for viewMode 'parallel'
+			sightRange : [16, 9]	//投影平面的宽，高
+		}
+		this.ele = null	//canvas 元素
+		this.c = null	//Context 2D 对象
+		this.doDraw = true
+		for(att in obj){
+			this[att] = obj[att]
+		}
+		if(this._)this._(this)
+		if(this.c) this.c.translate(this.ele.width/2, this.ele.height/2)	///
+	},
+	spaces : [],	//用于存放Space对象，只有将创建的Space对象添加到这里，并设置其对应的2Dcontext，inr_draw()才能绘制它
+	activeSpace : null,	//当前活动的space
+	projectionToSurface : (p,cmr)=>{
+		///calculate [x,y] by p[x,y,z], cmr
+		var
+			[dx,dy,dz] = [...cmr.d],
+			_OP = Vector.$(p ,'-', cmr.P),
+			_Dx = [-dy, dx, 0],
+			_Dy = Vector.tv([0, 0, -1], cmr.d)
+		_Dx = Vector.toUnit(_Dx)
+		_Dy = Vector.toUnit(_Dy)
+		return [
+			Vector.VVmul(_OP, _Dx),
+			Vector.VVmul(_OP, _Dy),
+		]
+	},
+	t0 : 0,
+	t1 : 1,
+	FPS : 0,
+	T0 : 0,	//用于计算FPS
+	T1 : 0,
+	dtT: 0,	//每一帧经历的时间
+	FPS_draw : 0,
+
+	inr_draw : ()=>{
+		let V = viewer, j, k, l, k_i, l_i
+		let S = viewer.activeSpace, c = S.c, cmr = S.camera
+		V.T1 = new Date() /1e3
+		V.dtT = V.T1 - V.T0
+		window.t += V.dtT
+		V.FPS_draw =1 / V.dtT
+		V.T0 = V.T1
+		if(!(cmr.d[0]*cmr.d[1])){
+			cmr.d[0] += 0.00000000000001
+		}
+		//------------------
+		// key bindings:
+		let _dv = Vector.tv(cmr.d, [0, 0, 1])
+		cmr.ay = (!!user.keys[87] - !!user.keys[83])	//87W 83S
+		cmr.ax = (!!user.keys[68] - !!user.keys[65])	//65A 68D
+		if(Vector.abs(cmr.v)!==0 && !(cmr.ax || cmr.ay)){
+			cmr.a = Vector.NVmul(-cmr.sightRange[0], cmr.v)
+		}else{
+			cmr.ay = Vector.NVmul(cmr.ay, _dv)
+			cmr.ax = Vector.NVmul(cmr.ax, [-_dv[1], _dv[0], 0])
+			cmr.a =Vector.NVmul(10*cmr.sightRange[0], Vector.toUnit(Vector.plus(cmr.ax, cmr.ay)))
+		}
+		if(user.keys[74] || user.keys[76]){
+			let Ag = Math.atan2(cmr.d[1], cmr.d[0]) + V.dtT *3 * ((!!user.keys[74] < !!user.keys[76]) - 0.5)
+			//Ag = Ag/2/3.14159265358979323*360
+			var absz = Vector.abs([cmr.d[0], cmr.d[1]])
+			cmr.d[0] = Math.cos(Ag)
+			cmr.d[1] = Math.sin(Ag)
+			cmr.d[2] *= Vector.abs([cmr.d[0], cmr.d[1]]) / absz
+		}
+		if(user.keys[73] || user.keys[75]){
+			var absz = Vector.abs([cmr.d[0], cmr.d[1]])
+			let Ag = Math.atan2(cmr.d[2],absz) + ((!!user.keys[73] < !!user.keys[75]) - 0.5) * 0.15
+			cmr.d[2] = Math.tan(Ag) * absz
+			// Ag = Math.tan(Ag)
+			// Ag = Ag/2/3.14159265358979323*360
+		}
+		if(user.keys[69] || user.keys[81]){
+			let Ag = ((!!user.keys[69] < !!user.keys[81]) - 0.5)
+			Ag = Math.pow(2, Ag*V.dtT)
+			window.Ag = Ag
+			cmr.sightRange[0] *= Ag
+			cmr.sightRange[1] *= Ag
+		}
+
+		//if(Vector.abs(what)!==0)console.log(what)
+		// camera's moving:
+		// a => v
+		cmr.v = [
+			cmr.v[0] + cmr.a[0]*V.dtT,
+			cmr.v[1] + cmr.a[1]*V.dtT,
+			cmr.v[2] + cmr.a[2]*V.dtT,
+		]
+		if(S.inr_)	S.inr_(S,cmr)
+		// v => P
+		if(Vector.abs(cmr.v) > cmr.sightRange[0]){
+			cmr.v = Vector.NVmul(cmr.sightRange[0], Vector.toUnit(cmr.v))
+		}
+		cmr.P = [
+			cmr.P[0] + cmr.v[0]*V.dtT,
+			cmr.P[1] + cmr.v[1]*V.dtT,
+			cmr.P[2] + cmr.v[2]*V.dtT,
+		]
+		//------------------
+		c.clearRect(-S.ele.width, -S.ele.height, 2*S.ele.width, 2*S.ele.height)
+		// S.ele.width = S.ele.width
+		// c.translate(S.ele.width/2, S.ele.height/2)	///
+		//delete S.P:
+		S.P = []
+		S.t += V.dtT
+		if(S.t > S.tR[1]){
+			S.t = S.tR[0] + S.t - S.tR[1]
+		}
+		//采样 Sample:
+		switch(S.samplingMode){
+			case 'byUnit':	//operate S.P by sampleDensity
+				if(S.targetFPS){
+					S.sampleDensity += ( !!(S.targetFPS > viewer.FPS_draw) - 0.5)*0.003
+				}
+				//遍历所有函数 Traverse the functions:
+				j = S.func.length - 1
+				while(j >= 0){
+					let fun = S.func[j]
+					if(!fun.visible){
+						j --
+						continue
+					}
+					k = Math.ceil(S.vrX[0])
+					while(k < S.vrX[1]){
+						l = Math.ceil(S.vrY[0])
+						while(l < S.vrY[1]){
+							S.P.push({
+								p : [k, l, fun._(k, l)],
+								r : 'auto',
+								col : 'auto',
+							})
+							l += S.sampleDensity
+						}
+						k += S.sampleDensity
+					}
+					j --
+				}
+				break
+			case 'byCount':	//operate S.P by sampleCount
+				if(S.targetFPS){
+					var dt = ( !!(S.targetFPS < viewer.FPS_draw) - 0.5)*0.5
+					S.sampleCount[0] += dt
+					S.sampleCount[1] += dt
+				}
+				j = S.func.length - 1
+				while(j >= 0){
+					let fun = S.func[j]
+					if(!fun.visible){
+						j --
+						continue
+					}
+					k = S.vrX[0], k_i = (S.vrX[1] - S.vrX[0]) / S.sampleCount[0]
+					while(k < S.vrX[1]){
+						l = S.vrY[0], l_i = (S.vrY[1] - S.vrY[0]) / S.sampleCount[1]
+						while(l < S.vrY[1]){
+							S.P.push({
+								p : [k, l, fun._(k, l)],
+								r : 'auto',
+								col : 'auto',
+							})
+							l += l_i
+						}
+						k += k_i
+					}
+					j --
+				}
+				break
+		}
+		//draw the points
+		switch(S.viewMode){
+			case 'parallel':
+				//Traverse the points,and draw them
+				j = 0
+				while(j < S.P.length){
+					let p = S.P[j]
+					var p_ = viewer.projectionToSurface(p.p,cmr)
+					///draw by [x,y],ele.width/height, P[j].col, P[j].r, on S.c
+					p_ = [
+						p_[0] / cmr.sightRange[0] * S.ele.width,
+						p_[1] / cmr.sightRange[1] * S.ele.height,
+					]
+					S.c.beginPath()
+					S.c.arc(...p_,p.r === 'auto'? 2 : p.r,0,7)
+					S.c.fillStyle = p.col==='auto'? '#ff0' : p.col
+					S.c.fill()
+					j ++
+				}
+				//Traverse the lines,and draw them
+				j = 0
+				while(j < S.L.length){
+					l = S.L[j]
+					p0 = viewer.projectionToSurface(l.P0, cmr)
+					p1 = viewer.projectionToSurface(l.P1, cmr)
+					p0 = [
+						p0[0] / cmr.sightRange[0] * S.ele.width,
+						p0[1] / cmr.sightRange[1] * S.ele.height,
+					]
+					
+					p1 = [
+						p1[0] / cmr.sightRange[0] * S.ele.width,
+						p1[1] / cmr.sightRange[1] * S.ele.height,
+					]
+					S.c.beginPath()
+					S.c.moveTo(...p0)
+					S.c.lineTo(...p1)
+					S.c.strokeStyle = l.col
+					S.c.lineWidth = 3
+					S.c.stroke()
+					j ++
+				}
+				break
+			case 'inperson':
+				break
+		}
+	},
+}
+	</script>
+	<script>
+cvs = document.getElementById('scrn')
+cvs.c = cvs.getContext('2d')
+viewer.spaces.push(new viewer.Space({
+	func : [
+			{
+				visible : true,
+				_ : (x, y) => sin(x*y)
+			}
+		],
+	ele : cvs,
+	c : cvs.c,
+	samplingMode : 'byCount',
+	sampleDensity : 0.5,
+	targetFPS : 23,
+	sampleCount : [100,100],
+	camera : {
+		P : [1, 1, 0],		//parallel:投影平面中心点 | inperson:镜头坐标
+		d : [0, -1, -1],	//parallel:投影平面法向量 | inperson:镜头所指方向
+		sightRange : [16*0.4, 0.4* 9],	//投影平面的宽，高
+		a : [0,0,0],
+		v : [0,0,0],
+	},
+	vrX : [0, 6],
+	vrY : [0, 6],
+	_ : (the)=>{
+		the.ele.width =1920
+		the.ele.height=1080
+		viewer.activeSpace = the
+	},
+	inr_ : function(S,cmr){
+		var sr = Math.min(...cmr.sightRange)/2
+		S.vrX = [cmr.P[0] - sr, cmr.P[0] + sr]
+		S.vrY = [cmr.P[1] - sr, cmr.P[1] + sr]
+	}
+}))
+setInterval(viewer.inr_draw,1e3/32);
+
+window.user = {
+	keys : [],
+	maxV : 1,	//camera's max moving speed, * 1 unit/s
+	V : 0,	//camera's moving speed
+	a : 0.4,
+}
+window.onkeydown=()=>{
+	user.keys[event.keyCode] = true
+	console.log(event.keyCode)
+	if(event.keyCode === 116){	//F5
+		location.reload(1)
+	}
+	event.preventDefault()
+}
+window.onkeyup=()=>{
+	user.keys[event.keyCode] = false
+}
+	</script>
+</body>
+</html>

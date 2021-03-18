@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Crimpt</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body onkeydown="try{this.requestFullscreen()}catch(ERROR){}">
+
+		<canvas id=a></canvas> 
+
+		<dv id='conspage' onclick="Es.inpute.focus()">
+			<dv id="cons">
+			</dv>
+			<input type="text" id="inpute" value=">"></input>
+		</dv>
+<!--
+<dv class="hurt_effect" style="height:100vh;left:0;top:0;"></dv>
+<dv class="hurt_effect" style="height:100vh;right:0;top:0;"></dv>
+<dv class="hurt_effect" style="width:100vw;top:0;left:0;"></dv>
+<dv class="hurt_effect" style="width:100vw;bottom:0;left:0;"></dv>
+<dv class="hurt_effect" style="width:100vw;height:100vh;top:0;left:0;box-shadow:0;background:#f00;opacity:0.3"></dv>
+-->
+		<script id="worker" type="typeyoudonotknow">'use strict';
+var $=null,data,func,arg,res;
+onmessage = (event)=>{
+	arg = event.data;
+	res = false;
+	func = arg.slice(0,8);	//whitch function to handle this
+	arg = arg.slice(8);	//arguements(txt)
+	switch(func){
+	 case 'pathPlan': //path planning. (x,y);
+		arg = arg.split('^')
+////-------------------------------------------------------\\\\
+var _ = []
+var i=$.length-1;
+while(i>=0){
+	_[i] = [];
+	var j = $[i].length-1;
+	while(j>=0){
+		_[i][j] = -1;
+		j--;
+	};
+	i--;
+};
+var 
+	marked = [[arg[0],arg[1]]],
+	n = 0;
+_[arg[0]][arg[1]] = n;
+while(marked.length >0){
+	n ++;
+	var len = marked.length,
+	i=0,m;
+	while(i<len){
+		m = marked[i];
+		var mx=m[0]*1,my=m[1]*1
+		//(there is no wall.          && not yet marked)
+		if($[mx  ][my-1] && !$[mx  ][my-1][0] && _[mx  ][my-1]<0){	//North
+			_[mx  ][my-1] = n;
+			marked.push([mx  ,my-1])
+		}
+		if($[mx+1]       && !$[mx+1][my  ][0] && _[mx+1][my  ]<0){	//East
+			_[mx+1][my  ] = n;
+			marked.push([mx+1,my  ])
+		}
+		if($[mx  ][my+1] && !$[mx  ][my+1][0] && _[mx  ][my+1]<0){	//South
+			_[mx  ][my+1] = n;
+			marked.push([mx  ,my+1])
+		}
+		if($[mx-1]       && !$[mx-1][my  ][0] && _[mx-1][my  ]<0){	//West
+			_[mx-1][my  ] = n;
+			marked.push([mx-1,my  ])
+		}
+		if($[mx-1]       && $[mx-1][my-1] && !$[mx-1][my-1][0] && !($[mx-1][my][0] && $[mx][my-1][0]) && _[mx-1][my-1]<0){	//WN
+			_[mx-1][my-1] = n;
+			marked.push([mx-1,my-1])
+		}
+		if($[mx+1]       && $[mx+1][my-1] && !$[mx+1][my-1][0] && !($[mx+1][my][0] && $[mx][my-1][0]) && _[mx+1][my-1]<0){	//EN
+			_[mx+1][my-1] = n;
+			marked.push([mx+1,my-1])
+		}
+		if($[mx+1] && $[mx+1][my+1] && !$[mx+1][my+1][0] && !($[mx+1][my][0] && $[mx][my+1][0]) && _[mx+1][my+1]<0){	//ES
+			_[mx+1][my+1] = n;
+			marked.push([mx+1,my+1])
+		}
+		if($[mx-1] && $[mx-1][my+1] && !$[mx-1][my+1][0] && !($[mx-1][my][0] && $[mx][my+1][0]) && _[mx-1][my+1]<0){	//WS
+			_[mx-1][my+1] = n;
+			marked.push([mx-1,my+1])
+		}
+		i ++;
+	}
+	marked.splice(0,len);
+}
+console.log(_)
+_ = JSON.stringify(_)
+
+////-------------------------------------------------------////
+		res = `pathPlan${arg[0]}^${arg[1]}^${_}`//a obj's JSON
+		break;
+	 case '': //
+		break;
+	 case 'setMap--': //set the map. only including these information : width, height, each block is a wall or just a space
+		$ = JSON.parse(arg);
+		return;
+		break;
+	}
+	if(res)postMessage(res);
+}
+		</script>
+		<script>
+'use strict';
+var Es=['#a','canvas','#conspage','#cons','#inpute'];
+for(var i=0;i<Es.length;i++){
+	if(Es[i][0]==='#'){
+		var txt = Es[i].slice(1)
+		Es[txt] = document.getElementById(txt);
+		if(Es[txt].tagName==='CANVAS'){
+			Es[txt].c = Es[txt].getContext('2d');
+			Es[txt].c.ele = Es[txt];
+		};
+	}else{
+		Es[Es[i].replace(/\./g,'')] = document.querySelectorAll(Es[i]);
+	}
+}
+var blob = new Blob([document.getElementById('worker').textContent]);
+var url = window.URL.createObjectURL(blob);
+var worker = new Worker(url);
+worker.onmessage = (event)=>{
+	var func,arg;
+	arg = event.data;
+	func = arg.slice(0,8);	//whitch function to handle this
+	arg = arg.slice(8);	//arguments
+	switch(func){
+	 case 'pathPlan': //set the plan into current map
+		var M = crimpt.M;
+		arg = arg.split('^');
+	//	try{	////////////////////////////////////////
+		M._[arg[0]][arg[1]] = JSON.parse(arg[2]);///
+	//	}catch(error){}/////////////////////////////
+		break;
+	 case '':
+		break;
+	}
+	console.log(`get a message:\n${func}`);}
+		</script>
+		<script src="maps.js"></script>
+		<script src="main.js"></script>
+	</body>
+</html>

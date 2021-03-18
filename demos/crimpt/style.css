@@ -1,0 +1,61 @@
+*{
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+body{
+	background: #000;
+	cursor: crosshair;
+}
+canvas,img{
+	image-rendering: pixelated;
+}
+dv{
+	display: block;
+
+}
+
+#a{/*the canvas a*/
+	width:100vw;
+	height:100vh;
+	/*filter: blur(1vmin)*/
+	transition: filter 60ms;
+}
+.hurt_effect{
+	display: block;
+	position: fixed;
+	box-shadow: 0 0 160px 5vmin #f00;
+	opacity: 0.96;
+	width:0;
+	height:0;
+}
+#conspage{
+	display: none;
+	position: fixed;
+	left:0;bottom:0;
+	width:100vw;
+	height:100vh;
+	padding:0 0 0 1em;
+	background: rgba(0,0,0,0.4);
+	overflow:scroll;
+	filter: blur(2vmin);
+	transition: 60ms;
+}
+#cons{
+	height:auto;
+	width:100vw;
+	white-space: pre;
+}
+#cons *,#inpute{
+	outline: none;
+	display: block;
+	background: none;
+	min-width:100vw;
+	min-height: 4.2vmin;
+	border: none;
+	color: #fff;
+	font-family: monospace;
+	font-size: 3.6vmin;
+	line-height: 4.2vmin;
+	letter-spacing: 0em;
+}
