@@ -12,7 +12,7 @@
 }
 body{
 	padding:1em;
-	font-size: 3.6vmin;
+	font-size: 3.2vmin;
 	font-family:'Courier New', Courier, monospace;
 	font-weight: 900;
 }
@@ -25,6 +25,8 @@ body{
 //DOM
 var box = document.getElementById('apis')
 
+window.Cusor = {}
+window.Touch = {}
 
 //----------------
 var list = [
@@ -36,19 +38,26 @@ var list = [
 	['innerHeight',''],
 	['outerWidth',''],
 	['outerHeight',''],
-	['navigator.language','language'],
+	['navigator.language',''],
+	['navigator.languages',''],
 	['navigator.onLine',''],
 	['navigator.geolocation',''],
 	['navigator.platform',''],
 	['navigator.appName',''],
-	//['navigator.appVersion',''],
+	['navigator.appVersion',''],
+	['navigator.clipboard',''],
+	['navigator.vendor',''],
 	['BTY.charging',''],
 	['BTY.chargingTime',''],
 	['BTY.level',''],
-	['navigator.clipboard',''],
-	['',''],
-	['',''],
-	['',''],
+	['Cusor.clientX',''],
+	['Cusor.clientY',''],
+	['Cusor.screenX',''],
+	['Cusor.screenY',''],
+	['Touch.clientX',''],
+	['Touch.clientY',''],
+	['Touch.screenX',''],
+	['Touch.screenY',''],
 	['',''],
 	['',''],
 	['',''],
@@ -71,6 +80,29 @@ setInterval(inr,11)
 navigator.getBattery().then(function(battery) {     
 	window.BTY = battery
 })
+
+document.body.addEventListener("mousemove", ()=>{
+	window.Cusor.clientX = event.clientX;
+	window.Cusor.clientY = event.clientY;
+	window.Cusor.screenX = event.screenX;
+	window.Cusor.screenY = event.screenY;
+})
+document.body.addEventListener("touchmove", ()=>{
+	window.Touch.clientX = event.touches[0].clientX;
+	window.Touch.clientY = event.touches[0].clientY;
+	window.Touch.screenX = event.touches[0].screenX;
+	window.Touch.screenY = event.touches[0].screenY;
+})
+document.body.addEventListener("touchstart", ()=>{
+	window.Touch.clientX = event.touches[0].clientX;
+	window.Touch.clientY = event.touches[0].clientY;
+	window.Touch.screenX = event.touches[0].screenX;
+	window.Touch.screenY = event.touches[0].screenY;
+})
+
+
+
+
 /*
 navigator.getUserMedia({
 		video: true, //使用摄像头对象

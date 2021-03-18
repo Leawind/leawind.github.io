@@ -1,9 +1,4 @@
-<!--
-	待解决:
-	inperson模式
-	镜头的移动和转动
-	绘制线条
--->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>3D-viewer</title>
 	<script>'strict';
-`插件:向量运算`
+// 向量运算
 window.Vector = {
 	plus : function(v0, v1){
 		this.i = v0.length - 1
@@ -151,6 +146,10 @@ body{
 <body>
 	<canvas id="scrn"></canvas>
 	<script>'strict';
+alert(`建议配合键盘食用
+I J K L 调整视角
+W A S D 控制移动
+Q E 控制缩放`)
 window.t = 0	//inr运行时在每一帧初始时增加(每秒增加1)，时间变量
 window.viewer = {
 	Space : function(obj){
@@ -466,6 +465,7 @@ window.user = {
 	a : 0.4,
 }
 window.onkeydown=()=>{
+	document.body.requestFullscreen();
 	user.keys[event.keyCode] = true
 	console.log(event.keyCode)
 	if(event.keyCode === 116){	//F5
