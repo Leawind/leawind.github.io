@@ -186,6 +186,7 @@ numjs.Mat = function(iter=0){
 
 		var w = new Uwin(this.c, this.r);
 		w.title(tt);
+		w.move(0, 50);
 		w.body.style.overflow = 'auto';
 		w.body.appendChild(cvs)
 	}
