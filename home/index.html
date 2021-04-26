@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home</title>
+	<style></style>
+</head>
+<body>
+	<script>
+"use strict";
+var Sites = [
+	// 格式: "[名称]地址"
+	{
+		"Translate": [
+			"[Google Translate]https://translate.google.com",
+			"[Baidu Translate]https://translate.baidu.com"
+		]
+	},
+	{
+		MC: [
+			"[Minecraft]https://www.minecraft.net/en-us/",
+			"[MC Wiki]https://minecraft.fandom.com/wiki/Minecraft",
+			"[MC Wiki bilibili]https://wiki.biligame.com/mc/Minecraft_Wiki",
+			"[网易我的世界]https://mc.163.com/",
+		]
+	},
+	"[leawind.github.io]https://leawind.github.io",
+	{
+		"Search": [
+			"[Google]https://www.google.com",
+			"[Bing]https://www.bing.com",
+			"[百度]https://www.baidu.com"
+		]
+	},
+	"[Google Earth]https://earth.google.com/web",
+	"[行者]https://imxingzhe.com/",
+	"[index.baidu]https://index.baidu.com/",
+	"[Python Package]http://pypi.doubanio.com/simple/",
+	"[Python]https://www.python.org/downloads/",
+	"[Java]https://www.oracle.com/java/technologies/oracle-java-archive-downloads.html",
+	"[Github]https://github.com/",
+	{
+		"Bicycle": [
+			"[Shimano]https://bike.shimano.com/en-US/home.html",
+			"[Giant-ZH]https://giant.com.cn/",
+			"[Giant-US]https://www.giant-bicycles.com/us",
+			"[Merida]https://www.merida-bikes.com/en",
+			"[Merada-ZH]http://www.merida.cn/",
+			"[Specialized]https://specialized.com.cn/?lang=zh",
+			"[Santa Cruz]https://www.santacruzbicycles.com/en-US"
+		]
+	},
+	"[B站]bilibili.com/",
+	"[知乎]https://www.zhihu.com/",
+	"[FaceBook]https://www.facebook.com/",
+	"[youtube]https://www.youtube.com/",
+	"[Twitter]https://twitter.com/?lang=en",
+	"[Instagram]https://www.instagram.com/"
+]
+
+var map = [
+	{
+		name: "百度地图",
+		url: "https://map.baidu.com/@12917488.502162639,3315495.348015713,21z"
+	},
+	{
+		name: "Google Earth",
+		// 经度,纬度,地面海拔高度a,摄像机高度d,35y,朝向h,视线与竖直方向夹角t,0r
+		url: "https://earth.google.com/web/@28.68646709,116.02688068,22.3486148a,147.83625471d,35y,0h,0t,0r",
+	},
+	{
+		name: "Google Maps",
+		url: "https://www.google.com/maps/@28.6864721,116.0268739,16z/",
+	}
+]
+
+var searchEngine = [
+	// url中的{$}表示关键词位置
+	{
+		name: "MC Wiki",
+		url: "https://minecraft.fandom.com/wiki/Special:Search?search={$}&fulltext=Search"
+	},
+	{
+		name: "index.baidu.com",
+		url: "https://index.baidu.com/v2/main/index.html#/trend/linux?words={$}"
+	},
+	{
+		name: "Google",
+		url: "https://www.google.com/search?q={$}&sourceid=chrome&ie=UTF-8"
+	},
+	{
+		name: "Bing",
+		url: "https://www.bing.com/search?q={$}"
+	},
+	{
+		name: "Baidu",
+		url: "https://www.baidu.com/s?wd={$}"
+	},
+	{
+		name: "WikiPedia",
+		url: "https://zh.wikipedia.org/w/index.php?search={$}"
+	},
+	{
+		name: "Youtube",
+		url: "https://www.youtube.com/results?search_query={$}"
+	},
+	{
+		name: "BiliBili",
+		url: "https://search.bilibili.com/all?keyword={$}"
+	},
+	{
+		name: "知乎",
+		url: "https://www.zhihu.com/search?type=content&q={$}"
+	}
+]
+	</script>
+</body>
+</html>
