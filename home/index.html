@@ -136,8 +136,8 @@ class IconBox{
 		}
 		e.preventDefault();
 	}
+	// 事件_鼠标拖动
 	static s_onmousemove(e){
-		// 拖动
 		if(this.dragging===null){
 			// 确定所在元素
 			e.on = this;
@@ -158,6 +158,13 @@ class IconBox{
 				cY: e.clientY
 			});
 			this.focusing.detectWall(true);
+			// 碰撞检测
+			let i, itm1;
+			for(i=0;i<this.itms.length;i++){
+				itm1 = this.itms[i];
+				if(itm1==this.focusing) continue;
+				this.focusing.detectCollision(itm1, true);
+			}
 		}
 	}
 	static s_onmouseup(e){
@@ -216,6 +223,8 @@ class IconBox{
 
 	// 帧
 	static s_inv(){
+		//TODO
+		// calculate FPS
 		// 遍历元素们
 		let i, j;
 		let itm0;
@@ -224,40 +233,13 @@ class IconBox{
 			let cb0 = itm0.getCollisionBox();
 			// 撞墙检测
 			if(itm0.is_collide_wall){
-				itm0.detectWall(true);
+				itm0.detectWall(false);
 			}
 			// console.log(itm.size, itm.type, itm.pos);
 			// 与其他元素碰撞检测
 			if(itm0.is_collide_item) for(j=i+1;j<this.itms.length;j++){
 				let itm1 = this.itms[j];
-				let cb1, center0, center1, dn, dd;
-				if(itm1.is_collide_item){
-					cb1 = itm1.getCollisionBox();
-					if((cb0[3]<cb1[1]) || (cb0[0]>cb1[2]) || (cb0[1]>cb1[3]) || (cb0[2]<cb1[0]))	// 不可能有碰撞
-						continue;
-					center0 = [(cb0[0]+cb0[2])/2, (cb0[1]+cb0[3])/2];
-					center1 = [(cb1[0]+cb1[2])/2, (cb1[1]+cb1[3])/2];
-					// console.log('centers:', center0, center1);
-					// 中心点向量
-					dn = [
-						(center1[0]-center0[0] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1,
-						(center1[1]-center0[1] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1
-					];
-					dd = [
-						dn[0] > 0? cb0[2]-cb1[0] : cb0[0]-cb1[2],
-						dn[1] > 0? cb0[3]-cb1[1] : cb0[1]-cb1[3]
-					];
-					if(Math.abs(dd[0])<Math.abs(dd[1])){
-						dd[1] = 0;
-					}else{
-						dd[0] = 0;
-					}
-					// // console.log(dn);
-					let m0 = itm0.cb_m, m1 = itm1.cb_m;
-					itm0.move(-m1/(m0+m1)*dd[0],-m1/(m0+m1)*dd[1], true);
-					itm1.move( m0/(m0+m1)*dd[0], m0/(m0+m1)*dd[1], true);
-					//TODO
-				}
+				itm0.detectCollision(itm1, true);
 			}
 
 			// 运动
@@ -286,11 +268,11 @@ class Item{
 		switch(type){
 			case 'site':
 				this.size = [72, 72];
-				this.cb_box = [0, 0, 72, 72];
+				this.cb_box = [-2, -2, 72+2, 72+2];
 				break;
 			case 'search':
 				this.size = [300, 64];
-				this.cb_box = [0, 0, 300, 64];
+				this.cb_box = [-2, -2, 300+2, 64+2];
 				break;
 		}
 		let i;
@@ -324,6 +306,35 @@ class Item{
 		dx = cb[2]>this.home.bsize[0] ? this.home.bsize[0]-cb[2] : dx;	//right
 		dy = cb[3]>this.home.bsize[1] ? this.home.bsize[1]-cb[3] : dy;	//bottom
 		this.move(dx, dy, astyle);
+	}
+	detectCollision(itm1, astyle){
+		let cb0 = this.getCollisionBox(), cb1 = itm1.getCollisionBox();
+		let center0, center1, dn, dd;
+		if(itm1.is_collide_item){
+			cb1 = itm1.getCollisionBox();
+			if((cb0[3]<cb1[1]) || (cb0[0]>cb1[2]) || (cb0[1]>cb1[3]) || (cb0[2]<cb1[0]))	// 不可能有碰撞
+				return;
+			center0 = [(cb0[0]+cb0[2])/2, (cb0[1]+cb0[3])/2];
+			center1 = [(cb1[0]+cb1[2])/2, (cb1[1]+cb1[3])/2];
+			// 中点向量
+			dn = [
+				(center1[0]-center0[0] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1,
+				(center1[1]-center0[1] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1
+			];
+			dd = [
+				dn[0] > 0? cb0[2]-cb1[0] : cb0[0]-cb1[2],
+				dn[1] > 0? cb0[3]-cb1[1] : cb0[1]-cb1[3]
+			];
+			if(Math.abs(dd[0])<Math.abs(dd[1])){
+				dd[1] = 0;
+			}else{
+				dd[0] = 0;
+			}
+			let m0 = this.cb_m, m1 = itm1.cb_m;
+			this.move(-m1/(m0+m1)*dd[0],-m1/(m0+m1)*dd[1], astyle);
+			itm1.move( m0/(m0+m1)*dd[0], m0/(m0+m1)*dd[1], astyle);
+			//TODO 可以优化
+		}
 	}
 	//移动 (dx, dy, 是否立即应用样式)
 	move(dx, dy, astyle=false){
@@ -365,6 +376,7 @@ var ib = new IconBox(E_ib)
 ib.addItem(new Item('site', {
 	name: "Minecraft",
 	href: "https://www.minecraft.net/en-us/",
+	pos: [200, 200],
 	id: "test_site_0"
 }))
 ib.addItem(new Item('search', {
