@@ -5,116 +5,356 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Home</title>
-	<style></style>
+	<style>
+*{
+	transition-duration: 0;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+body{
+	font-size: 4vmin;
+}
+
+.iconbox{
+	z-index: 128;
+	background: #222;
+	display: block;
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	left: 0;
+	top: 0;
+	overflow: hidden;
+	border-radius: 0%;
+	border: 1px solid #ff0;
+	outline: 0px solid #ff0;
+}
+.iconbox .item{
+	z-index: 256;
+	display: block;
+	position: absolute;
+	/* outline: 1px solid #ff0; */
+	background: rgba(199, 199, 255, 0.5);
+	border-radius: 10px;
+	left: 10px;
+	top: 10px;
+}
+.iconbox .focusingItem{
+	border: 1px solid #fff;
+}
+	</style>
 </head>
 <body>
+	<div id="mi", class="iconbox"></div>
+
 	<script>
 "use strict";
-var Sites = [
-	// 格式: "[名称]地址"
-	{
-		"Translate": [
-			"[Google Translate]https://translate.google.com",
-			"[Baidu Translate]https://translate.baidu.com"
-		]
-	},
-	{
-		MC: [
-			"[Minecraft]https://www.minecraft.net/en-us/",
-			"[MC Wiki]https://minecraft.fandom.com/wiki/Minecraft",
-			"[MC Wiki bilibili]https://wiki.biligame.com/mc/Minecraft_Wiki",
-			"[网易我的世界]https://mc.163.com/",
-		]
-	},
-	"[leawind.github.io]https://leawind.github.io",
-	{
-		"Search": [
-			"[Google]https://www.google.com",
-			"[Bing]https://www.bing.com",
-			"[百度]https://www.baidu.com"
-		]
-	},
-	"[Google Earth]https://earth.google.com/web",
-	"[行者]https://imxingzhe.com/",
-	"[index.baidu]https://index.baidu.com/",
-	"[Python Package]http://pypi.doubanio.com/simple/",
-	"[Python]https://www.python.org/downloads/",
-	"[Java]https://www.oracle.com/java/technologies/oracle-java-archive-downloads.html",
-	"[Github]https://github.com/",
-	{
-		"Bicycle": [
-			"[Shimano]https://bike.shimano.com/en-US/home.html",
-			"[Giant-ZH]https://giant.com.cn/",
-			"[Giant-US]https://www.giant-bicycles.com/us",
-			"[Merida]https://www.merida-bikes.com/en",
-			"[Merada-ZH]http://www.merida.cn/",
-			"[Specialized]https://specialized.com.cn/?lang=zh",
-			"[Santa Cruz]https://www.santacruzbicycles.com/en-US"
-		]
-	},
-	"[B站]bilibili.com/",
-	"[知乎]https://www.zhihu.com/",
-	"[FaceBook]https://www.facebook.com/",
-	"[youtube]https://www.youtube.com/",
-	"[Twitter]https://twitter.com/?lang=en",
-	"[Instagram]https://www.instagram.com/"
-]
+// 绘制
+class IconBox{
+	constructor(ele){
+		this.ele = null;	//根元素
+		this.getStyle = null;	//根元素的 getComputedStyle
+		this.bsize = [NaN, NaN];	// 盒子大小 宽，高 (px)
+		this.itms = [];	//包含的元素们
+		this.interval_a = null;
+		this.focusing = this;	// 当前焦点
+		this.dragging = null;	// 拖拽着的
+		this._bind(ele);
+		this.getSize();
 
-var map = [
-	{
-		name: "百度地图",
-		url: "https://map.baidu.com/@12917488.502162639,3315495.348015713,21z"
-	},
-	{
-		name: "Google Earth",
-		// 经度,纬度,地面海拔高度a,摄像机高度d,35y,朝向h,视线与竖直方向夹角t,0r
-		url: "https://earth.google.com/web/@28.68646709,116.02688068,22.3486148a,147.83625471d,35y,0h,0t,0r",
-	},
-	{
-		name: "Google Maps",
-		url: "https://www.google.com/maps/@28.6864721,116.0268739,16z/",
-	}
-]
+		// setInterval
+		this.inv = IconBox.s_inv.bind(this);
+		this.interval_a = setInterval(this.inv, 1000/144);
 
-var searchEngine = [
-	// url中的{$}表示关键词位置
-	{
-		name: "MC Wiki",
-		url: "https://minecraft.fandom.com/wiki/Special:Search?search={$}&fulltext=Search"
-	},
-	{
-		name: "index.baidu.com",
-		url: "https://index.baidu.com/v2/main/index.html#/trend/linux?words={$}"
-	},
-	{
-		name: "Google",
-		url: "https://www.google.com/search?q={$}&sourceid=chrome&ie=UTF-8"
-	},
-	{
-		name: "Bing",
-		url: "https://www.bing.com/search?q={$}"
-	},
-	{
-		name: "Baidu",
-		url: "https://www.baidu.com/s?wd={$}"
-	},
-	{
-		name: "WikiPedia",
-		url: "https://zh.wikipedia.org/w/index.php?search={$}"
-	},
-	{
-		name: "Youtube",
-		url: "https://www.youtube.com/results?search_query={$}"
-	},
-	{
-		name: "BiliBili",
-		url: "https://search.bilibili.com/all?keyword={$}"
-	},
-	{
-		name: "知乎",
-		url: "https://www.zhihu.com/search?type=content&q={$}"
+		// 事件绑定
+		window.addEventListener('resize', IconBox.s_onresize.bind(this));
+		this.ele.addEventListener('mousedown', IconBox.s_onmousedown.bind(this));
+		this.ele.addEventListener('mousemove', IconBox.s_onmousemove.bind(this));
+		this.ele.addEventListener('mouseup', IconBox.s_onmouseup.bind(this));
+		this.ele.addEventListener('touchstart', IconBox.s_ontouchstart.bind(this));
+		this.ele.addEventListener('touchmove', IconBox.s_ontouchmove.bind(this));
+		this.ele.addEventListener('touchend', IconBox.s_ontouchend.bind(this));
 	}
-]
+	// 绑定 iconbox 元素
+	_bind(ele){
+		ele.classList.add("iconbox");
+		this.ele = ele;
+		this.getStyle = window.getComputedStyle(ele, null);
+	}
+	// 获取当前元素样式 长宽像素 (Computed)
+	getSize(){
+		if(this.ele==null) return [NaN, NaN];
+		this.bsize = [this.getStyle.width.replace('px', '')*1, this.getStyle.height.replace('px', '')*1];
+		return this.bsize;
+	}
+	// 添加元素
+	addItem(itm){
+		itm.home = this;
+		this.itms.push(itm);
+		this.ele.appendChild(itm.ele);
+		itm.visible = true;
+		itm.reStyle();
+		return;
+	}
+	// 设为焦点
+	focus(itm){
+		this.focusing.ele.classList.remove('focusingItem');
+		this.focusing = itm;
+		if(itm.constructor==Item){
+			itm.style.zIndex = new Date()*1 % 36000000;
+			itm.ele.classList.add('focusingItem');
+		}
+	}
+
+	// 事件_调整大小
+	static s_onresize(e){
+		this.getSize();
+	}
+	// 事件_鼠标落下
+	static s_onmousedown(e){
+		// 确定所在元素
+		e.on = this;
+		let i, ele;
+		for(i=0;i<this.itms.length;i++){
+			ele = this.itms[i].ele;
+			if(ele.contains(e.target)){
+				e.on = this.itms[i];
+			}
+		}
+		//聚焦
+		this.focus(e.on);
+		
+		if(e.on.constructor == Item){	// 如果点到了icon
+			this.dragging = e.on;
+			e.on.s_cursordown({
+				time: new Date()*1,
+				cX: e.clientX,
+				cY: e.clientY,
+				_event: e
+			});
+		}
+		e.preventDefault();
+	}
+	static s_onmousemove(e){
+		// 拖动
+		if(this.dragging===null){
+			// 确定所在元素
+			e.on = this;
+			let i, ele;
+			for(i=0;i<this.itms.length;i++){
+				ele = this.itms[i].ele;
+				if(ele.contains(e.target)){
+					e.on = this.itms[i];
+				}
+			}
+			if(e.on.constructor==Item){
+				this.focus(e.on);
+			}
+		}else{
+			this.focusing.s_cursormove({
+				time: new Date()*1,
+				cX: e.clientX,
+				cY: e.clientY
+			});
+			this.focusing.detectWall(true);
+		}
+	}
+	static s_onmouseup(e){
+		this.dragging = null;
+	}
+	//TODO
+	// 事件_触摸开始
+	static s_ontouchstart(e){
+		console.log(e.touches[0]);
+		// 确定所在元素
+		e.on = this;
+		let i, ele;
+		for(i=0;i<this.itms.length;i++){
+			ele = this.itms[i].ele;
+			if(ele.contains(e.target)){
+				e.on = this.itms[i];
+			}
+		}
+		//聚焦
+		this.focus(e.on);
+		if(e.on.constructor == Item){
+			this.dragging = e.on;
+			e.on.s_cursordown({
+				time: new Date()*1,
+				cX: e.touches[0].clientX,
+				cY: e.touches[0].clientY
+			});
+		}
+		e.preventDefault();
+	}
+	static s_ontouchmove(e){
+		if(this.dragging === null){
+			e.on = this;
+			let i, ele;
+			for(i=0;i<this.itms.length;i++){
+				ele = this.itms[i].ele;
+				if(ele.contains(e.target)){
+					e.on = this.itms[i];
+				}
+			}
+			if(e.on.constructor==Item){
+				this.focus(e.on);
+			}
+		}else{
+			this.focusing.s_cursormove({
+				time: new Date()*1,
+				cX: e.touches[0].clientX,
+				cY: e.touches[0].clientY,
+			});
+			this.focusing.detectWall(true);
+		}
+		// 确定所在元素
+	}
+	static s_ontouchend(e){
+		this.dragging = null;
+	}
+
+	// 帧
+	static s_inv(){
+		// 遍历元素们
+		let i, j;
+		let itm;
+		for(i=0;i<this.itms.length;i++){
+			itm = this.itms[i];
+			let cb0 = itm.getCollisionBox();
+			// 撞墙检测
+			if(itm.is_collide_wall){
+				itm.detectWall(true);
+			}
+			// console.log(itm.size, itm.type, itm.pos);
+			// 与其他元素碰撞检测
+			if(itm.is_collide_item) for(j=i+1;j<this.itms.length;j++){
+				itm1 = this.itms[j];
+				if(itm1.is_collide_item){
+					let cb1 = itm1.getCollisionBox();
+					// console.log(itm.size, itm.type, itm.pos);
+
+					//TODO
+				}
+			}
+
+			// 运动
+		}
+	}
+}
+
+class Item{
+	constructor(type="base", opt={}){
+		this.home = null;	// 属于哪个 IconBox
+		this.id = '' + new Date()*1 + Math.floor(Math.random()*1e8);
+		this.ele = document.createElement('div');
+		this.ele.classList.add('item')
+		this.style = this.ele.style;
+		this.type = type;	//类型
+		this.visible = false;	// 是否可见
+		this.size = [32, 32];	// 元素的宽高 [宽, 高]
+		this.cb_box = [0, 0, 32, 32];	// 碰撞盒子 碰撞检测时以这个为准 以元素左上角为准 [...盒子左上角坐标, 盒子宽, 盒子高]
+		this.cb_m = 1;	// 重量
+		this.pos = [20, 20];	// [left, top]
+		this.is_collide_wall = true;	//是否检测撞墙
+		this.is_collide_item = false;	//是否检测与其他物体碰撞
+		this.fixed = false;	// 固定不动
+		this.tp={};	//存放一些临时变量
+
+		switch(type){
+			case 'site':
+				this.size = [72, 72];
+				this.cb_box[2] = 72;
+				this.cb_box[3] = 72;
+				break;
+			case 'search':
+				this.size = [300, 64]
+				this.cb_box[2] = 300;
+				this.cb_box[3] = 64;
+				break;
+		}
+		let i;
+		for(i in opt){
+			this[i] = opt[i];
+		}
+	}
+	// 将对象属性应用于元素style
+	reStyle(){
+		let S = this.ele.style
+		S.display = this.visible ? "block" : "none";
+		S.width = this.size[0] +'px';
+		S.height= this.size[1] +'px';
+		S.left = this.pos[0] + 'px';
+		S.top= this.pos[1] + 'px';
+	}
+	// 根据碰撞体积和当前位置 计算碰撞箱的位置	[x, y, x1, y1]
+	getCollisionBox(){
+		return [
+			this.pos[0] + this.cb_box[0],
+			this.pos[1] + this.cb_box[1],
+			this.pos[0] + this.cb_box[2],
+			this.pos[1] + this.cb_box[3]
+		];
+	}
+	detectWall(astyle=false){
+		let cb = this.getCollisionBox();
+		let dx=0, dy=0;
+		dx = cb[0]<0 ? -cb[0] : 0;	//left
+		dy = cb[1]<0 ? -cb[1] : 0;	//top
+		dx = cb[2]>this.home.bsize[0] ? this.home.bsize[0]-cb[2] : dx;	//right
+		dy = cb[3]>this.home.bsize[1] ? this.home.bsize[1]-cb[3] : dy;	//bottom
+		this.move(dx, dy, astyle);
+	}
+	//移动 (dx, dy, 是否立即应用样式)
+	move(dx, dy, astyle=false){
+		this.pos[0] += dx;
+		this.pos[1] += dy;
+		if(astyle){
+			this.style.left = this.pos[0] +'px';
+			this.style.top = this.pos[1] +'px';
+		}
+	}
+	//设置位置
+	setPos(x, y, astyle=false){
+		this.pos = [x, y];
+		if(astyle){
+			this.style.left = this.pos[0] +'px';
+			this.style.top = this.pos[1] +'px';
+		}
+	}
+
+	// 伪事件
+	s_cursordown(e){
+		this.tp.a0 = [e.cX, e.cY];
+		this.tp.pos0 = [...this.pos];
+	}
+	s_cursormove(e){
+		let dx, dy;
+		dx = e.cX - this.tp.a0[0];
+		dy = e.cY - this.tp.a0[1];
+		this.setPos(this.tp.pos0[0] + dx, this.tp.pos0[1] + dy, true);
+	}
+	s_cursorup(e){
+	}
+}
+	</script>
+	<script>
+"use strict";
+var E_ib = document.getElementById("mi");
+var ib = new IconBox(E_ib)
+ib.addItem(new Item('site', {
+	name: "Minecraft",
+	href: "https://www.minecraft.net/en-us/",
+	id: "test_site_0"
+}))
+ib.addItem(new Item('search', {
+	name: "Minecraft",
+	href: "https://www.minecraft.net/en-us/",
+	pos: [50, 100],
+	id: "test_search_0"
+}))
+
 	</script>
 </body>
 </html>
