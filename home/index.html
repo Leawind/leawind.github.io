@@ -36,7 +36,7 @@ body{
 	position: absolute;
 	/* outline: 1px solid #ff0; */
 	background: rgba(199, 199, 255, 0.5);
-	border-radius: 10px;
+	border-radius: 3px;
 	left: 10px;
 	top: 10px;
 }
@@ -163,7 +163,6 @@ class IconBox{
 	static s_onmouseup(e){
 		this.dragging = null;
 	}
-	//TODO
 	// 事件_触摸开始
 	static s_ontouchstart(e){
 		console.log(e.touches[0]);
@@ -219,22 +218,44 @@ class IconBox{
 	static s_inv(){
 		// 遍历元素们
 		let i, j;
-		let itm;
+		let itm0;
 		for(i=0;i<this.itms.length;i++){
-			itm = this.itms[i];
-			let cb0 = itm.getCollisionBox();
+			itm0 = this.itms[i];
+			let cb0 = itm0.getCollisionBox();
 			// 撞墙检测
-			if(itm.is_collide_wall){
-				itm.detectWall(true);
+			if(itm0.is_collide_wall){
+				itm0.detectWall(true);
 			}
 			// console.log(itm.size, itm.type, itm.pos);
 			// 与其他元素碰撞检测
-			if(itm.is_collide_item) for(j=i+1;j<this.itms.length;j++){
-				itm1 = this.itms[j];
+			if(itm0.is_collide_item) for(j=i+1;j<this.itms.length;j++){
+				let itm1 = this.itms[j];
+				let cb1, center0, center1, dn, dd;
 				if(itm1.is_collide_item){
-					let cb1 = itm1.getCollisionBox();
-					// console.log(itm.size, itm.type, itm.pos);
-
+					cb1 = itm1.getCollisionBox();
+					if((cb0[3]<cb1[1]) || (cb0[0]>cb1[2]) || (cb0[1]>cb1[3]) || (cb0[2]<cb1[0]))	// 不可能有碰撞
+						continue;
+					center0 = [(cb0[0]+cb0[2])/2, (cb0[1]+cb0[3])/2];
+					center1 = [(cb1[0]+cb1[2])/2, (cb1[1]+cb1[3])/2];
+					// console.log('centers:', center0, center1);
+					// 中心点向量
+					dn = [
+						(center1[0]-center0[0] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1,
+						(center1[1]-center0[1] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1
+					];
+					dd = [
+						dn[0] > 0? cb0[2]-cb1[0] : cb0[0]-cb1[2],
+						dn[1] > 0? cb0[3]-cb1[1] : cb0[1]-cb1[3]
+					];
+					if(Math.abs(dd[0])<Math.abs(dd[1])){
+						dd[1] = 0;
+					}else{
+						dd[0] = 0;
+					}
+					// // console.log(dn);
+					let m0 = itm0.cb_m, m1 = itm1.cb_m;
+					itm0.move(-m1/(m0+m1)*dd[0],-m1/(m0+m1)*dd[1], true);
+					itm1.move( m0/(m0+m1)*dd[0], m0/(m0+m1)*dd[1], true);
 					//TODO
 				}
 			}
@@ -255,23 +276,21 @@ class Item{
 		this.visible = false;	// 是否可见
 		this.size = [32, 32];	// 元素的宽高 [宽, 高]
 		this.cb_box = [0, 0, 32, 32];	// 碰撞盒子 碰撞检测时以这个为准 以元素左上角为准 [...盒子左上角坐标, 盒子宽, 盒子高]
-		this.cb_m = 1;	// 重量
+		this.cb_m = 1;	// 质量
 		this.pos = [20, 20];	// [left, top]
 		this.is_collide_wall = true;	//是否检测撞墙
-		this.is_collide_item = false;	//是否检测与其他物体碰撞
+		this.is_collide_item = true;	//是否检测与其他物体碰撞
 		this.fixed = false;	// 固定不动
 		this.tp={};	//存放一些临时变量
 
 		switch(type){
 			case 'site':
 				this.size = [72, 72];
-				this.cb_box[2] = 72;
-				this.cb_box[3] = 72;
+				this.cb_box = [0, 0, 72, 72];
 				break;
 			case 'search':
-				this.size = [300, 64]
-				this.cb_box[2] = 300;
-				this.cb_box[3] = 64;
+				this.size = [300, 64];
+				this.cb_box = [0, 0, 300, 64];
 				break;
 		}
 		let i;
@@ -308,8 +327,8 @@ class Item{
 	}
 	//移动 (dx, dy, 是否立即应用样式)
 	move(dx, dy, astyle=false){
-		this.pos[0] += dx;
-		this.pos[1] += dy;
+		this.pos[0] += isNaN(dx) ? 0 : dx;
+		this.pos[1] += isNaN(dy) ? 0 : dy;
 		if(astyle){
 			this.style.left = this.pos[0] +'px';
 			this.style.top = this.pos[1] +'px';
