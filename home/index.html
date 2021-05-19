@@ -27,8 +27,8 @@ body{
 	top: 0;
 	overflow: hidden;
 	border-radius: 0%;
-	border: 1px solid #ff0;
-	outline: 0px solid #ff0;
+	/* border: 1px solid #ff0; */
+	/* outline: 0px solid #ff0; */
 }
 .iconbox .item{
 	z-index: 256;
@@ -62,10 +62,16 @@ class IconBox{
 		this.dragging = null;	// 拖拽着的
 		this._bind(ele);
 		this.getSize();
-
+		this._Ts = [new Date()*1, new Date()*1];
+		this._maxDt = 1 / 60;
+		this._Ts_max = 3;
+		this.FPS = 0;
+		this._G = [0, 0];	// 重力
+		this._FDC = 10;	// 流体阻力系数, F = fdc*v^2
+		this._maxSpeed = 2000;	// 最大速度 （px/s)
 		// setInterval
 		this.inv = IconBox.s_inv.bind(this);
-		this.interval_a = setInterval(this.inv, 1000/144);
+		this.interval_a = setInterval(this.inv, 1000/90);
 
 		// 事件绑定
 		window.addEventListener('resize', IconBox.s_onresize.bind(this));
@@ -94,7 +100,7 @@ class IconBox{
 		this.itms.push(itm);
 		this.ele.appendChild(itm.ele);
 		itm.visible = true;
-		itm.reStyle();
+		itm.aStyle();
 		return;
 	}
 	// 设为焦点
@@ -106,7 +112,11 @@ class IconBox{
 			itm.ele.classList.add('focusingItem');
 		}
 	}
-
+	// 取消焦点
+	blur(){
+		this.focusing.ele.classList.remove('focusingItem');
+		this.focusing = this;
+	}
 	// 事件_调整大小
 	static s_onresize(e){
 		this.getSize();
@@ -124,7 +134,6 @@ class IconBox{
 		}
 		//聚焦
 		this.focus(e.on);
-		
 		if(e.on.constructor == Item){	// 如果点到了icon
 			this.dragging = e.on;
 			e.on.s_cursordown({
@@ -148,6 +157,7 @@ class IconBox{
 					e.on = this.itms[i];
 				}
 			}
+			// console.log(e.on===this.focusing);
 			if(e.on.constructor==Item){
 				this.focus(e.on);
 			}
@@ -157,7 +167,7 @@ class IconBox{
 				cX: e.clientX,
 				cY: e.clientY
 			});
-			this.focusing.detectWall(true);
+			this.focusing.detectBorder(true);
 			// 碰撞检测
 			let i, itm1;
 			for(i=0;i<this.itms.length;i++){
@@ -167,8 +177,17 @@ class IconBox{
 			}
 		}
 	}
+	// 事件_鼠标抬起
 	static s_onmouseup(e){
-		this.dragging = null;
+		if(this.dragging===null){
+		}else{
+			this.focusing.s_cursorup({
+				time: new Date()*1,
+				cX: e.clientX,
+				cY: e.clientY
+			});
+			this.dragging = null;
+		}
 	}
 	// 事件_触摸开始
 	static s_ontouchstart(e){
@@ -194,6 +213,7 @@ class IconBox{
 		}
 		e.preventDefault();
 	}
+	// 事件_触摸时拖动
 	static s_ontouchmove(e){
 		if(this.dragging === null){
 			e.on = this;
@@ -213,10 +233,11 @@ class IconBox{
 				cX: e.touches[0].clientX,
 				cY: e.touches[0].clientY,
 			});
-			this.focusing.detectWall(true);
+			this.focusing.detectBorder(true);
 		}
 		// 确定所在元素
 	}
+	// 事件_触摸结束
 	static s_ontouchend(e){
 		this.dragging = null;
 	}
@@ -225,24 +246,69 @@ class IconBox{
 	static s_inv(){
 		//TODO
 		// calculate FPS
+		this._Ts.push(new Date()*1);
+		while(this._Ts.length > this._Ts_max) this._Ts.shift();
+		let dt = (this._Ts[this._Ts.length-1] - this._Ts[0]) / (this._Ts.length-1) / 1E3;	// s
+		dt = Math.min(dt, this._maxDt);
+		this.FPS = 1 / dt;
 		// 遍历元素们
 		let i, j;
 		let itm0;
 		for(i=0;i<this.itms.length;i++){
 			itm0 = this.itms[i];
+			let _v = itm0._v, v_p2, v_abs, v_d;
 			let cb0 = itm0.getCollisionBox();
-			// 撞墙检测
-			if(itm0.is_collide_wall){
-				itm0.detectWall(false);
-			}
-			// console.log(itm.size, itm.type, itm.pos);
-			// 与其他元素碰撞检测
-			if(itm0.is_collide_item) for(j=i+1;j<this.itms.length;j++){
-				let itm1 = this.itms[j];
-				itm0.detectCollision(itm1, true);
-			}
-
+			itm0.rec_pos();
 			// 运动
+			// itm0.resetSpeed();	// 根据之前的位移计算当前速度
+			if(itm0.enable_autoMotion){
+				// 计算合外力
+				/// F = m*G - k*FDC*|v|
+				//速度绝对值
+				v_abs = Math.sqrt(_v[0]*_v[0]+_v[1]*_v[1]);
+				v_d = [
+					_v[0]===0 ? 0 : _v[0] / v_abs,
+					_v[1]===0 ? 0 : _v[1] / v_abs,
+				]	// 速度的单位向量
+				itm0._F = [
+					itm0._m*this._G[0] - itm0._k*this._FDC*v_abs *v_d[0],
+					itm0._m*this._G[1] - itm0._k*this._FDC*v_abs *v_d[1],
+				];
+				// console.log(itm0._k*this._FDC*v_abs *v_d[1],);
+
+				/// a = F / m
+				itm0._a = [
+					itm0._F[0] / itm0._m,
+					itm0._F[1] / itm0._m,
+				];
+				/// v = v0 + a * dt
+				_v = [
+					itm0._v[0] + itm0._a[0] * dt,
+					itm0._v[1] + itm0._a[1] * dt,
+				]
+				///TODO 限速
+				v_abs = Math.sqrt(_v[0]*_v[0]+_v[1]*_v[1]);
+				if(v_abs>this._maxSpeed){
+					v_abs /= this._maxSpeed;
+					_v[0] /= v_abs;
+					_v[1] /= v_abs;
+				}
+
+				/// x = x + v * dt
+				itm0.pos = [
+					itm0.pos[0] + _v[0] * dt,
+					itm0.pos[1] + _v[1] * dt,
+				]
+			}
+			// 撞墙检测
+			itm0.detectBorder(false);
+			// 与其他元素碰撞检测
+			if(itm0.enable_collide_item){
+				for(j=i+1;j<this.itms.length;j++){
+					itm0.detectCollision(this.itms[j], false);
+				}
+			}
+			itm0.aStyle_pos();
 		}
 	}
 }
@@ -255,15 +321,25 @@ class Item{
 		this.ele.classList.add('item')
 		this.style = this.ele.style;
 		this.type = type;	//类型
+		// this.ico = 	//图标
 		this.visible = false;	// 是否可见
 		this.size = [32, 32];	// 元素的宽高 [宽, 高]
+
 		this.cb_box = [0, 0, 32, 32];	// 碰撞盒子 碰撞检测时以这个为准 以元素左上角为准 [...盒子左上角坐标, 盒子宽, 盒子高]
-		this.cb_m = 1;	// 质量
+		this._m = 1;	// 质量
+		this._k = 0.05;	// 等效迎风面积
+		this._F = [0, 0];	// 合外力
+		this._a = [0, 0];	// 合加速度
+		this._v = [0, 0];	// 速度	px/s
+		this.pos_record = [];	// 位移记录
+		this.pos_rmax = 4;	// 位移记录数量
 		this.pos = [20, 20];	// [left, top]
-		this.is_collide_wall = true;	//是否检测撞墙
-		this.is_collide_item = true;	//是否检测与其他物体碰撞
+
+		this.enable_autoMotion = true;	//运动
+		this.enable_collide_wall = true;	//是否检测撞墙
+		this.enable_collide_item = true;	//是否检测与其他物体碰撞
 		this.fixed = false;	// 固定不动
-		this.tp={};	//存放一些临时变量
+		this.tp = {};	//存放一些临时变量
 
 		switch(type){
 			case 'site':
@@ -274,20 +350,22 @@ class Item{
 				this.size = [300, 64];
 				this.cb_box = [-2, -2, 300+2, 64+2];
 				break;
+			case 'button':
+				break;
 		}
-		let i;
-		for(i in opt){
-			this[i] = opt[i];
-		}
+		for(let i in opt) this[i] = opt[i];
 	}
 	// 将对象属性应用于元素style
-	reStyle(){
-		let S = this.ele.style
-		S.display = this.visible ? "block" : "none";
-		S.width = this.size[0] +'px';
-		S.height= this.size[1] +'px';
-		S.left = this.pos[0] + 'px';
-		S.top= this.pos[1] + 'px';
+	aStyle(){
+		this.style.display = this.visible ? "block" : "none";
+		this.style.width = this.size[0] +'px';
+		this.style.height= this.size[1] +'px';
+		this.style.left = this.pos[0] + 'px';
+		this.style.top= this.pos[1] + 'px';
+	}
+	aStyle_pos(){
+		this.style.left = this.pos[0] + 'px';
+		this.style.top= this.pos[1] + 'px';
 	}
 	// 根据碰撞体积和当前位置 计算碰撞箱的位置	[x, y, x1, y1]
 	getCollisionBox(){
@@ -298,25 +376,30 @@ class Item{
 			this.pos[1] + this.cb_box[3]
 		];
 	}
-	detectWall(astyle=false){
+	// 检测与边界的碰撞
+	detectBorder(astyle=false){
+		if(!this.enable_collide_wall) return;
 		let cb = this.getCollisionBox();
 		let dx=0, dy=0;
 		dx = cb[0]<0 ? -cb[0] : 0;	//left
 		dy = cb[1]<0 ? -cb[1] : 0;	//top
 		dx = cb[2]>this.home.bsize[0] ? this.home.bsize[0]-cb[2] : dx;	//right
 		dy = cb[3]>this.home.bsize[1] ? this.home.bsize[1]-cb[3] : dy;	//bottom
+		if(dx !== 0) this._v[0] = 0;
+		if(dy !== 0) this._v[1] = 0;
 		this.move(dx, dy, astyle);
 	}
+	// 检测与 itm1 的碰撞 并更改位置
 	detectCollision(itm1, astyle){
+		if(!this.detectCollision) return;
 		let cb0 = this.getCollisionBox(), cb1 = itm1.getCollisionBox();
 		let center0, center1, dn, dd;
-		if(itm1.is_collide_item){
+		if(itm1.enable_collide_item){
 			cb1 = itm1.getCollisionBox();
 			if((cb0[3]<cb1[1]) || (cb0[0]>cb1[2]) || (cb0[1]>cb1[3]) || (cb0[2]<cb1[0]))	// 不可能有碰撞
 				return;
 			center0 = [(cb0[0]+cb0[2])/2, (cb0[1]+cb0[3])/2];
 			center1 = [(cb1[0]+cb1[2])/2, (cb1[1]+cb1[3])/2];
-			// 中点向量
 			dn = [
 				(center1[0]-center0[0] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1,
 				(center1[1]-center0[1] + (Math.random()*2-1)*1E-8) > 0 ? 1 : -1
@@ -330,42 +413,69 @@ class Item{
 			}else{
 				dd[0] = 0;
 			}
-			let m0 = this.cb_m, m1 = itm1.cb_m;
+			let m0 = this._m, m1 = itm1._m;
 			this.move(-m1/(m0+m1)*dd[0],-m1/(m0+m1)*dd[1], astyle);
 			itm1.move( m0/(m0+m1)*dd[0], m0/(m0+m1)*dd[1], astyle);
-			//TODO 可以优化
+			//TODO optimizable
 		}
 	}
+	// 记录当前位置
+	rec_pos(){
+		this.pos_record.push([new Date()*1, ...this.pos]);
+		while(this.pos_record.length > this.pos_rmax) this.pos_record.shift();
+	}
+	// 根据位置记录计算速度
+	getSpeedFromPosRec(){
+		let x, i, d, t, v=null, vd, vd_abs;
+		let rcd = this.pos_record;
+		let leng = rcd.length;
+		if(leng<3) return this._v;
+		vd = [
+			rcd[leng-1][1] - rcd[leng-2][1],
+			rcd[leng-1][2] - rcd[leng-2][2]
+		];	// 位移
+		t = rcd[leng-1][0] - rcd[leng-2][0];	// 时间
+		if(t===0) return this._v;
+		vd[0] = vd[0]===0 ? 0 : vd[0] / t * 1E3;
+		vd[1] = vd[1]===0 ? 0 : vd[1] / t * 1E3;
+		return vd;
+	}
+	// 将速度设置为计算到的速度
+	resetSpeed(){
+		if(this.pos_record.length>2)
+			this._v = this.getSpeedFromPosRec();
+	};
 	//移动 (dx, dy, 是否立即应用样式)
 	move(dx, dy, astyle=false){
 		this.pos[0] += isNaN(dx) ? 0 : dx;
 		this.pos[1] += isNaN(dy) ? 0 : dy;
-		if(astyle){
-			this.style.left = this.pos[0] +'px';
-			this.style.top = this.pos[1] +'px';
-		}
+		if(astyle) this.aStyle_pos()
 	}
 	//设置位置
 	setPos(x, y, astyle=false){
 		this.pos = [x, y];
-		if(astyle){
-			this.style.left = this.pos[0] +'px';
-			this.style.top = this.pos[1] +'px';
-		}
+		if(astyle) this.aStyle_pos();
 	}
 
 	// 伪事件
 	s_cursordown(e){
 		this.tp.a0 = [e.cX, e.cY];
 		this.tp.pos0 = [...this.pos];
+		this.enable_autoMotion = false;
 	}
 	s_cursormove(e){
 		let dx, dy;
 		dx = e.cX - this.tp.a0[0];
 		dy = e.cY - this.tp.a0[1];
 		this.setPos(this.tp.pos0[0] + dx, this.tp.pos0[1] + dy, true);
+		this.rec_pos();
+		this.resetSpeed();	// 根据之前的位移计算当前速度
 	}
 	s_cursorup(e){
+		console.log(this.pos_record);
+		console.log(this.getSpeedFromPosRec());
+		this.resetSpeed();
+		this.enable_autoMotion = true;
 	}
 }
 	</script>
@@ -373,6 +483,11 @@ class Item{
 "use strict";
 var E_ib = document.getElementById("mi");
 var ib = new IconBox(E_ib)
+// ib.addItem(new Item('button', {
+// 	name: 'Settings',
+// 	pos: [0, 0],
+// 	id: "_settingsButton",
+// }))
 ib.addItem(new Item('site', {
 	name: "Minecraft",
 	href: "https://www.minecraft.net/en-us/",
