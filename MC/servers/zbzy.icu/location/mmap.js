@@ -129,6 +129,7 @@ function Mmap(){
 				})
 			}
 		}
+		
 		if(this.ops.showGrid){
 			let step=2;
 			c.font = `${this.ops.gridFontSize}px consolas`;
