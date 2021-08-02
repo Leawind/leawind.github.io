@@ -135,7 +135,7 @@ function Mmap(){
 			step = Math.max(step, c.measureText("30000000 ").width / s);
 
 			// step = Math.pow(10, 1+Math.floor(Math.log10(step)))
-			step = Math.pow(2, Math.floor(Math.log(step)/Math.log(2)))
+			step = Math.pow(2, 1+Math.floor(Math.log(step)/Math.log(2)));
 			// if(step>10) step = step-step%10;
 			// else step = Math.floor(step);
 
