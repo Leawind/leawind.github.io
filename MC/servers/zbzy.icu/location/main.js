@@ -6,5 +6,6 @@ m.bindCanvas(cvs);
 m.setLocations(locations);
 m.setDim(0);
 m._setScale(3);
+m.setTargetScale(4);
 m.setPos(300, 130)
 m.start();

@@ -11,6 +11,8 @@ function Mmap(){
 	];
 	// 一个方块显示为多少像素
 	this.scale = 4;
+	this.targetScale = 3;
+	this.targetScaleTime = 0;
 	// 选项
 	this.ops = {
 		showBlockLine: false,	// 显示方块边界
@@ -20,6 +22,7 @@ function Mmap(){
 		showName: true,	// 显示标签名
 		fontScale: 1,	// 标签文本缩放
 		changeScaleSpeed: 1.2,	// 每次调整缩放的尺度
+		scaleChangeTime: 1000,	// 切换缩放花的时间(ms)
 	}
 
 	this.bindCanvas = function(ele){
@@ -44,6 +47,10 @@ function Mmap(){
 	this._setScale = function(s){
 		this.scale = s;
 	}
+	this.setTargetScale = function(s){
+		this.targetScale = s;
+		this.targetScaleTime = new Date()*1 + this.ops.scaleChangeTime;
+	}
 	this.FPS = 0;
 	this.t0 = 0;
 	this.loop = function(){
@@ -51,6 +58,7 @@ function Mmap(){
 
 		t1 = new Date()*1;
 		T = t1 - this.t0;
+		T = Math.max(T, 100);
 		this.t0 = t1;
 		this.FPS = 1E3/T;
 
@@ -104,6 +112,12 @@ function Mmap(){
 				if(this.ops.showName) c.fillText(l.name, _v[0], _v[1]-_hs/2);
 			}
 		}
+
+		// scale 变化 (t1:当前时间 this.targetScaleTime:目标时间 this.targetScale:目标值 this.scale:当前值 T:帧时间)
+		this.scale += (this.targetScale-this.scale)/20
+
+		// 
+
 
 	}
 	this.start = function(){
