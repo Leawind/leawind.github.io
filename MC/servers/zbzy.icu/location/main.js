@@ -6,7 +6,7 @@ m.bindCanvas(cvs);
 m.setLocations(locations);
 m.setDim(0);
 m.setTargetScale(12);
-m.setPos(260, 100)
+m.setTargetPos(244, 139)
 m.start();
 
 m.ops.tagSize = 6;

@@ -291,6 +291,7 @@ function Mmap(){
 				i++;
 			this._ev.rcd = this._ev.rcd.slice(0, i);
 			let touch = e.touches[e.touches.length-1];
+			// 添加记录
 			this._ev.rcd.unshift({
 				type: 'start',
 				timeStamp: e.timeStamp,
@@ -302,12 +303,12 @@ function Mmap(){
 				screenY: touch.screenY,
 
 			});
-			
-
 			e.preventDefault();
 		},
 		touchmove: function(e){
+			// 清理没用的记录
 			let touch = e.touches[e.touches.length-1];
+			// 添加记录
 			this._ev.rcd.unshift({
 				type: 'move',
 				timeStamp: e.timeStamp,
@@ -321,6 +322,7 @@ function Mmap(){
 			e.preventDefault();
 		},
 		touchend: function(e){
+			// 添加记录
 			this._ev.rcd.unshift({
 				type: 'end',
 				timeStamp: e.timeStamp,
@@ -351,7 +353,7 @@ function Mmap(){
 			while(i<this._ev.srcd.length && e.timeStamp-this._ev.srcd[i].timeStamp < 1000)
 				i++;
 			this._ev.srcd = this._ev.srcd.slice(0, i);
-
+			// 添加记录
 			this._ev.srcd.unshift({
 				type: 'point',
 				timeStamp: e.timeStamp,
@@ -362,10 +364,9 @@ function Mmap(){
 				screenX: e.screenX,
 				screenY: e.screenY
 			});
-
-			// double touch
 			let r = this._ev.srcd;
 			if(r[1] && e.timeStamp - r[1].timeStamp<300){
+				// 单指双击
 				this.eventsHandler._doublepoint.bind(this)({
 					timeStamp: e.timeStamp,
 					pageX: e.pageX,
@@ -375,11 +376,21 @@ function Mmap(){
 					screenX: e.screenX,
 					screenY: e.screenY
 				})
+			}else if(1){
+				// 双指单击
+				
 			}
 		},
 		_doublepoint: function(e){
-			console.log('doublePoint');
-			console.log(e);
+			// 单指双击
+			this.setTargetScale(this.scale*this.ops.changeScaleSpeed);
+			this.setTargetPos(
+				this.pos[this.dim][0] + (e.pageX - this.cvs.width/2) / 2 / this.scale,
+				this.pos[this.dim][1] + (e.pageY - this.cvs.height/2) / 2 / this.scale
+			)
+		},
+		_bothpoint: function(e){
+			// 双指单击
 		}
 	}
 }
