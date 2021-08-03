@@ -3,7 +3,8 @@ function print(...arg){
 	for(let i=0;i<arg.length;i++)
 		// t += Array.isArray(arg[i]) ? `[${arg[i]}]` :JSON.stringify(arg[i], 0, ' ')+' ';
 		t += JSON.stringify(arg[i], 0, ' ')+' ';
-	document.getElementById('log').innerHTML += t;
+	let ele =  document.getElementById('log');
+	ele.innerHTML = t + ele.innerHTML;
 }
 // get element
 var cvs = document.getElementById("lmap-cv");

@@ -241,6 +241,12 @@ function Mmap(){
 		lsX: 0,
 		lsY: 0,
 		ad: 0,
+		downAd: 0,
+		downX: 0,
+		downY: 0,
+		downPX: 0,
+		downPY: 0,
+
 	};
 	this.eventsHandler = {
 		wheel: function(e){
@@ -271,17 +277,15 @@ function Mmap(){
 		},
 		mousemove: function(e){
 			if(this._ev.isHolding){
-				// console.log(e);
 				let dx = (e.offsetX - this._ev.downX) / this.scale;
 				let dy = (e.offsetY - this._ev.downY) / this.scale;
-				// console.log(dx, dy);
 				this.setPos(
 					this._ev.downPX - dx,
 					this._ev.downPY - dy
 				);
 				this.setTargetPos(
-						this._ev.downPX - dx,
-						this._ev.downPY - dy
+					this._ev.downPX - dx,
+					this._ev.downPY - dy
 				);
 			}
 		},
@@ -308,36 +312,23 @@ function Mmap(){
 				);
 			}
 			this._ev.ad /= e.touches.length;
-
-			// 清理旧纪录
-			let i=0;
-			while(i<this._ev.rcd.length && e.timeStamp-this._ev.rcd[i].timeStamp < 1000)
-				i++;
-			this._ev.rcd = this._ev.rcd.slice(0, i);
-			let touch = e.touches[e.touches.length-1];
-			// 添加记录
-			this._ev.rcd.unshift({
-				type: 'start',
-				timeStamp: e.timeStamp,
-				pageX: touch.pageX,
-				pageY: touch.pageY,
-				clientX: touch.clientX,
-				clientY: touch.clientY,
-				screenX: touch.screenX,
-				screenY: touch.screenY
-			});
-
-			//=========
-
+ 
+			// // 清理旧纪录
 			// 清理200ms以前的记录
+			let i=0;
 			while(i<this._ev.srcd.length && e.timeStamp-this._ev.srcd[i].timeStamp<200) i++;
 			this._ev.srcd = this._ev.srcd.slice(0, i);
 			// 记录本次 srcd
 			this._ev.srcd.unshift({
 				len: e.touches.length,
-				timeStamp: e.timeStamp
+				timeStamp: e.timeStamp,
 			});
 
+			this._ev.downX = this._ev.lsX;
+			this._ev.downY = this._ev.lsY;
+			this._ev.downPX = this.pos[this.dim][0];
+			this._ev.downPY = this.pos[this.dim][1];
+			this._ev.downAd = this._ev.ad;
 
 			e.preventDefault();
 		},
@@ -359,24 +350,23 @@ function Mmap(){
 			}
 			this._ev.ad /= e.touches.length;
 
+			if(this._ev.isHolding){
+				let dx = (this._ev.lsX - this._ev.downX) / this.scale;
+				let dy = (this._ev.lsY - this._ev.downY) / this.scale;
+				this.setPos(
+					this._ev.downPX - dx,
+					this._ev.downPY - dy
+				);
+				this.setTargetPos(
+					this._ev.downPX - dx,
+					this._ev.downPY - dy
+				);
+			}
 
-			// 清理没用的记录
-			let touch = e.touches[e.touches.length-1];
-			// 添加记录
-			// this._ev.rcd.unshift({
-			// 	type: 'move',
-			// 	timeStamp: e.timeStamp,
-			// 	pageX: touch.pageX,
-			// 	pageY: touch.pageY,
-			// 	clientX: touch.clientX,
-			// 	clientY: touch.clientY,
-			// 	screenX: touch.screenX,
-			// 	screenY: touch.screenY,
-			// });
 			e.preventDefault();
 		},
 		touchend: function(e){
-
+			this._ev.isHolding = !!e.touches.length;
 			// 添加记录 rcd
 			this._ev.rcd.unshift({
 				type: 'end',
@@ -426,6 +416,12 @@ function Mmap(){
 						this.pos[this.dim][0] - (this._ev.lsX - this.cvs.width/2)  / this.scale,
 						this.pos[this.dim][1] - (this._ev.lsY - this.cvs.height/2)  / this.scale
 					)
+					break;
+				case '012':
+					location.reload(1);
+					break;
+				case '0123':
+					document.body.requestFullscreen();
 					break;
 			}
 			
