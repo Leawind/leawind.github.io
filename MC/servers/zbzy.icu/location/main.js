@@ -1,6 +1,12 @@
+function print(...arg){
+	let t = '\n';
+	for(let i=0;i<arg.length;i++)
+		// t += Array.isArray(arg[i]) ? `[${arg[i]}]` :JSON.stringify(arg[i], 0, ' ')+' ';
+		t += JSON.stringify(arg[i], 0, ' ')+' ';
+	document.getElementById('log').innerHTML += t;
+}
 // get element
 var cvs = document.getElementById("lmap-cv");
-
 var m = new Mmap();
 m.bindCanvas(cvs);
 m.setLocations(locations);

@@ -234,15 +234,20 @@ function Mmap(){
 		setInterval(func, 0);
 	}
 	this._ev = {
+		isHolding: false,
 		rcd: [],
-		srcd:[]
+		srcd: [],
+		ercd: [],
+		lsX: 0,
+		lsY: 0,
+		ad: 0,
 	};
 	this.eventsHandler = {
 		wheel: function(e){
 			if(e.deltaY<0){
 				this.setTargetScale(this.scale*this.ops.changeScaleSpeed);
 				this.setTargetPos(
-					this.pos[this.dim][0] + (e.offsetX - this.cvs.width/2) / 2 / this.scale,
+					this.pos[this.dim][0] + (e.offsetX - this.cvs.width /2) / 2 / this.scale,
 					this.pos[this.dim][1] + (e.offsetY - this.cvs.height/2) / 2 / this.scale
 				)
 			}else{
@@ -256,7 +261,7 @@ function Mmap(){
 		},
 		mousedown: function(e){
 			if(e.button===0){
-				this._ev.holding = true;
+				this._ev.isHolding = true;
 				this._ev.downX = e.offsetX;
 				this._ev.downY = e.offsetY;
 				this._ev.downPX = this.pos[this.dim][0];
@@ -265,7 +270,7 @@ function Mmap(){
 			}
 		},
 		mousemove: function(e){
-			if(this._ev.holding){
+			if(this._ev.isHolding){
 				// console.log(e);
 				let dx = (e.offsetX - this._ev.downX) / this.scale;
 				let dy = (e.offsetY - this._ev.downY) / this.scale;
@@ -282,12 +287,31 @@ function Mmap(){
 		},
 		mouseup: function(e){
 			if(e.button===0)
-				this._ev.holding = false;
+				this._ev.isHolding = false;
 		},
 		touchstart: function(e){
+			this._ev.isHolding = true;
+
+			// 计算触点位置中心 ls 和平均距离 ad
+			this._ev.lsX = 0;
+			this._ev.lsY = 0;
+			for(let i=0;i<e.touches.length;i++){
+				this._ev.lsX += e.touches[i].pageX;
+				this._ev.lsY += e.touches[i].pageY;
+			}
+			this._ev.lsX /= e.touches.length;
+			this._ev.lsY /= e.touches.length;
+			for(let i=0;i<e.touches.length;i++){
+				this._ev.ad += Math.sqrt(
+					Math.pow(this._ev.lsX - e.touches[i].pageX, 2)
+					+ Math.pow(this._ev.lsY - e.touches[i].pageY, 2)
+				);
+			}
+			this._ev.ad /= e.touches.length;
+
 			// 清理旧纪录
 			let i=0;
-			while(i<this._ev.rcd.length && e.timeStamp-this._ev.rcd[i].time < 1000)
+			while(i<this._ev.rcd.length && e.timeStamp-this._ev.rcd[i].timeStamp < 1000)
 				i++;
 			this._ev.rcd = this._ev.rcd.slice(0, i);
 			let touch = e.touches[e.touches.length-1];
@@ -300,97 +324,117 @@ function Mmap(){
 				clientX: touch.clientX,
 				clientY: touch.clientY,
 				screenX: touch.screenX,
-				screenY: touch.screenY,
-
+				screenY: touch.screenY
 			});
+
+			//=========
+
+			// 清理200ms以前的记录
+			while(i<this._ev.srcd.length && e.timeStamp-this._ev.srcd[i].timeStamp<200) i++;
+			this._ev.srcd = this._ev.srcd.slice(0, i);
+			// 记录本次 srcd
+			this._ev.srcd.unshift({
+				len: e.touches.length,
+				timeStamp: e.timeStamp
+			});
+
+
 			e.preventDefault();
 		},
 		touchmove: function(e){
+			// 计算触点位置中心 ls 和平均距离 ad
+			this._ev.lsX = 0;
+			this._ev.lsY = 0;
+			for(let i=0;i<e.touches.length;i++){
+				this._ev.lsX += e.touches[i].pageX;
+				this._ev.lsY += e.touches[i].pageY;
+			}
+			this._ev.lsX /= e.touches.length;
+			this._ev.lsY /= e.touches.length;
+			for(let i=0;i<e.touches.length;i++){
+				this._ev.ad += Math.sqrt(
+					Math.pow(this._ev.lsX - e.touches[i].pageX, 2)
+					+ Math.pow(this._ev.lsY - e.touches[i].pageY, 2)
+				);
+			}
+			this._ev.ad /= e.touches.length;
+
+
 			// 清理没用的记录
 			let touch = e.touches[e.touches.length-1];
 			// 添加记录
-			this._ev.rcd.unshift({
-				type: 'move',
-				timeStamp: e.timeStamp,
-				pageX: touch.pageX,
-				pageY: touch.pageY,
-				clientX: touch.clientX,
-				clientY: touch.clientY,
-				screenX: touch.screenX,
-				screenY: touch.screenY,
-			});
+			// this._ev.rcd.unshift({
+			// 	type: 'move',
+			// 	timeStamp: e.timeStamp,
+			// 	pageX: touch.pageX,
+			// 	pageY: touch.pageY,
+			// 	clientX: touch.clientX,
+			// 	clientY: touch.clientY,
+			// 	screenX: touch.screenX,
+			// 	screenY: touch.screenY,
+			// });
 			e.preventDefault();
 		},
 		touchend: function(e){
-			// 添加记录
+
+			// 添加记录 rcd
 			this._ev.rcd.unshift({
 				type: 'end',
 				timeStamp: e.timeStamp,
 			});
+			// =============
+			// 清理200ms以前的记录
+			let i=0;
+			while(i<this._ev.ercd.length && e.timeStamp-this._ev.ercd[i].timeStamp<200) i++;
+			this._ev.ercd = this._ev.ercd.slice(0, i);
+			// 记录本次 ercd
+			this._ev.ercd.unshift({
+				len: e.touches.length,
+				timeStamp: e.timeStamp
+			});
 
-			// click
-			// console.log(this._ev.rcd);
-			if(this._ev.rcd[1] && this._ev.rcd[1].type==='start'){
-				if(e.timeStamp-this._ev.rcd[1].timeStamp<300){
-					this.eventsHandler._point.bind(this)({
-						timeStamp: e.timeStamp,
-						pageX: this._ev.rcd[1].pageX,
-						pageY: this._ev.rcd[1].pageY,
-						clientX: this._ev.rcd[1].clientX,
-						clientY: this._ev.rcd[1].clientY,
-						screenX: this._ev.rcd[1].screenX,
-						screenY: this._ev.rcd[1].screenY,
-					})
-				}
+			// 统计近200ms内在屏幕上的指头数量变化
+			let endCode = '';
+			for(let i=0;i<this._ev.ercd.length;i++) endCode += this._ev.ercd[i].len;
+/*
+	0		单指单击
+	00		单指双击
+	01		双指单击
+	0101		双指双击
+	012		三指单击
+	012012		三指双击
+*/
+
+			if(this._ev.srcd.length>0&&e.timeStamp-this._ev.srcd[0].timeStamp<200)switch(endCode){
+				case '00':
+					this.setTargetScale(this.scale*this.ops.changeScaleSpeed);
+					this.setTargetPos(
+						this.pos[this.dim][0] + (this._ev.lsX - this.cvs.width/2) / 2 / this.scale,
+						this.pos[this.dim][1] + (this._ev.lsY - this.cvs.height/2) / 2 / this.scale
+					)
+					break;
+				case '01':
+					this.setTargetScale(this.scale/this.ops.changeScaleSpeed);
+					this.setTargetPos(
+						this.pos[this.dim][0] - (this._ev.lsX - this.cvs.width/2) / 2 / this.scale,
+						this.pos[this.dim][1] - (this._ev.lsY - this.cvs.height/2) / 2 / this.scale
+					)
+					break;
+				case '0101':
+					this.setTargetScale(this.scale/this.ops.changeScaleSpeed/this.ops.changeScaleSpeed);
+					this.setTargetPos(
+						this.pos[this.dim][0] - (this._ev.lsX - this.cvs.width/2)  / this.scale,
+						this.pos[this.dim][1] - (this._ev.lsY - this.cvs.height/2)  / this.scale
+					)
+					break;
 			}
+			
+			// this.eventsHandler._point.bind(this)({
+			// 	timeStamp: e.timeStamp,
+			// 	endCode: endCode
+			// })
 
 			e.preventDefault();
-		},
-		_point: function(e){
-			console.log('touch');
-			// 清理旧纪录
-			let i=0;
-			while(i<this._ev.srcd.length && e.timeStamp-this._ev.srcd[i].timeStamp < 1000)
-				i++;
-			this._ev.srcd = this._ev.srcd.slice(0, i);
-			// 添加记录
-			this._ev.srcd.unshift({
-				type: 'point',
-				timeStamp: e.timeStamp,
-				pageX: e.pageX,
-				pageY: e.pageY,
-				clientX: e.clientX,
-				clientY: e.clientY,
-				screenX: e.screenX,
-				screenY: e.screenY
-			});
-			let r = this._ev.srcd;
-			if(r[1] && e.timeStamp - r[1].timeStamp<300){
-				// 单指双击
-				this.eventsHandler._doublepoint.bind(this)({
-					timeStamp: e.timeStamp,
-					pageX: e.pageX,
-					pageY: e.pageY,
-					clientX: e.clientX,
-					clientY: e.clientY,
-					screenX: e.screenX,
-					screenY: e.screenY
-				})
-			}else if(1){
-				// 双指单击
-				
-			}
-		},
-		_doublepoint: function(e){
-			// 单指双击
-			this.setTargetScale(this.scale*this.ops.changeScaleSpeed);
-			this.setTargetPos(
-				this.pos[this.dim][0] + (e.pageX - this.cvs.width/2) / 2 / this.scale,
-				this.pos[this.dim][1] + (e.pageY - this.cvs.height/2) / 2 / this.scale
-			)
-		},
-		_bothpoint: function(e){
-			// 双指单击
 		}
 	}
 }
