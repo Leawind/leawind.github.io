@@ -8,4 +8,5 @@
 	height: 100vh;
 	background: #333;
 	image-rendering: pixelated;
+	cursor:crosshair;
 }
