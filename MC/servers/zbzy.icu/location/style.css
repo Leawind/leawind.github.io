@@ -12,6 +12,7 @@
 }
 
 #log{
+	display: none;
 	white-space: pre;
 	opacity: 0.3;
 	color: #fff;
