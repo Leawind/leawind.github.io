@@ -12,12 +12,12 @@ var m = new Mmap();
 m.bindCanvas(cvs);
 m.setLocations(locations);
 m.setDim(0);
-m.setTargetScale(12);
+m.setTargetScale(3);
 m.setTargetPos(244, 139)
 m.start();
 
 m.ops.tagSize = 6;
-m.ops.fontScale = 2;
+m.ops.fontScale = 3;
 m.ops.changeScaleSpeed = 1.5;
 m.ops.showChunkLine = false;
 m.ops.showBlockLine = false;

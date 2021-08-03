@@ -31,10 +31,11 @@ function Mmap(){
 		dimsBackground: ["#040", "#400", "#004"],	// 各维度背景颜色
 		tagSize: 20,	// 标签点大小
 		showName: true,	// 显示标签名
-		fontScale: 1,	// 标签文本缩放
+		fontScale: 1.2,	// 标签文本缩放
 		changeScaleSpeed: 1.4,	// 每次调整缩放的尺度
 		// scaleChangeTime: 1000,	// 切换缩放花的时间(ms)
 		scaleK : 0.08,
+		pixcelScale: 1,//TODO
 	}
 
 	this.bindCanvas = function(cvs){
@@ -72,7 +73,6 @@ function Mmap(){
 	}
 	this.setTargetScale = function(s){
 		this.targetScale = s;
-		// this.targetScaleTime = new Date()*1 + this.ops.scaleChangeTime;
 	}
 	this.FPS = 0;
 	this.t0 = new Date()*1;
@@ -89,9 +89,9 @@ function Mmap(){
 		let dim = this.dim;	// 维度
 		let cmr = this.pos[dim];	// 当前视野中心的世界坐标	[x, z]
 		let c = this.ctx;	// 画布上下文
-		let pw = this.cstyle.get('width').value;	// 作为画布宽度
-		let ph = this.cstyle.get('height').value;	// 作为画布高度
-
+		let pw = this.cstyle.get('width' ).value *this.ops.pixcelScale;	// 作为画布宽度
+		let ph = this.cstyle.get('height').value *this.ops.pixcelScale;	// 作为画布高度
+		
 		// 设置画布尺寸，顺便清空画布
 		this.cvs.width = pw;
 		this.cvs.height = ph;
@@ -266,19 +266,23 @@ function Mmap(){
 			e.preventDefault();
 		},
 		mousedown: function(e){
+			e._offsetX = e.offsetX * this.ops.pixcelScale;
+			e._offsetY = e.offsetY * this.ops.pixcelScale;
 			if(e.button===0){
 				this._ev.isHolding = true;
-				this._ev.downX = e.offsetX;
-				this._ev.downY = e.offsetY;
+				this._ev.downX = e._offsetX;
+				this._ev.downY = e._offsetY;
 				this._ev.downPX = this.pos[this.dim][0];
 				this._ev.downPY = this.pos[this.dim][1];
 				this._ev.downTime = e.timeStamp;
 			}
 		},
 		mousemove: function(e){
+			e._offsetX = e.offsetX * this.ops.pixcelScale;
+			e._offsetY = e.offsetY * this.ops.pixcelScale;
 			if(this._ev.isHolding){
-				let dx = (e.offsetX - this._ev.downX) / this.scale;
-				let dy = (e.offsetY - this._ev.downY) / this.scale;
+				let dx = (e._offsetX - this._ev.downX) / this.scale;
+				let dy = (e._offsetY - this._ev.downY) / this.scale;
 				this.setPos(
 					this._ev.downPX - dx,
 					this._ev.downPY - dy
@@ -299,6 +303,7 @@ function Mmap(){
 			// 计算触点位置中心 ls 和平均距离 ad
 			this._ev.lsX = 0;
 			this._ev.lsY = 0;
+			this._ev.ad = 0;
 			for(let i=0;i<e.touches.length;i++){
 				this._ev.lsX += e.touches[i].pageX;
 				this._ev.lsY += e.touches[i].pageY;
@@ -329,7 +334,7 @@ function Mmap(){
 			this._ev.downPX = this.pos[this.dim][0];
 			this._ev.downPY = this.pos[this.dim][1];
 			this._ev.downAd = this._ev.ad;
-
+			this._ev.downScale = this.scale;
 			e.preventDefault();
 		},
 		touchmove: function(e){
@@ -349,24 +354,48 @@ function Mmap(){
 				);
 			}
 			this._ev.ad /= e.touches.length;
-
 			if(this._ev.isHolding){
 				let dx = (this._ev.lsX - this._ev.downX) / this.scale;
 				let dy = (this._ev.lsY - this._ev.downY) / this.scale;
-				this.setPos(
-					this._ev.downPX - dx,
-					this._ev.downPY - dy
-				);
+				// this.setPos(
+				// 	this._ev.downPX - dx,
+				// 	this._ev.downPY - dy
+				// );
 				this.setTargetPos(
 					this._ev.downPX - dx,
 					this._ev.downPY - dy
 				);
+				// if(this._ev.ad * this._ev.downAd != 0){
+				// 	// this._setScale(this._ev.downScale * this._ev.ad /this._ev.downAd)
+				// 	// this.setTargetScale(this._ev.downScale * this._ev.ad / this._ev.downAd/1.75);
+				// 	// print('scale', this._ev.ad /this._ev.downAd)
+				// }
 			}
-
 			e.preventDefault();
 		},
 		touchend: function(e){
 			this._ev.isHolding = !!e.touches.length;
+			
+			// 计算触点位置中心 ls 和平均距离 ad
+			if(e.touches.length){
+				this._ev.lsX = 0;
+				this._ev.lsY = 0;
+				this._ev.ad = 0;
+				for(let i=0;i<e.touches.length;i++){
+					this._ev.lsX += e.touches[i].pageX;
+					this._ev.lsY += e.touches[i].pageY;
+				}
+				this._ev.lsX /= e.touches.length;
+				this._ev.lsY /= e.touches.length;
+				for(let i=0;i<e.touches.length;i++){
+					this._ev.ad += Math.sqrt(
+						Math.pow(this._ev.lsX - e.touches[i].pageX, 2)
+						+ Math.pow(this._ev.lsY - e.touches[i].pageY, 2)
+					);
+				}
+				this._ev.ad /= e.touches.length;
+			}
+ 
 			// 添加记录 rcd
 			this._ev.rcd.unshift({
 				type: 'end',
@@ -394,7 +423,6 @@ function Mmap(){
 	012		三指单击
 	012012		三指双击
 */
-
 			if(this._ev.srcd.length>0&&e.timeStamp-this._ev.srcd[0].timeStamp<200)switch(endCode){
 				case '00':
 					this.setTargetScale(this.scale*this.ops.changeScaleSpeed);
@@ -424,12 +452,6 @@ function Mmap(){
 					document.body.requestFullscreen();
 					break;
 			}
-			
-			// this.eventsHandler._point.bind(this)({
-			// 	timeStamp: e.timeStamp,
-			// 	endCode: endCode
-			// })
-
 			e.preventDefault();
 		}
 	}
