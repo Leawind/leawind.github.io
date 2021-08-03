@@ -13,8 +13,13 @@ function Mmap(){
 		[0, 0],
 		[0, 0]
 	];
+	this.targetPos = [
+		[0, 0],
+		[0, 0],
+		[0, 0]
+	]
 	// 一个方块显示为多少像素
-	this.scale = 4;
+	this.scale = 1;
 	this.targetScale = 3;
 	this.targetScaleTime = 0;
 	// 选项
@@ -44,6 +49,8 @@ function Mmap(){
 		cvs.addEventListener("mousemove", this.eventsHandler.mousemove.bind(this));
 		cvs.addEventListener("mouseup", this.eventsHandler.mouseup.bind(this));
 		cvs.addEventListener("touchstart", this.eventsHandler.touchstart.bind(this));
+		cvs.addEventListener("touchmove", this.eventsHandler.touchmove.bind(this));
+		cvs.addEventListener("touchend", this.eventsHandler.touchend.bind(this));
 
 	}
 	this.setLocations = function(obj){
@@ -56,6 +63,9 @@ function Mmap(){
 	}
 	this.setPos = function(x, y){
 		this.pos[this.dim] = [x, y];
+	}
+	this.setTargetPos = function(x, y){
+		this.targetPos[this.dim] = [x, y];
 	}
 	this._setScale = function(s){
 		this.scale = s;
@@ -129,7 +139,7 @@ function Mmap(){
 				})
 			}
 		}
-		
+
 		if(this.ops.showGrid){
 			let step=2;
 			c.font = `${this.ops.gridFontSize}px consolas`;
@@ -213,7 +223,9 @@ function Mmap(){
 		// scale 变化 (t1:当前时间 this.targetScaleTime:目标时间 this.targetScale:目标值 this.scale:当前值 T:帧时间)
 		this.scale += (this.targetScale-this.scale)* this.ops.scaleK * T;
 
-		// 
+		// position 变化
+		this.pos[this.dim][0] += (this.targetPos[this.dim][0] - this.pos[this.dim][0]) * this.ops.scaleK * T;
+		this.pos[this.dim][1] += (this.targetPos[this.dim][1] - this.pos[this.dim][1]) * this.ops.scaleK * T;
 
 
 	}
@@ -221,15 +233,26 @@ function Mmap(){
 		let func = this.loop.bind(this);
 		setInterval(func, 0);
 	}
-	this._ev = {};
+	this._ev = {
+		rcd: [],
+		srcd:[]
+	};
 	this.eventsHandler = {
 		wheel: function(e){
-			e.preventDefault();
 			if(e.deltaY<0){
 				this.setTargetScale(this.scale*this.ops.changeScaleSpeed);
+				this.setTargetPos(
+					this.pos[this.dim][0] + (e.offsetX - this.cvs.width/2) / 2 / this.scale,
+					this.pos[this.dim][1] + (e.offsetY - this.cvs.height/2) / 2 / this.scale
+				)
 			}else{
 				this.setTargetScale(this.scale/this.ops.changeScaleSpeed);
+				this.setTargetPos(
+					this.pos[this.dim][0] - (e.offsetX - this.cvs.width/2) / 2 / this.scale,
+					this.pos[this.dim][1] - (e.offsetY - this.cvs.height/2) / 2 / this.scale
+				)
 			};
+			e.preventDefault();
 		},
 		mousedown: function(e){
 			if(e.button===0){
@@ -248,24 +271,115 @@ function Mmap(){
 				let dy = (e.offsetY - this._ev.downY) / this.scale;
 				// console.log(dx, dy);
 				this.setPos(
+					this._ev.downPX - dx,
+					this._ev.downPY - dy
+				);
+				this.setTargetPos(
 						this._ev.downPX - dx,
 						this._ev.downPY - dy
 				);
 			}
 		},
 		mouseup: function(e){
-			if(e.button===0){
+			if(e.button===0)
 				this._ev.holding = false;
-			}
 		},
 		touchstart: function(e){
+			// 清理旧纪录
+			let i=0;
+			while(i<this._ev.rcd.length && e.timeStamp-this._ev.rcd[i].time < 1000)
+				i++;
+			this._ev.rcd = this._ev.rcd.slice(0, i);
+			let touch = e.touches[e.touches.length-1];
+			this._ev.rcd.unshift({
+				type: 'start',
+				timeStamp: e.timeStamp,
+				pageX: touch.pageX,
+				pageY: touch.pageY,
+				clientX: touch.clientX,
+				clientY: touch.clientY,
+				screenX: touch.screenX,
+				screenY: touch.screenY,
+
+			});
+			
+
+			e.preventDefault();
+		},
+		touchmove: function(e){
+			let touch = e.touches[e.touches.length-1];
+			this._ev.rcd.unshift({
+				type: 'move',
+				timeStamp: e.timeStamp,
+				pageX: touch.pageX,
+				pageY: touch.pageY,
+				clientX: touch.clientX,
+				clientY: touch.clientY,
+				screenX: touch.screenX,
+				screenY: touch.screenY,
+			});
+			e.preventDefault();
+		},
+		touchend: function(e){
+			this._ev.rcd.unshift({
+				type: 'end',
+				timeStamp: e.timeStamp,
+			});
+
+			// click
+			// console.log(this._ev.rcd);
+			if(this._ev.rcd[1] && this._ev.rcd[1].type==='start'){
+				if(e.timeStamp-this._ev.rcd[1].timeStamp<300){
+					this.eventsHandler._point.bind(this)({
+						timeStamp: e.timeStamp,
+						pageX: this._ev.rcd[1].pageX,
+						pageY: this._ev.rcd[1].pageY,
+						clientX: this._ev.rcd[1].clientX,
+						clientY: this._ev.rcd[1].clientY,
+						screenX: this._ev.rcd[1].screenX,
+						screenY: this._ev.rcd[1].screenY,
+					})
+				}
+			}
+
 			e.preventDefault();
 		},
 		_point: function(e){
+			console.log('touch');
+			// 清理旧纪录
+			let i=0;
+			while(i<this._ev.srcd.length && e.timeStamp-this._ev.srcd[i].timeStamp < 1000)
+				i++;
+			this._ev.srcd = this._ev.srcd.slice(0, i);
 
+			this._ev.srcd.unshift({
+				type: 'point',
+				timeStamp: e.timeStamp,
+				pageX: e.pageX,
+				pageY: e.pageY,
+				clientX: e.clientX,
+				clientY: e.clientY,
+				screenX: e.screenX,
+				screenY: e.screenY
+			});
+
+			// double touch
+			let r = this._ev.srcd;
+			if(r[1] && e.timeStamp - r[1].timeStamp<300){
+				this.eventsHandler._doublepoint.bind(this)({
+					timeStamp: e.timeStamp,
+					pageX: e.pageX,
+					pageY: e.pageY,
+					clientX: e.clientX,
+					clientY: e.clientY,
+					screenX: e.screenX,
+					screenY: e.screenY
+				})
+			}
 		},
 		_doublepoint: function(e){
-
+			console.log('doublePoint');
+			console.log(e);
 		}
 	}
 }
