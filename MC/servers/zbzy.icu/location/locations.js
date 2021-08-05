@@ -35,6 +35,12 @@ var locations = [
 	{
 		dim: 0,
 		type: "building",
+		name: "袭击塔",
+		pos: [5288, 196, 259]
+	},
+	{
+		dim: 0,
+		type: "building",
 		name: "甘蔗机",
 		pos: [3154, 69, -418]	
 	},
@@ -142,6 +148,30 @@ var locations = [
 	},
 	{
 		dim: 0,
+		type: "villige",
+		name: "村庄_针叶林",
+		pos: [10893, 70, -2437]
+	},
+	{
+		dim: 0,
+		type: "villige",
+		name: "大村庄_针叶林",
+		pos: [10260, 70, -6017]
+	},
+	{
+		dim: 0,
+		type: "villige",
+		name: "僵尸村庄_平原",
+		pos: [8415, 65, -5901]
+	},
+	{
+		dim: 0,
+		type: "villige",
+		name: "村庄_平原",
+		pos: [11037, 70, -3451]
+	},
+	{
+		dim: 0,
 		type: "biome",
 		name: "粘土山",
 		pos: [5908, 93],
@@ -149,9 +179,27 @@ var locations = [
 	},
 	{
 		dim: 0,
+		type: "biome",
+		name: "丛林",
+		pos: [5900, -5066],
+	},
+	{
+		dim: 0,
+		type: "biome",
+		name: "向日葵平原",
+		pos: [10657, 64,-5947],
+	},
+	{
+		dim: 0,
 		type: "nether_portal", // 下界传送门
 		name: "通往基岩上层",
 		pos: [3196, 102, -604]
+	},
+	{
+		dim: 0,
+		type: "nether_portal",
+		name: "w通往基岩上层",
+		pos: [5918, 104, -5105]
 	},
 	{
 		dim: 2,
@@ -193,7 +241,7 @@ var locations = [
 		dim: 0,
 		type: "end_portal",
 		name: "末地传送门",
-		pos: [2364, 888]
+		pos: [2364, 36, 886]
 	},
 	{
 		dim: 1,
@@ -206,6 +254,12 @@ var locations = [
 		type: "nether_portal",
 		name: "通往主城",
 		pos: [38, 130, 15]
+	},
+	{
+		dim: 1,
+		type: "nether_portal",
+		name: "通往丛林",
+		pos: [738, 129, -642]
 	},
 	{
 		dim: 1,
