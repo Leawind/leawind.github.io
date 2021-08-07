@@ -35,6 +35,12 @@ var locations = [
 	{
 		dim: 0,
 		type: "building",
+		name: "地图",
+		pos: [3255, 112, -409]
+	},
+	{
+		dim: 0,
+		type: "building",
 		name: "袭击塔",
 		pos: [5288, 196, 259]
 	},
@@ -224,6 +230,12 @@ var locations = [
 		type: "biome",
 		name: "灵魂沙峡谷",
 		pos: [-600, 200]
+	},
+	{
+		dim: 1,
+		type: "struct",
+		name: "地狱堡垒",
+		pos: [-1367, -89]
 	},
 	{
 		dim: 0,
