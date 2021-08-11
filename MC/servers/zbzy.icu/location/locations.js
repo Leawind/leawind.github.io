@@ -65,7 +65,7 @@ var locations = [
 	{
 		dim: 0,
 		type: "player_home",
-		name: " 家",
+		name: "hanfgggg 家",
 		pos: [247, 83, 110]
 	},
 	{
