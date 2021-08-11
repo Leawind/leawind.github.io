@@ -65,6 +65,12 @@ var locations = [
 	{
 		dim: 0,
 		type: "player_home",
+		name: " 家",
+		pos: [247, 83, 110]
+	},
+	{
+		dim: 0,
+		type: "player_home",
 		name: "Black_Mai 家",
 		pos: [2200, -283]
 	},
