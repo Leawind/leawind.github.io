@@ -1,0 +1,82 @@
+*{
+	/* transition-duration: 120ms; */
+	/* border:solid 1px #ff0; */
+}
+
+body{
+	background-color: var(--text-background);
+	color: var(--font-color);
+}
+
+#side-bar{
+	position: absolute;
+	left: var(--bar-left);
+	top: var(--bar-top);
+	height: 100vh;
+}
+#side-bar-body{
+	overflow: auto;
+	scrollbar-width: 0;
+}#side-bar-body::-webkit-scrollbar{
+	display: none;
+}
+#article-list-head{
+	text-align: center;
+}
+#article-list{
+	overflow: hidden;
+	height: 100%;
+}
+
+#article-list .article-item{
+	width:100%;
+	height: fit-content;
+	line-height: 2em;
+	padding: 0 1em;
+	cursor: pointer;
+}#article-list .article-item:hover{
+	color: var(--hover-font-color);
+	background: var(--hover-background);
+}
+
+
+/* For computer*/
+
+.dv-pc #side-bar{
+	display:flex;
+	flex-direction: row;
+	width: var(--pc-bar-width);
+}
+.dv-pc #side-bar-body{
+	width: 100%;
+}
+.dv-pc #article-list-head{
+	font-size: 30px;
+	line-height: 3em;
+}
+.dv-pc #article-list{
+	font-size: 20px;
+	/* padding: 0 1em; */
+}
+.dv-pc #article-list .article-item{
+
+}
+.dv-pc #side-bar-bar{
+	width: 6px;
+	height: 100vh;
+	background: var(--bar-line-color);
+}
+
+/* For Mobile Device*/
+.dv-mb #side-bar{
+	width: 100vw;
+}
+.dv-mb #side-bar-bar{
+	display: none;
+}
+.dv-mb #article-list{
+
+}
+.dv-mb #article-list .article-item{
+	text-align: center;
+}
