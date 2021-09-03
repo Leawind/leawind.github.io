@@ -15,13 +15,14 @@ body{
 	height: 100vh;
 }
 #side-bar-body{
-	overflow: auto;
+	overflow:auto;
 	scrollbar-width: 0;
 }#side-bar-body::-webkit-scrollbar{
 	display: none;
 }
 #article-list-head{
 	text-align: center;
+	cursor:grab;
 }
 #article-list{
 	overflow: hidden;
@@ -59,11 +60,12 @@ body{
 	/* padding: 0 1em; */
 }
 .dv-pc #article-list .article-item{
-
+	
 }
 .dv-pc #side-bar-bar{
 	width: 6px;
 	height: 100vh;
+	cursor:col-resize;
 	background: var(--bar-line-color);
 }
 

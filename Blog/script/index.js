@@ -31,7 +31,24 @@ function openBar(){
 	}
 
 }
-
+function dragBarStart(e, isTouching=false){
+	//TODO
+	console.log(e);
+	con.isDragingBar = true;
+	if(isTouching){
+		con.dragStartAt = {
+			bar_width: con.cssVar["--pc-bar-width"].slice(0, -2)*1,
+			clientX: e.touches[0].clientX,
+			clientY: e.touches[0].clientY
+		}
+	}else{
+		con.dragStartAt = {
+			bar_width: con.cssVar["--pc-bar-width"].slice(0, -2)*1,
+			clientX: e.touches[0].clientX,
+			clientY: e.touches[0].clientY
+		}
+	}
+}
 
 
 window.con = {
@@ -46,8 +63,13 @@ window.con = {
 		"--bar-left": "0",
 		"--bar-top": "0",
 	},
-	MIN_BAR_WIDTH: 20,
+	isDragingBar: false,
+	MIN_BAR_WIDTH: 10,
 	MAX_BAR_WIDTH: 90,
+	dragStartAt: {
+		bar_width: 0,
+		clientX:0, clientY:0,
+	},
 	pointPos: {
 		x: 0, y: 0,
 		screenX: 0, screenY: 0,
@@ -70,6 +92,32 @@ window.onmousemove = function(e){
 		con.pointPos[key] = e[key];
 	}
 	// console.log(con.pointPos);
-
-
+	if(con.isDragingBar){
+		let v = (e.clientX-con.dragStartAt.clientX)/document.body.clientWidth*100 + con.dragStartAt.bar_width
+		if(v<con.MIN_BAR_WIDTH) v = con.MIN_BAR_WIDTH;
+		if(v>con.MAX_BAR_WIDTH) v = con.MAX_BAR_WIDTH;
+		con.cssVar["--pc-bar-width"] = v +'vw';
+		e.preventDefault()
+	}
+}
+window.ontouchmove = function(e){
+	//TODO
+	let te = e.touches[0];
+	for(let key in con.pointPos){
+		let v = te[key];
+		if(v!==undefined) con.pointPos[key] = v;
+	}
+	if(con.isDragingBar){
+		// console.log(con.pointPos);
+		let v = (te.clientX-con.dragStartAt.clientX)/document.body.clientWidth*100 + con.dragStartAt.bar_width
+		if(v<con.MIN_BAR_WIDTH) v = con.MIN_BAR_WIDTH;
+		if(v>con.MAX_BAR_WIDTH) v = con.MAX_BAR_WIDTH;
+		con.cssVar["--pc-bar-width"] = v +'vw';
+	}
+}
+window.onmouseup = function(e){
+	con.isDragingBar = false;
+}
+window.ontouchend = function(e){
+	con.isDragingBar = false;
 }

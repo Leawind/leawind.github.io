@@ -13,7 +13,7 @@
 <body>
 	<div id="side-bar">
 		<div id="side-bar-body">
-			<div id="article-list-head">LEAWIND</div>
+			<div id="article-list-head" onmousedown="dragBarStart(event)" ontouchstart="dragBarStart(event, true)">LEAWIND</div>
 			<div id="article-list">
 				<div class="article-item">Test-测试1</div>
 				<div class="article-item">Test-测试2</div>
@@ -33,7 +33,7 @@
 				<div class="article-item">Test-测试6</div>
 			</div>
 		</div>
-		<div id=side-bar-bar></div>
+		<div id=side-bar-bar onmousedown="dragBarStart(event)" ontouchstart="dragBarStart(event, true)"></div>
 	</div>
 	<div id="article-body"></div>
 	<script src="script/index.js"></script>
