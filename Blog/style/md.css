@@ -1,0 +1,32 @@
+.markdown{
+
+}
+.markdown pre{
+	border: solid 1px #888;
+	padding: 0.5em;
+	cursor:text;
+	overflow-x: auto;
+}
+.markdown table td{
+	box-sizing: border-box;
+	outline: solid 1px #888;
+	padding: 0 0.5em;
+	line-height: 2em;
+}
+.markdown a{
+	color: #88f;
+}.markdown a:hover{
+	color: #55f;
+}
+
+
+
+/*=============================*/
+/*========= For computer ======*/
+/*=============================*/
+
+
+
+/*=============================*/
+/*===== For Mobile Device =====*/
+/*=============================*/

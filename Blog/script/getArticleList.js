@@ -20,6 +20,7 @@ function loadArticles(t){
 		t = t.split('\n');
 		ArticleList = t;
 		window.loadArticles(t);
+		// this.remove();
 	}
 })()
 
@@ -30,9 +31,14 @@ function showArticle(ele){
 		// console.log(tr);
 		// console.log(tr.content);
 		let t = tr.content;
-		let converter = new showdown.Converter();
-		t = converter.makeHtml(t)
-		articleBody.innerHTML = t;
+		if(1){
+			let converter = new showdown.Converter({tables:true,});
+			t = converter.makeHtml(t)
+		}else{
+			let mdl = new MDL();
+			t = mdl.convert(t);
+		}
+		articleBody.innerHTML = `<div class="markdown">${t}</div>`;
 	});
 
 }

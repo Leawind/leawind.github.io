@@ -23,6 +23,7 @@ class TextReader{
 			let obj = window._TextReaderEs[this.getAttribute("title")*1];
 			obj.content = this.contentWindow.document.body.innerText;
 			if(obj.whenLoaded) obj.whenLoaded(obj);
+			obj.ele.remove();
 		}
 		window._TextReaderEs[this.ord] = this;
 		this.ele = ele;
