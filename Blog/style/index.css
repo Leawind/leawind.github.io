@@ -40,8 +40,18 @@ body{
 	background: var(--hover-background);
 }
 
+#article-body{
+	padding: 5em;
+}
 
-/* For computer*/
+#article-body{
+	white-space:pre-wrap;
+}
+
+
+/*=============================*/
+/*========= For computer ======*/
+/*=============================*/
 
 .dv-pc #side-bar{
 	display:flex;
@@ -54,13 +64,15 @@ body{
 .dv-pc #article-list-head{
 	font-size: 30px;
 	line-height: 3em;
+	touch-action: none;
 }
 .dv-pc #article-list{
 	font-size: 20px;
 	/* padding: 0 1em; */
 }
 .dv-pc #article-list .article-item{
-	
+	overflow: hidden;
+	white-space: nowrap;
 }
 .dv-pc #side-bar-bar{
 	width: 6px;
@@ -69,7 +81,17 @@ body{
 	background: var(--bar-line-color);
 }
 
-/* For Mobile Device*/
+.dv-pc #article-body{
+	position:absolute;
+	right: 0;
+	top: 0;
+	width: calc(100vw - var(--pc-bar-width));
+	height: 100vh;
+}
+
+/*=============================*/
+/*===== For Mobile Device =====*/
+/*=============================*/
 .dv-mb #side-bar{
 	width: 100vw;
 }

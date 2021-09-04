@@ -33,22 +33,25 @@ function openBar(){
 }
 function dragBarStart(e, isTouching=false){
 	//TODO
-	console.log(e);
+	e.preventDefault();
 	con.isDragingBar = true;
-	if(isTouching){
+	if(e.type=="mousedown"){
 		con.dragStartAt = {
 			bar_width: con.cssVar["--pc-bar-width"].slice(0, -2)*1,
-			clientX: e.touches[0].clientX,
-			clientY: e.touches[0].clientY
+			clientX: e.clientX,
+			clientY: e.clientY,
 		}
 	}else{
 		con.dragStartAt = {
 			bar_width: con.cssVar["--pc-bar-width"].slice(0, -2)*1,
 			clientX: e.touches[0].clientX,
-			clientY: e.touches[0].clientY
+			clientY: e.touches[0].clientY,
 		}
 	}
 }
+
+
+
 
 
 window.con = {
@@ -64,7 +67,7 @@ window.con = {
 		"--bar-top": "0",
 	},
 	isDragingBar: false,
-	MIN_BAR_WIDTH: 10,
+	MIN_BAR_WIDTH: 5,
 	MAX_BAR_WIDTH: 90,
 	dragStartAt: {
 		bar_width: 0,
@@ -87,6 +90,7 @@ var staticSync = function(){
 setInterval(staticSync, 0);
 
 // Events
+
 window.onmousemove = function(e){
 	for(let key in con.pointPos){
 		con.pointPos[key] = e[key];

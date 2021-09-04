@@ -44,6 +44,14 @@ int main(int argument_length, char* arguments){
 }
 ```
 
+另一段代码:
+
+```js
+document.getElementByTagName("body").innerHTML = ''
+```
+
+
+
 ## 然后宣布几件事：
 
 * 首先，这是第一件事
@@ -60,4 +68,4 @@ int main(int argument_length, char* arguments){
 
 ## 图片
 
-![建国同志](img/image-20210903163305297.png)
+![建国同志](https://pic1.zhimg.com/v2-afff64e20f5ef81cc735f58153d45179_1440w.jpg?source=172ae18b)

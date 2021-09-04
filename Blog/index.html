@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+	<meta http-equiv="Expires" content="0">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Cache-control" content="no-cache">
+	<meta http-equiv="Cache" content="no-cache">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>His Blog</title>
@@ -8,32 +12,22 @@
 	<link rel="stylesheet" href="style/top.css">
 	<link rel="stylesheet" href="style/index.css">
 	<script src="script/deviceJudger.js"></script>
-	<script src="script/articleList.js"></script>
+
+	<script src="script/lib/showdown.js"></script>
+	<script src="script/lib/mdl.js"></script>
+	<script src="script/lib/TextReader.js"></script>
+	<iframe src="markdown/list.txt" importance="high" id="iframe-mdlist" style="display:none;"></iframe>
+	<script src="script/getArticleList.js"></script>
 </head>
 <body>
 	<div id="side-bar">
 		<div id="side-bar-body">
-			<div id="article-list-head" onmousedown="dragBarStart(event)" ontouchstart="dragBarStart(event, true)">LEAWIND</div>
+			<div id="article-list-head" onmousedown="dragBarStart(event)" ontouchstart="dragBarStart(event)">LEAWIND</div>
 			<div id="article-list">
-				<div class="article-item">Test-测试1</div>
-				<div class="article-item">Test-测试2</div>
-				<div class="article-item">Test-测试5</div>
-				<div class="article-item">Test-测试6</div>
-				<div class="article-item">Test-测试3</div>
-				<div class="article-item">Test-测试6</div>
-				<div class="article-item">Test-测试5</div>
-				<div class="article-item">Test-测试6</div>
-				<div class="article-item">Test-测试3</div>
-				<div class="article-item">Test-测试6</div>
-				<div class="article-item">Test-测试5</div>
-				<div class="article-item">Test-测试6</div>
-				<div class="article-item">232432</div>
-				<div class="article-item">Test-测试6</div>
-				<div class="article-item">Test-测试3</div>
-				<div class="article-item">Test-测试6</div>
+				<div class="article-item">Test-测试afwefgwadwege1</div>
 			</div>
 		</div>
-		<div id=side-bar-bar onmousedown="dragBarStart(event)" ontouchstart="dragBarStart(event, true)"></div>
+		<div id=side-bar-bar onmousedown="dragBarStart(event)" ontouchstart="dragBarStart(event)"></div>
 	</div>
 	<div id="article-body"></div>
 	<script src="script/index.js"></script>
