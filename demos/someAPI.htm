@@ -18,8 +18,8 @@ body{
 		</style>
 	</head>
 	<body>
-		<input type="text" id="vibrateDuration">
-		<button onclick="window.navigator.vibrate(document.getElementById('vibrateDuration').value*1)">Start</button>
+		<button onclick="window.v = setInterval(()=>{navigator.vibrate(1000)}, 1000)">Start</button>
+		<button onclick="window.navigator.vibrate(0);window.clearInterval(window.v);">Stop</button>
 		<div id="apis"></div>
 		<script>
 //DOM
