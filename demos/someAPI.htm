@@ -3,7 +3,6 @@
 	<head>
 		<title>APIs</title>
 		<meta charset="utf-8">
-		<meta>
 		<style>
 *{
 	padding: 0;
@@ -12,15 +11,16 @@
 }
 body{
 	padding:1em;
-	font-size: 3.2vmin;
+	font-size: 20px;
 	font-family:'Courier New', Courier, monospace;
 	font-weight: 900;
 }
 		</style>
 	</head>
 	<body>
-		<div id="apis">
-		</div>
+		<input type="text" id="vibrateDuration">
+		<button onclick="window.navigator.vibrate(document.getElementById('vibrateDuration').value*1)">Start</button>
+		<div id="apis"></div>
 		<script>
 //DOM
 var box = document.getElementById('apis')
