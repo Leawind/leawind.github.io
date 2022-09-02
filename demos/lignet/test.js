@@ -93,7 +93,7 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 		}
 
 		lw.frc = 0; // 流体阻力系数
-		lw.fc = 0.02;
+		lw.fc = 0.1;
 		lw.renderOptions.fVisible = false; // 物体所受合力 可见性
 	}
 
