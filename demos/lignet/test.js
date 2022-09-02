@@ -54,28 +54,47 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 	// 	for (let i = 0; i < 16; i++)
 	// 		console.warn("Random:", Math.seedRandom(-10, 10));
 }
-
 (() => {
-	const WorldHeight = 1.08, // 世界高度
-		WorldWidth = 1.92; // 世界宽度
-	const RESOLUTION = 1000; // 1m对应多少像素
+	const WorldHeight = 3.2, // 世界高度
+		WorldWidth = 1.7; // 世界宽度
+	const RESOLUTION = 600; // 1m对应多少像素
 
 	const cvs = document.querySelector("#testcvs"); // 获取画布元素
+
 	window.lw = new LignetWorld(); // 创建世界实例
+
 	// 设置世界属性
 	{
 		lw.setWorldSize([WorldWidth, WorldHeight]);
+		{
+			// 设置重力场
 
-		// 设置重力场
-		lw.x_fields.gravity = (x) => [
-			Math.cos(Date.now() * 4e-4) * 9.8,
-			Math.sin(Date.now() * 4e-4) * 9.8,
-		];
-		lw.x_fields.gravity = (x) => [0, -9.8];
+			let aclx = null,
+				acly = null,
+				aclz = null;
+			window.ondevicemotion = (e) => {
+				aclx = -e.accelerationIncludingGravity.x;
+				acly = -e.accelerationIncludingGravity.y;
+				aclz = e.accelerationIncludingGravity.z;
+			};
+
+			lw.x_fields.gravity = (x) => [
+				Math.cos(Date.now() * 4e-4) * 9.8,
+				Math.sin(Date.now() * 4e-4) * 9.8,
+			];
+			lw.x_fields.gravity = (x) => [0, -9.8];
+			lw.x_fields.gravity = (x) => {
+				if (aclx == null) {
+					return [0, -9.8];
+				} else {
+					return [aclx, acly];
+				}
+			};
+		}
 
 		lw.frc = 0; // 流体阻力系数
-		lw.fc = 0.3;
-		lw.renderOptions.fVisible = 0.1; // 物体所受合力 可见性
+		lw.fc = 0.02;
+		lw.renderOptions.fVisible = false; // 物体所受合力 可见性
 	}
 
 	if (!true) {
@@ -122,7 +141,27 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 		}
 	}
 	if (true) {
-		window.onpointerdown = function (e) {
+		for (let i = 0; i < 0; i++) {
+			let p = new Particle(); // 创建粒子实例
+			{
+				p.radius = 0.03;
+				p.mo = 0.03;
+				p.frc = 1;
+				p.fc = 1;
+				p.cvc = 0.9;
+				p.charge = 0;
+				p.v = [0, 0];
+			}
+			// 加入元素
+			lw.appendObject(p, [
+				Math.seedRandom(WorldWidth),
+				Math.seedRandom(WorldHeight),
+			]);
+		}
+
+		// onpointerdown
+
+		window.addEventListener("click", function (e) {
 			let style = window.getComputedStyle(cvs);
 			// 屏幕坐标
 			let x = e.offsetX / style.width.slice(0, -2);
@@ -151,13 +190,13 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 				if (p.radius + np.radius < dist && dist < maxDist) {
 					let rlt = new TelescopicElasticRod();
 					rlt.length = dist;
-					rlt.minLength = dist * 0.5;
-					rlt.maxLength = dist * 1.75;
-					rlt.strength = 30;
+					rlt.minLength = dist * 0.7;
+					rlt.maxLength = dist / 0.7;
+					rlt.strength = 40;
 					lw.appendRelation(rlt, p, np);
 				}
 			}
-		};
+		});
 	}
 
 	var t0 = Date.now() / 1e3;
@@ -169,9 +208,9 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 		PFPS = 1 / dt;
 		FrameTime = dt;
 		t0 = t1;
-		dt = Math.min(dt, 8e-3);
+		dt = Math.min(dt, 1 / 200);
 		lw.update_physic(dt);
-	}, 1e3 / 165);
+	}, 1e3 / 200);
 
 	setInterval(() => {
 		lw.render(cvs, [0, 0], [WorldWidth, WorldHeight], RESOLUTION);

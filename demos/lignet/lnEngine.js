@@ -1,8 +1,8 @@
 //TODO 绘制各区域场强
 // TODO 弹性伸缩杆的长度限制，超出后损毁
 // TODO bug
-var DEBUGMODE = 0;
 
+var DEBUGMODE = 0;
 function db_checkNumber(...args) {
 	if (DEBUGMODE < 3) return;
 	for (let a of args) {
@@ -624,6 +624,7 @@ class LignetRelation {
 		throw new Error("You forgot to overwrite this method!!!");
 	}
 }
+
 /**
  * 伸缩弹性杆
  */
@@ -643,7 +644,7 @@ class TelescopicElasticRod extends LignetRelation {
 	damping = 1e-9;
 
 	// 弹力与长度的关系, 正代表拉力，负代表推力
-	#resilience(x) {
+	resilience(x) {
 		// E=2.7182818
 		// Slider(y, 0.2, 20, 0.01)
 		// Slider(a, 0.1, 2, 0.01)
@@ -658,7 +659,7 @@ class TelescopicElasticRod extends LignetRelation {
 
 		let r =
 			x > this.length
-				? a * (Math.E ** (b * (x - this.length)) - 1)
+				? a * (Math.exp(b * (x - this.length)) - 1)
 				: c * Math.log(x / this.length);
 		r = Math.min(r, 10);
 		r = Math.max(r, -10);
@@ -682,12 +683,12 @@ class TelescopicElasticRod extends LignetRelation {
 
 		let rv = [o1.v[0] - o0.v[0], o1.v[1] - o0.v[1]]; // 相对速度
 		let rvy = Vectorjs["|>"](rv, _i);
-		let vy2 = rvy[0] ** 2 + rvy[1] ** 2;
+		let vy2 = rvy[0] * rvy[0] + rvy[1] * rvy[1];
 		let vy = Math.sqrt(vy2);
 
 		db_checkNumber(rv, rvy, vy2, vy);
 
-		let force = this.#resilience(dist);
+		let force = this.resilience(dist);
 		let _F = [
 			//
 			_i[0] * force * Math.pow(1 / 1, vy),
