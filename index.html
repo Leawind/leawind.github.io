@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>LEAWIND boring games</title>
-</head>
-<body>
-	<div id="md"></div>
-	<script>
-var demos = [
-	"Blog/index.html",
-	"home/index.html",
-	"demos/3Df/3Dviewer.htm",
-	"demos/crimpt/crimpt.htm",
-	"demos/FAM/index.htm",
-	"demos/particle/particle.htm",
-	"demos/ai/test.htm",
-	"demos/someAPI.htm",
-	// "Tp/jxnu/index.html"
-]
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>LEAWIND boring games</title>
+	</head>
+	<body>
+		<div id="md"></div>
+		<script>
+			var demos = [
+				"Blog/index.html",
+				"home/index.html",
+				"demos/3Df/3Dviewer.htm",
+				"demos/crimpt/crimpt.htm",
+				"demos/FAM/index.htm",
+				"demos/particle/particle.htm",
+				"demos/ai/test.htm",
+				"demos/lignet/test.htm",
+				"demos/someAPI.htm",
+				// "Tp/jxnu/index.html"
+			];
 
-var Es = {
-	md: document.getElementById("md"),
-}
-var txt = '';
-for(let i=0;i<demos.length;i++){
-	txt += `<a href="${demos[i]}">${demos[i]}</a></br>`
-}
-Es.md.innerHTML = txt;
-	</script>
-</body>
+			var Es = {
+				md: document.getElementById("md"),
+			};
+			var txt = "";
+			for (let i = 0; i < demos.length; i++) {
+				txt += `<a href="${demos[i]}">${demos[i]}</a></br>`;
+			}
+			Es.md.innerHTML = txt;
+		</script>
+	</body>
 </html>
