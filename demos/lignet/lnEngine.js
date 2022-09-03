@@ -1,6 +1,5 @@
 //TODO 绘制各区域场强
 // TODO 弹性伸缩杆的长度限制，超出后损毁
-// TODO bug
 
 var DEBUGMODE = 0;
 function db_checkNumber(...args) {
@@ -640,11 +639,15 @@ class TelescopicElasticRod extends LignetRelation {
 	// 弹力(零点导数)
 	strength = 5;
 
-	// 阻尼系数 s/m
-	damping = 1e-9;
+	// 阻尼系数 > 0
+	damping = 2;
+
+	// 透明度
+	alpha = 0.25;
 
 	// 弹力与长度的关系, 正代表拉力，负代表推力
 	resilience(x) {
+		// http://mathstud.io/
 		// E=2.7182818
 		// Slider(y, 0.2, 20, 0.01)
 		// Slider(a, 0.1, 2, 0.01)
@@ -674,29 +677,46 @@ class TelescopicElasticRod extends LignetRelation {
 		let _d = [o1.x[0] - o0.x[0], o1.x[1] - o0.x[1]],
 			dist = Vectorjs.mod(_d);
 
+		// 长度限制
 		if (dist < this.minLength || this.maxLength < dist) this.destroy();
 
 		let _i = [_d[0] / dist, _d[1] / dist]; // 单位向量
 		db_checkNumber(_d, dist, _i);
 
-		// 长度限制
+		let rv = [o1.v[0] - o0.v[0], o1.v[1] - o0.v[1]]; // 相对速度 /
+		let rvy = Vectorjs["|>"](rv, _d); // 相对速度在连线方向上的分量 /
+		let rvh = Vectorjs["|-"](rv, _d); // 相对速度在连线垂直方向上的分量 /
+		db_checkNumber(rv, rvy, rvh);
 
-		let rv = [o1.v[0] - o0.v[0], o1.v[1] - o0.v[1]]; // 相对速度
-		let rvy = Vectorjs["|>"](rv, _i);
-		let vy2 = rvy[0] * rvy[0] + rvy[1] * rvy[1];
-		let vy = Math.sqrt(vy2);
+		let vy = Vectorjs.mod(rvy); // 连线上相对速度大小 /
+		if (vy == 0) return;
+		let vy2 = vy * vy;
+		db_checkNumber(vy, vy2);
 
-		db_checkNumber(rv, rvy, vy2, vy);
+		db_checkNumber(rv, rvh, rvy, vy2, vy);
 
-		let force = this.resilience(dist);
-		let _F = [
-			//
-			_i[0] * force * Math.pow(1 / 1, vy),
-			_i[1] * force * Math.pow(1 / 1, vy),
-		];
+		// 阻尼
+		{
+			let mul = 2 ** ((-this.damping * 1e-3) / dt); // 动量乘数
+			let n_rvy;
+			// n_rvy = [_i[0] * vy, _i[1] * vy]; //新的相对速度
+			n_rvy = [rvy[0] * mul, rvy[1] * mul];
+
+			let dt_rvy = [n_rvy[0] - rvy[0], n_rvy[1] - rvy[1]]; // 相对速度变化量
+
+			let w0 = o0.mo / (o0.mo + o1.mo),
+				w1 = 1 - w0; // 二者质量权重
+			o0.v[0] -= dt_rvy[0] * w1;
+			o0.v[1] -= dt_rvy[1] * w1;
+			o1.v[0] += dt_rvy[0] * w0;
+			o1.v[1] += dt_rvy[1] * w0;
+		}
+
+		let force = this.resilience(dist); // 拉力大小，正表示拉力，负表示推力
+		let _F = [_i[0] * force, _i[1] * force]; // 拉力矢量
+
 		db_checkNumber(force, _F);
 
-		// TODO
 		o0._F[0] += _F[0];
 		o0._F[1] += _F[1];
 		o1._F[0] -= _F[0];
@@ -713,7 +733,7 @@ class TelescopicElasticRod extends LignetRelation {
 			(P1[1] - this.object1.x[1]) * s
 		);
 		c.lineWidth = 2;
-		c.strokeStyle = `rgba(255,255,255,0.25)`;
+		c.strokeStyle = `rgba(255,255,255,${this.alpha})`;
 		c.stroke();
 	}
 }

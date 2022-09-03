@@ -1,3 +1,5 @@
+// TODO 放置粒子时距离其他粒子要足够远
+
 var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 
 {
@@ -66,9 +68,8 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 	// 设置世界属性
 	{
 		lw.setWorldSize([WorldWidth, WorldHeight]);
+		// 设置重力场
 		{
-			// 设置重力场
-
 			let aclx = null,
 				acly = null,
 				aclz = null;
@@ -83,6 +84,7 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 				Math.sin(Date.now() * 4e-4) * 9.8,
 			];
 			lw.x_fields.gravity = (x) => [0, -9.8];
+
 			lw.x_fields.gravity = (x) => {
 				if (aclx == null) {
 					return [0, -9.8];
@@ -91,9 +93,8 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 				}
 			};
 		}
-
 		lw.frc = 0; // 流体阻力系数
-		lw.fc = 0.1;
+		lw.fc = 0; // 摩擦阻力系数 0.1
 		lw.renderOptions.fVisible = false; // 物体所受合力 可见性
 	}
 
@@ -141,15 +142,18 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 		}
 	}
 	if (true) {
+		const ParticleSettings = {
+			radius: 0.03,
+			mo: 0.03,
+			frc: 1,
+			fc: 1,
+			cvc: 0.5,
+			charge: 0.1,
+		};
 		for (let i = 0; i < 0; i++) {
 			let p = new Particle(); // 创建粒子实例
-			{
-				p.radius = 0.03;
-				p.mo = 0.03;
-				p.frc = 1;
-				p.fc = 1;
-				p.cvc = 0.9;
-				p.charge = 0;
+			for (let k in ParticleSettings) {
+				p[k] = ParticleSettings[k];
 				p.v = [0, 0];
 			}
 			// 加入元素
@@ -160,7 +164,6 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 		}
 
 		// onpointerdown
-
 		window.addEventListener("click", function (e) {
 			let style = window.getComputedStyle(cvs);
 			// 屏幕坐标
@@ -171,29 +174,38 @@ var DEBUGMODE = 3; // 0, 1, 2, 3, 4
 			y *= WorldHeight;
 
 			// 创建粒子
-			let p = new Particle();
-			{
-				p.radius = 0.03;
-				p.mo = 0.03;
-				p.frc = 1;
-				p.fc = 1;
-				p.cvc = 0.9;
-				p.charge = 0;
-				p.v = [0, 0];
-			}
-			lw.appendObject(p, [x, y]);
-			// 创建关系
-			const maxDist = 0.5;
+			// 判断距离
 			for (let np of lw.objectsList) {
-				if (np == p) continue;
-				let dist = Vectorjs.distance(p.x, np.x);
-				if (p.radius + np.radius < dist && dist < maxDist) {
-					let rlt = new TelescopicElasticRod();
-					rlt.length = dist;
-					rlt.minLength = dist * 0.7;
-					rlt.maxLength = dist / 0.7;
-					rlt.strength = 40;
-					lw.appendRelation(rlt, p, np);
+				if (
+					Vectorjs.distance([x, y], np.x) <
+					np.radius + ParticleSettings.radius
+				) {
+					return;
+				}
+			}
+
+			let p = new Particle();
+			for (let k in ParticleSettings) {
+				p[k] = ParticleSettings[k];
+			}
+			p.v = [0, 0];
+			lw.appendObject(p, [x, y]);
+
+			// 创建关系
+			if (true) {
+				const maxDist = 0.5;
+				for (let np of lw.objectsList) {
+					if (np == p) continue;
+					let dist = Vectorjs.distance(p.x, np.x);
+					if (p.radius + np.radius < dist && dist < maxDist) {
+						let rlt = new TelescopicElasticRod();
+						rlt.length = dist;
+						rlt.minLength = dist * 0.7;
+						rlt.maxLength = dist * 1.5;
+						rlt.strength = 20;
+						rlt.alpha = 0.04;
+						lw.appendRelation(rlt, p, np);
+					}
 				}
 			}
 		});
