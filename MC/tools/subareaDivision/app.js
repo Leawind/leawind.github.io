@@ -11,7 +11,7 @@
 		Es.cmds.value = "";
 	}
 
-	Es.opts.value = convert(Es.opts.value);
+	Es.opts.value = convert(Es.cmds.value);
 	resize(Es.cmds);
 	resize(Es.errs);
 	resize(Es.opts);
