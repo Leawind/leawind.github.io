@@ -1,0 +1,51 @@
+* {
+	font-family: "Fira Code";
+	transition-duration: 80ms;
+}
+body{
+	font-size: 2.4vw;
+}
+textarea {
+	margin-top: 0.6em;
+	padding: 0.5em;
+	font-family: fira, consolas;
+	font-size: 1em;
+	line-height: 1.2em;
+	display: block;
+	min-height: 1.2em;
+	height: 1.2em;
+	resize: none;
+	min-height: 2em;
+	width: 96vw;
+	font-family: "Fira Code", consolas;
+	font-weight: 600;
+	border: none;
+	outline: none;
+	white-space: pre;
+}
+textarea:focus {
+	border: none;
+	outline: none;
+}
+
+#commands {
+	background: #fff;
+	color: #000;
+	border: 2px solid #00f;
+}
+
+#errors {
+	min-height: 0;
+	font-size: 0.7em;
+	background: #a11;
+	color: #eee;
+	font-weight: 600;
+	border: 2px solid #f00;
+	display: none;
+}
+
+#outputs {
+	background: #000;
+	color: #fff;
+	border: 2px solid #ff0;
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Subarea Division</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<h1>Minecraft 子区域划分</h1>
+		<p>Minecraft 的 clone 和 fill 命令只能操作体积小于等于 32768 的区域。如果需要操作更大的空间，就需要将大空间划分成多个小空间以满足体积限制。</p>
+		<p>当要操作的大空间非常大时，手动划分会比较繁琐和低效。</p>
+		<p>在蓝色框中输入命令（每行一条）</p>
+		<p><b>只能使用世界绝对坐标</b></p>
+		<textarea name="commands" id="commands" cols="30" rows="10" warp="off"></textarea>
+		<textarea name="errors" id="errors" cols="30" rows="10" readonly warp="off"></textarea>
+		<textarea name="outputs" id="outputs" cols="30" rows="10" readonly warp="off"></textarea>
+		<script src="algo.js"></script>
+		<script src="app.js"></script>
+	</body>
+</html>
