@@ -8,7 +8,7 @@
 	if ("inputs" in localStorage) {
 		Es.cmds.value = localStorage.inputs;
 	} else {
-		Es.cmds.value = "";
+		Es.cmds.value = "/fill 0 0 0 0 0 32768";
 	}
 
 	Es.opts.value = convert(Es.cmds.value);
