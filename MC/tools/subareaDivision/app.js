@@ -7,9 +7,11 @@
 
 	if ("inputs" in localStorage) {
 		Es.cmds.value = localStorage.inputs;
+	} else {
+		Es.cmds.value = "";
 	}
 
-	Es.opts.value = convert(localStorage.inputs);
+	Es.opts.value = convert(Es.opts.value);
 	resize(Es.cmds);
 	resize(Es.errs);
 	resize(Es.opts);
