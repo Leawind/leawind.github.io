@@ -1,6 +1,7 @@
 *.ignored
 *.ignored/
 *.ignored/*
+*.ignored.*
 
 bad/
 bad/*
