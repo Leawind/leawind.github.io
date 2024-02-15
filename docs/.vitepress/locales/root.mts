@@ -1,5 +1,5 @@
 export default {
-	label: '简体中文',
+	label: '默认',
 	lang: 'zh-CN',
 	title: "Leawind的文档",
 	titleTemplate: ":title | Leawind的文档",
