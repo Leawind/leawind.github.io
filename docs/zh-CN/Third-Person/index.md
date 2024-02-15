@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: 捐赠
-      link: /donate
+      link: /zh-CN/donate
     - theme: alt
       text: 🏅徽章
       link: ./_badges

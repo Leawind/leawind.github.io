@@ -3,7 +3,6 @@ import en from "./en.mjs";
 import zhCN from "./zh-CN.mts";
 
 export default {
-	root,
-	en,
+	en: en,
 	'zh-CN': zhCN,
 };
