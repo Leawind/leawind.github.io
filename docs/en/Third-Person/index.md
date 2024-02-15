@@ -9,6 +9,9 @@ hero:
     - theme: brand
       text: Donate
       link: /en/donate
+    - theme: alt
+      text: 🏅Badges
+      link: ./.badges
 features:
   - title: Introduction
     link: ./intro
