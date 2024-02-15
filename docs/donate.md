@@ -9,14 +9,14 @@ hero:
   image: 
 features:
 
-  - title: 微信
-    details: 🔍💬 <img src=/donate/wechat.png>
-    icon: {src: /icons/wechat.svg}
-
   - title: 支付宝
     details: 💸👶 <img src=/donate/alipay.png style="width:100%;image-rendering:pixelated">
     link: https://qr.alipay.com/fkx13526acsazyxpidsxj0e
     icon: {src: /icons/alipay.svg}
+
+  - title: 微信
+    details: 🔍💬 <img src=/donate/wechat.png>
+    icon: {src: /icons/wechat.svg}
 
   - title: 爱发电
     details: 💖⚡️ <img src=/donate/afdian.png style="width:100%;image-rendering:pixelated">
@@ -30,7 +30,7 @@ features:
     icon: {src: /icons/bmc.svg}
 
   - title: Patreon
-    details: Not available yet
+    details: 暂无
     link: 
     icon: 
       dark: /icons/patreon-dark.svg
