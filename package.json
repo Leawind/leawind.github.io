@@ -1,0 +1,12 @@
+{
+	"author": "Leawind",
+	"private": true,
+	"scripts": {
+		"docs:dev": "vitepress dev docs -p5173",
+		"docs:build": "vitepress build docs",
+		"docs:preview": "vitepress preview docs"
+	},
+	"dependencies": {
+		"vitepress": "1.0.0-rc.32"
+	}
+}

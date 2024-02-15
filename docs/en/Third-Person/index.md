@@ -1,0 +1,28 @@
+---
+layout: home
+hero:
+  name: Leawind's Third Person
+  text:
+  tagline: Notice:This doc is only for the latest version (2.0.4+)
+  image: 
+  actions:
+    - theme: brand
+      text: Donate
+      link: /en/donate
+features:
+  - title: Introduction
+    link: ./intro
+    icon: 🗒
+  - title: Mod Configuration
+    link: ./configuration
+    icon: ⚙️
+  - title: Changelog
+    link: ./changelog
+    icon: 📝
+  - title: FAQ
+    link: ./faq
+    icon: 💬
+  - title: Gallery
+    link: ./gallery
+    icon: 🖼
+---

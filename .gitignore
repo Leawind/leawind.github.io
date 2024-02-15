@@ -1,0 +1,9 @@
+# npm
+node_modules
+
+# vitepress
+docs/.vitepress/dist
+docs/.vitepress/cache
+
+# vscode
+.vscode
