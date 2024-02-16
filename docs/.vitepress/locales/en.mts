@@ -13,7 +13,7 @@ export default {
 					{ text: 'MCAFS', link: '/en/mcafs/' },
 				]
 			},
-			{ text: 'Misc', link: '/misc/' },
+			{ text: 'Misc', link: '/en/misc/' },
 		],
 		sidebar: {
 			'/en/Third-Person': [

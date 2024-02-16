@@ -5,6 +5,9 @@ import locales from './locales/index.mjs';
 export default defineConfig({
 	base: '/',
 	cleanUrls: true,
+	router: {
+		prefetchLinks: true,
+	},
 	themeConfig: {
 		socialLinks: [
 			{ link: 'https://github.com/LEAWIND', icon: 'github' },
