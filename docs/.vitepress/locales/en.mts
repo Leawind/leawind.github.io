@@ -17,6 +17,7 @@ export default {
 		],
 		sidebar: {
 			'/en/Third-Person': [
+				{ text: "Leawind's Third Person", link: '.', },
 				{ text: "🗒Introduction", link: './intro', },
 				{ text: "⚙️Configuration", link: './configuration', },
 				{ text: "📝Changelog", link: './changelog', },

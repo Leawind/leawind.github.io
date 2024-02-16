@@ -1,5 +1,8 @@
 # Issue
 
+## issue labels
+https://github.com/vuejs/vitepress/labels
+
 ## 飞行时转向相机落点会怎样
 
 ## pick距离过远时MISS
