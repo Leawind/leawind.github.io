@@ -26,7 +26,7 @@ export default {
 			]
 		},
 		footer: {
-			message: '<a href=/zh-CN/donate>💰捐赠</a>',
+			message: '<a href=/zh-CN/donate>💰捐赠</a> <br> 本文档使用 <a href=https://vitepress.dev>vitepress</a> 构建',
 			copyright: 'Copyright © 2024 Leawind',
 		},
 		editLink: {

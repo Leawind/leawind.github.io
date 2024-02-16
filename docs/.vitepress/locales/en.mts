@@ -26,7 +26,7 @@ export default {
 			]
 		},
 		footer: {
-			message: '<a href=/en/donate>💰Donate</a>',
+			message: '<a href=/en/donate>💰Donate</a> <br> This doc is build by <a href=https://vitepress.dev>vitepress</a>',
 			copyright: 'Copyright © 2024 Leawind',
 		},
 		editLink: {
