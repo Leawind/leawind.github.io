@@ -11,6 +11,12 @@ hero:
     - theme: brand
       text: 捐赠
       link: /zh-CN/donate
+    - theme: alt
+      text: 笔记
+      link: /zh-CN/Notes/
+    - theme: alt
+      text: 杂项
+      link: /zh-CN/misc/
 features:
   - title: Leawind的第三人称
     details: 一个Minecraft模组，提供了更好的第三人称。
@@ -23,8 +29,4 @@ features:
     details: 一个FTP服务器，用于访问Minecraft的全局资源
     link: /zh-CN/mcafs/
     icon: 🗂
-  - title: 杂项
-    details: 懒得分类
-    link: /zh-CN/misc/
-    icon: 📝
 ---
