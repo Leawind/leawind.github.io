@@ -23,8 +23,4 @@ features:
     details: A FTP server for accessing Minecraft assets.
     link: /en/mcafs/
     icon: 🗂
-  - title: Misc
-    details: Miscellaneous
-    link: /en/misc/
-    icon: 📝
 ---

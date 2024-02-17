@@ -12,5 +12,8 @@ hero:
     - theme: alt
       text: Verdaccio安装
       link: ./verdaccio_install
+    - theme: alt
+      text: Aircrack-ng
+      link: ./aircrack-ng
 features:
 ---

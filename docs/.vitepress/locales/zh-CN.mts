@@ -31,8 +31,11 @@ export default {
 					items: [
 						{ text: 'Node 环境安装', link: './node_install' },
 						{ text: 'Verdaccio 安装', link: './verdaccio_install' },
+						{ text: 'Aircrack-ng', link: './aircrack-ng' },
 					]
 				},
+			],
+			'/zh-CN/misc': [
 			],
 		},
 		footer: {
