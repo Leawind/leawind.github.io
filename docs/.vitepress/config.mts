@@ -6,6 +6,7 @@ export default defineConfig({
 	head: [
 		['script', { src: '/script/search.js', }],
 	],
+	
 	base: '/',
 	cleanUrls: true,
 	router: {

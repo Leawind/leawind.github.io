@@ -8,5 +8,8 @@
 	},
 	"dependencies": {
 		"vitepress": "1.0.0-rc.32"
+	},
+	"devDependencies": {
+		"@types/node": "^20.11.19"
 	}
 }

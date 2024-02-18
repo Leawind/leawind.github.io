@@ -1,3 +1,5 @@
+import { buildSidebar } from "../builders.mts";
+
 export default {
 	label: '简体中文',
 	lang: 'zh-CN',
@@ -18,25 +20,19 @@ export default {
 		],
 		sidebar: {
 			'/zh-CN/Third-Person': [
-				{ text: "Leawind的第三人称", link: '.', },
-				{ text: "🗒简介", link: './intro', },
-				{ text: "⚙️模组配置", link: './configuration', },
-				{ text: "📝更新日志", link: './changelog', },
-				{ text: "💬常见问题", link: './faq', },
-				{ text: "🖼图册", link: './gallery', },
-			],
-			'/zh-CN/Notes': [
 				{
-					text: '笔记', link: '.',
+					text: "Leawind的第三人称", link: '.',
 					items: [
-						{ text: 'Node 环境安装', link: './node_install' },
-						{ text: 'Verdaccio 安装', link: './verdaccio_install' },
-						{ text: 'Aircrack-ng', link: './aircrack-ng' },
+						{ text: "🗒简介", link: './intro', },
+						{ text: "⚙️模组配置", link: './configuration', },
+						{ text: "📝更新日志", link: './changelog', },
+						{ text: "💬常见问题", link: './faq', },
+						{ text: "🖼图册", link: './gallery', },
 					]
 				},
 			],
-			'/zh-CN/misc': [
-			],
+			'/zh-CN/Notes': buildSidebar('/zh-CN/Notes', '笔记'),
+			'/zh-CN/misc': buildSidebar('/zh-CN/misc', '杂项'),
 		},
 		footer: {
 			message: '<a href=/zh-CN/donate>💰捐赠</a> <br> 本文档使用 <a href=https://vitepress.dev>vitepress</a> 构建',
