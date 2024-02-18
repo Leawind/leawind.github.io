@@ -5,7 +5,7 @@ export function buildSidebar(dir: string, name: string, docsRoot: string = 'docs
 	dir = path.join(docsRoot, dir.replace(/^\/+/g, ''));
 	const sidebar = [parseDir(dir, name)];
 	sidebar[0].link = '.';
-	console.warn(JSON.stringify(sidebar, null, 2));
+	// console.warn(JSON.stringify(sidebar, null, 2));
 	return sidebar;
 
 	function parseDir(dir: string, name: string | null = null) {
@@ -19,7 +19,6 @@ export function buildSidebar(dir: string, name: string, docsRoot: string = 'docs
 					return {
 						text: getTitle(oPath),
 						link: '/' + path.relative(docsRoot, oPath),
-
 					};
 				} else {
 					return parseDir(oPath, oName);

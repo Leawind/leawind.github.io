@@ -21,7 +21,8 @@ export default {
 		sidebar: {
 			'/zh-CN/Third-Person': [
 				{
-					text: "Leawind的第三人称", link: '.',
+					text: "Leawind的第三人称",
+					link: '.',
 					items: [
 						{ text: "🗒简介", link: './intro', },
 						{ text: "⚙️模组配置", link: './configuration', },
