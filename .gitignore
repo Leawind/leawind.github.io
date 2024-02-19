@@ -9,3 +9,8 @@ docs/.vitepress/cache
 .vscode
 
 .draft
+
+# ignored
+**.ignored.*
+**.reprint.*
+**.reprint
