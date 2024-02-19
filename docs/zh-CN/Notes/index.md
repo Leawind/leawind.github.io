@@ -6,8 +6,8 @@ hero:
   tagline: 很实用的嗷🙉
   image: 
   actions:
+    - theme: alt
+      text: Ubuntu tips
+      link: ./Ubuntu/tips
 features:
-    - title: TODO
-      details:
-      link: ./todo
 ---
