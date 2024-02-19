@@ -27,7 +27,7 @@ nvm -v
 
 可能需要先修改 hosts 才连得上
 
-```hosts
+```txt
 199.232.96.133 raw.githubusercontent.com
 ```
 

@@ -29,7 +29,7 @@
 vim /etc/systemd/system/mcafs.service
 ```
 
-```service
+```ini
 [Unit]
 Description=Minecraft Assets FTP Server
 

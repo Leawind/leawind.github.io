@@ -88,7 +88,7 @@ vim /etc/sysctl.conf
 
 在末尾添加
 
-```conf
+```
 net.ipv4.ip_forward = 1
 net.ipv4.conf.all.forwarding = 1
 net.ipv6.conf.all.forwarding = 1
@@ -125,7 +125,7 @@ INTERFACESv6="enp1s0"
 vim /etc/dhcp/dhcpd.conf
 ```
 
-```conf
+```
 # ChatGPT 说这的时间单位是秒
 default-lease-time 14400;
 max-lease-time 28800;
@@ -228,14 +228,14 @@ vim /lib/systemd/system/rc-local.service
 
 在末尾添加
 
-```service
+```ini
 [Install]
 WantedBy=multi-user.target
 ```
 
 保存后重载`systemd`配置
 
-```ssh
+```sh
 systemctl daemon-reload
 ```
 
@@ -268,7 +268,7 @@ apt install bind9 dnsutils
 
 DNS 服务相关选项`/etc/bind/named.conf.options`
 
-```conf
+```
 options {
 	directory "/var/cache/bind";
 
@@ -316,7 +316,7 @@ logging {
 
 `/etc/bind/named.conf.local`
 
-```conf
+```
 zone "s" {
 	type primary;
 	file "/etc/bind/zones/db.s";
@@ -325,7 +325,7 @@ zone "s" {
 
 `etc/bind/zones/db.s`
 
-```zone
+```
 s.	IN		SOA		ns.s.  leawind (
 	20240101	; Serial
 	3600		; Refresh

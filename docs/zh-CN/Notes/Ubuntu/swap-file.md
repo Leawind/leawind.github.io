@@ -40,7 +40,7 @@ sudo cp /etc/fstab /etc/fstab.bak
 
 再在文件末尾添加一行
 
-```fstab
+```
 /swaps/swapfile	none	swap	sw	0	0
 ```
 

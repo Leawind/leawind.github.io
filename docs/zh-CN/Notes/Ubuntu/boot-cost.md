@@ -35,16 +35,14 @@ systemd-analyze blame
 
 ### 可以禁用的服务
 
-```list
-ufw
-apport					应用程序崩溃时弹出提示
-avahi-daemon
-cups
-cups-browsed
-network-manager
-unattended-upgrades
-whoopsie
-```
+-   ufw
+-   apport 应用程序崩溃时弹出提示
+-   avahi-daemon
+-   cups
+-   cups-browsed
+-   network-manager
+-   unattended-upgrades
+-   whoopsie
 
 ### apt-daily 服务
 
@@ -67,7 +65,7 @@ RandomizedDelaySec=30min
 
 启动时卡在这：
 
-```log
+```
 A start job is running for Network to be configured ...
 ```
 
@@ -81,6 +79,6 @@ vim /etc/systemd/system/network-online.target.wants/systemd-networkd-wait-online
 
 在`server`中添加一行
 
-```service
+```ini
 TimeoutStartSec=4sec
 ```

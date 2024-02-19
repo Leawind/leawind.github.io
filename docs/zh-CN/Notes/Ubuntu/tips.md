@@ -222,7 +222,7 @@ sysctl fs.inotify.max_user_watches
 
 编辑文件`/etc/sysctl.conf`或在`/etc/sysctl.d/`下新建文件`local.conf`
 
-```conf
+```
 fs.inotify.max_user_watches=1048576
 ```
 
@@ -342,14 +342,14 @@ vim /lib/systemd/system/rc-local.service
 
 在末尾添加
 
-```service
+```ini
 [Install]
 WantedBy=multi-user.target
 ```
 
 保存后重载`systemd`配置
 
-```ssh
+```sh
 systemctl daemon-reload
 ```
 
