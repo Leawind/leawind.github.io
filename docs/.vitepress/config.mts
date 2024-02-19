@@ -6,7 +6,6 @@ export default defineConfig({
 	head: [
 		['script', { src: '/script/search.js', }],
 	],
-
 	base: '/',
 	cleanUrls: true,
 	router: {
@@ -22,7 +21,22 @@ export default defineConfig({
 		],
 		search: {
 			provider: 'local',
+			options: {
+				miniSearch: {
+					options: {
+						processTerm: term => {
+							term = term.toLowerCase()
+								.replace(/([\u4e00-\u9fff])/g, '$1 ')
+								.trim().replace(/\s+/g, ' ');
+							const terms = term.split(' ');
+							return terms.length === 1 ? term : terms;
+						},
+					},
+					searchOptions: {
+					},
+				},
+			},
 		},
 	},
-	locales: locales
+	locales: locales,
 });
