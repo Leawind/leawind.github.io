@@ -12,5 +12,3 @@ docs/.vitepress/cache
 
 # ignored
 **.ignored.*
-**.reprint.*
-**.reprint
