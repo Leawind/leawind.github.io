@@ -394,3 +394,13 @@ if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
 fi
 ```
+
+## 允许/禁止被 ping
+
+在文件`/etc/sysctl.conf`末尾添加一行
+
+```sh
+net.ipv4.icmp_echo_ignore_all = 0
+```
+
+1 表示忽略 icmp 包，外界就无法 ping 通本机

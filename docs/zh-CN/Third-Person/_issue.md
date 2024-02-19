@@ -1,11 +1,18 @@
 # Issue
 
+## Roadmap?
+
+## 文档中应当介绍如何彻底卸载该模组
+
 ## issue labels
+
 https://github.com/vuejs/vitepress/labels
+
+## GUI 中实现 2D 物理效果
 
 ## 飞行时转向相机落点会怎样
 
-## pick距离过远时MISS
+## pick 距离过远时 MISS
 
 ## 奔跑时迅速转向
 
@@ -21,7 +28,7 @@ https://github.com/vuejs/vitepress/labels
 
 ## 放置床的方向
 
-## 添加配置：玩家pickResult与相机pickResult不同时，禁用交互
+## 添加配置：玩家 pickResult 与相机 pickResult 不同时，禁用交互
 
 <hr />
 
@@ -40,11 +47,12 @@ https://github.com/vuejs/vitepress/labels
 ## 鼠标停止操作一段时间后，视角跟随玩家移动而转动（视角自动跟随）
 
 ## 瞄准时自动从中间切换到两侧视角
+
 https://www.mcmod.cn/class/12699.html
 
 ## 加个龙之谷的视角方式
 
-> 因为我童年的3D启蒙就是它，很习惯他的人物视角放置
+> 因为我童年的 3D 启蒙就是它，很习惯他的人物视角放置
 
 ## 角色头部能在角色朝向准星时的一定范围内会看着准星
 
@@ -77,32 +85,86 @@ https://space.bilibili.com/500810858
 
 经过测试，获取的玩家实体眼睛坐标是准确的，相机坐标的写入也正常。
 
-* [x] float 精度不足
-* [ ] 时间精度不足
+-   [x] float 精度不足
+-   [ ] 时间精度不足
 
 ### 解决方法
 
-* [x] Client tick
-* [x] 独立tick
-* [x] 过去一些tick的平均时间
-* [x] getSmooth(k) -> value + lerp(k, 0, value-lastValue)
-* [x] 双重 smooth
-* [√] Client tick + 插值。这个办法似乎解决了卡顿问题，但仍有一点瑕疵。
-* [ ] 限制 smooth 值变化的加速度
-
+-   [x] Client tick
+-   [x] 独立 tick
+-   [x] 过去一些 tick 的平均时间
+-   [x] getSmooth(k) -> value + lerp(k, 0, value-lastValue)
+-   [x] 双重 smooth
+-   [√] Client tick + 插值。这个办法似乎解决了卡顿问题，但仍有一点瑕疵。
+-   [ ] 限制 smooth 值变化的加速度
 
 ## 移植到其他版本
 
-* [ ] 1.20.4
-* [ ] 1.20.3
-* [ ] 1.20.2
-* [ ] 1.20.1
-* [ ] 1.20
-* [ ] 1.19.4
-* [x] 1.19.2
-* [ ] 1.18.2
-* [ ] 1.16.5
-* [ ] 1.12.2
-* [ ] 1.8.9
+-   [ ] 1.20.4
+-   [ ] 1.20.3
+-   [ ] 1.20.2
+-   [ ] 1.20.1
+-   [ ] 1.20
+-   [ ] 1.19.4
+-   [x] 1.19.2
+-   [ ] 1.18.2
+-   [ ] 1.16.5
+-   [ ] 1.12.2
+-   [ ] 1.8.9
 
 ## 常量选取
+
+## 可能需要兼容的模组
+
+|     |     |                  |                        |
+| --- | --- | ---------------- | ---------------------- |
+|     |     | EpicFight        | 史诗战斗               |
+|     |     | TAC              | 永恒枪械               |
+|     |     | YSM              |                        |
+|     |     |                  | 输入法冲突修复         |
+|     |     |                  | rlcraft 这一类的整合包 |
+|     |     |                  | dawn craft             |
+|     |     |                  | 沉浸式载具             |
+|     |     | Better Combat    |                        |
+|     |     | Do a Barrel Roll |                        |
+|     |     |                  | 瓦尔基里               |
+|     |     | SWEM             |                        |
+|     |     | Parcool          |                        |
+|     |     |                  |                        |
+|     |     |                  |                        |
+|     |     |                  |                        |
+
+## Platforms
+
+| Name           | Usages                             | my url                                              | proj url                                                          |     |     |     |     |     |     |
+| -------------- | ---------------------------------- | --------------------------------------------------- | ----------------------------------------------------------------- | --- | --- | --- | --- | --- | --- |
+| Github         | code,publish,download,donate,issue | https://github.com/LEAWIND                          | https://github.com/LEAWIND/Third-Person                           |     |     |     |     |     |     |
+| Bilibili       | publish,issue                      | https://space.bilibili.com/314412977                | https://www.bilibili.com/video/BV1Fg4y1R7ow                       |     |     |     |     |     |     |
+| afdian         | donate                             | https://afdian.net/a/Leawind                        |                                                                   |     |     |     |     |     |     |
+| Patreon        | donate                             | https://www.patreon.com/user/about?u=67288519       | https://www.patreon.com/                                          |     |     |     |     |     |     |
+| Gitee          | code,publish,download,donate       | https://gitee.com/leawind                           |                                                                   |     |     |     |     |     |     |
+| Modrinth       | publish,download                   | https://modrinth.com/user/leawind                   |                                                                   |     |     |     |     |     |     |
+| CurseForge     | publish,download,issue             | https://www.curseforge.com/members/leawind/projects | https://www.curseforge.com/minecraft/mc-mods/leawind-third-person |     |     |     |     |     |     |
+| mcmod          | publish,issue                      | https://www.mcmod.cn/class/12699.html               | https://www.mcmod.cn/class/12699.html                             |     |     |     |     |     |     |
+| mcbbs          | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
+| Youtube        | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
+| X              | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
+| Twitch         | ?                                  |                                                     |                                                                   |     |     |     |     |     |     |
+| Facebook       |                                    |                                                     |                                                                   |     |     |     |     |     |     |
+| Tiktok         |                                    |                                                     |                                                                   |     |     |     |     |     |     |
+| Instagram      |                                    |                                                     |                                                                   |     |     |     |     |     |     |
+| Reddit         |                                    |                                                     |                                                                   |     |     |     |     |     |     |
+| NeteaseMyWorld | earn money                         |                                                     |                                                                   |     |     |     |     |     |     |
+|                |                                    |                                                     |                                                                   |     |     |     |     |     |     |
+
+## Urls
+
+[Leawind 的第三人称视角](http://doc-notedev.s/ThirdPersonPerspective)
+
+[一个新的第三人称越肩视角模组~](https://www.bilibili.com/video/BV1Fg4y1R7ow)
+
+[★ 我的世界 ★ 更好第三人称 国产模组](https://www.bilibili.com/video/BV17Q4y1x7ow)
+
+[Top 10 Minecraft Mods (1.20.2) - 2023](https://www.youtube.com/watch?v=hBpVYqfyeNM&t=57s)
+
+[26 New Minecraft Mods You Need To Know! (1.20.1, 1.20.2)](https://www.youtube.com/watch?v=m872UIPrD-A)
