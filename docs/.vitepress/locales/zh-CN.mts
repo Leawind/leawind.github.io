@@ -29,6 +29,12 @@ export default {
 						{ text: "📝更新日志", link: './changelog', },
 						{ text: "💬常见问题", link: './faq', },
 						{ text: "🖼图册", link: './gallery', },
+						{
+							text: "其他",
+							items: [
+								{ text: '🏅徽章', link: './badges' },
+							]
+						},
 					]
 				},
 			],

@@ -11,7 +11,7 @@ hero:
       link: /zh-CN/donate
     - theme: alt
       text: 🏅徽章
-      link: ./_badges
+      link: ./badges
 features:
   - title: 简介
     link: ./intro

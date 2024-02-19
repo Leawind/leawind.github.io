@@ -1,3 +1,5 @@
+import { buildSidebar } from "../builders.mts";
+
 export default {
 	label: 'English',
 	lang: 'en',
@@ -25,6 +27,12 @@ export default {
 						{ text: "📝Changelog", link: './changelog', },
 						{ text: "💬FAQ", link: './faq', },
 						{ text: "🖼Gallery", link: './gallery', },
+						{
+							text: "Other",
+							items: [
+								{ text: '🏅Badges', link: './badges' },
+							]
+						},
 					],
 				},
 			]

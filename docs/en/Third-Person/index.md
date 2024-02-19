@@ -11,7 +11,7 @@ hero:
       link: /en/donate
     - theme: alt
       text: 🏅Badges
-      link: ./_badges
+      link: ./badges
 features:
   - title: Introduction
     link: ./intro
