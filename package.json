@@ -8,6 +8,7 @@
 		"bp": "vitepress build docs && vitepress preview docs"
 	},
 	"dependencies": {
+		"nodejieba": "^2.6.0",
 		"vitepress": "1.0.0-rc.32"
 	},
 	"devDependencies": {

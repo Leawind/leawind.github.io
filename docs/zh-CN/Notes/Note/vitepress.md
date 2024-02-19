@@ -49,3 +49,34 @@ export default defineConfig({
 ```
 
 ### 解决方案二
+
+使用分词器
+
+```sh
+npm install nodejieba
+```
+
+这样处理应该就可以了
+```ts
+processTerm: term => {
+	term = term.toLowerCase();
+	if (/[\u4e00-\u9fff]/.test(term)) {
+		term = term.replace(/([\u4e00-\u9fff]+)/g, ' $1 ').trim();
+		let terms = term.split(/\s+/g);
+		const termSet = new Set<string>();
+		for (const t of terms) {
+			if (/[\u4e00-\u9fff]/.test(t)) {
+				jieba.cut(t).forEach(f => termSet.add(f));
+			} else {
+				termSet.add(t);
+			}
+		}
+		terms = [...termSet];
+		console.warn(`[${term}] ${terms.join('|')}`);
+		return terms.length === 1 ? terms[0] : terms;
+	} else {
+		return term;
+	}
+},
+```
+但是并不可以。
