@@ -302,16 +302,16 @@ systemctl set-default multi-user.target # 禁用图形界面
 shutdown -r now # 重新启动
 ```
 
-### ibus 输入法问题
+## ibus 输入法问题
 
 按下 ctrl+. 时会出现 <underline>e</underline>
 执行 `ibus-setup` 即可
 
-### 调整触摸板速度
+## 调整触摸板速度
 
 [How to change 2-finger touchpad scroll speed on Ubuntu 22.04](https://askubuntu.com/questions/1413750/how-to-change-2-finger-touchpad-scroll-speed-on-ubuntu-22-04)
 
-## 找到触摸板备的 id
+### 找到触摸板备的 id
 
 ```bash
 $ xinput list|grep -i touch
@@ -320,7 +320,7 @@ $ xinput list|grep -i touch
 
 可以看到 id=17
 
-## 修改触摸板速度
+### 修改触摸板速度
 
 ```bash
 xinput set-prop 17 "libinput Scrolling Pixel Distance" 50
@@ -329,3 +329,68 @@ xinput set-prop 17 "libinput Scrolling Pixel Distance" 50
 `17` 是触摸板设备 id
 `50` 是速度，值越大，滚动速度越慢
 最大值是 50
+
+## 开机时自动执行脚本
+
+首先确保启用`rc-local`服务。
+
+`rc-local`服务可能默认未启用，需要修改相关配置文件
+
+```sh
+vim /lib/systemd/system/rc-local.service
+```
+
+在末尾添加
+
+```service
+[Install]
+WantedBy=multi-user.target
+```
+
+保存后重载`systemd`配置
+
+```ssh
+systemctl daemon-reload
+```
+
+**确保文件`/etc/rc.local`有执行权限**，然后启用 `rc-local` 服务
+
+```sh
+systemctl enable rc-local.service
+```
+
+在`/etc/rc.local`文件中添加启动脚本即可。
+
+示例：
+
+```sh
+#!/bin/bash
+
+echo Starting startup Script
+
+# read iptables config
+iptables-restore < /etc/iptables/rules.v4
+
+# enable WLAN
+ip link set wlp3s0 up
+
+exit 0
+
+```
+
+注意其中应该尽量使用绝对路径
+
+## 命令的别名
+
+别名可以在 `~/.bash_aliases` 中定义。
+
+```sh
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+	. ~/.bash_aliases
+fi
+```
