@@ -4,6 +4,8 @@ search: false
 
 # Issue
 
+## @VersionSensitive
+
 ## .gitattributes
 
 ```
@@ -43,6 +45,12 @@ search: false
 https://github.com/vuejs/vitepress/labels
 
 ## GUI 中实现 2D 物理效果
+
+## 玩家半透明效果
+
+参考 ShoulderSurfing
+
+https://github.com/Exopandora/ShoulderSurfing/commit/d488ec52e24897e47551cf2767f9372f7707c94b
 
 ## 飞行时转向相机落点会怎样
 
