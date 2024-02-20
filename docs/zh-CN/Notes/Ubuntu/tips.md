@@ -12,7 +12,7 @@ ethstatus -i <网络接口>
 
 ```hs
 ip a
-ipconfig
+ifconfig
 lxc network list
 networkctl
 ```
@@ -383,6 +383,13 @@ exit 0
 ## 命令的别名
 
 别名可以在 `~/.bash_aliases` 中定义。
+
+示例：
+```sh
+alias cls=clear
+```
+
+因为 `.bashrc` 中往往包含以下内容，会自动加载`~/.bash_aliases`文件。
 
 ```sh
 # Alias definitions.
