@@ -4,6 +4,36 @@ search: false
 
 # Issue
 
+## .gitattributes
+
+```
+* text=auto
+
+*.ts             text eol=lf
+*.js             text eol=lf
+*.py             text eol=lf
+*.java           text eol=lf
+*.kts            text eol=lf
+*.gradle         text eol=lf
+*.properties     text eol=lf
+*.json           text eol=lf
+*.yaml           text eol=lf
+*.toml           text eol=lf
+*.md             text eol=lf
+*.html           text eol=lf
+*.htm            text eol=lf
+*.css            text eol=lf
+
+*.sln  text eol=crlf
+
+*.png  binary
+*.jpg  binary
+*.ico  binary
+*.gif  binary
+*.mp3  binary
+*.ogg  binary
+```
+
 ## Roadmap?
 
 ## 文档中应当介绍如何彻底卸载该模组
