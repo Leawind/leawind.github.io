@@ -2,11 +2,16 @@
 
 ## 查看启动时各项目耗时
 
-### 直接打印到屏幕
+查看启动总耗时
 
 ```sh
-# 打印到屏幕
-systemd-analyze time
+systemd-analyze
+```
+
+查看各启动项耗时
+
+```sh
+systemd-analyze blame
 ```
 
 ```txt
@@ -26,14 +31,14 @@ systemd-analyze time
 ### 生成 svg 流水线图
 
 ```sh
-systemd-analyze blame
+systemd-analyze plot>boottime.svg
 ```
 
-## 对罪孽较重的项目的处理方式
+### 对罪孽较重的项目的处理方式
 
 有些服务可以直接禁用，有些不适合禁用的可以延迟启动，也就是在系统启动完后等待一段时间再启动。
 
-### 可以禁用的服务
+#### 可以禁用的服务
 
 -   ufw
 -   apport 应用程序崩溃时弹出提示
@@ -44,7 +49,7 @@ systemd-analyze blame
 -   unattended-upgrades
 -   whoopsie
 
-### apt-daily 服务
+#### apt-daily 服务
 
 这个服务用于自动更新软件包，可以延迟启动。
 
@@ -61,7 +66,7 @@ AccuracySec=1h
 RandomizedDelaySec=30min
 ```
 
-### 启动时卡住 A start job is running for Network to be configured
+## 启动时卡住 A start job is running for Network to be configured
 
 启动时卡在这：
 
