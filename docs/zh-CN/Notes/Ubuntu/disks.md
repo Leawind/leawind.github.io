@@ -60,8 +60,30 @@ Filesystem     1K-blocks     Used Available Use% Mounted on
 mount -o rw,remount /	# 重新挂载 /
 ```
 
+## 查看分区标识
+
+使用 `blkid`可以查看一个设备的 UUID（宇宙唯一标识符）。
+
 ## 开机自动挂载
 
 编辑`/etc/fstab`文件
 
-#TODO
+```
+# <file system>                           <mount point>      <type>  <options>                                                   <dump>  <pass>
+# <文件系统>                               <挂载点>             <类型>  <选项>                                                       <dump>  <pass>
+
+# Root
+UUID=1fb0cf5e-2fbd-44eb-b131-1a59f4b49d36    /               ext4    errors=remount-ro                                                0  1
+
+# EFI
+UUID=3274-35E0                               /boot/efi       vfat    defaults      0       1
+
+# Other
+UUID=C0F64505F644FCE2                        /D              auto    nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=11-SSD-0             0  0
+UUID=46603D58603D5043                        /C              auto    nosuid,nodev,nofail,x-gvfs-show,x-gvfs-name=Windows-SSD          0  0
+
+# Swap file
+# 69793218560 Bytes = 65GiB
+/swap/swapfile   none    swap    sw    0    0
+
+```

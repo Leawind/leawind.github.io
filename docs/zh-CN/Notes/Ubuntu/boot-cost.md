@@ -31,7 +31,7 @@ systemd-analyze blame
 ### 生成 svg 流水线图
 
 ```sh
-systemd-analyze plot>boottime.svg
+systemd-analyze plot>bootcost.svg
 ```
 
 ### 对罪孽较重的项目的处理方式
