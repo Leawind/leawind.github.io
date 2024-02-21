@@ -2,6 +2,7 @@
 	"author": "Leawind",
 	"private": true,
 	"scripts": {
+		"export_txt": "node scripts/export_txt.mjs",
 		"docs:dev": "vitepress dev docs -p5173",
 		"docs:build": "vitepress build docs",
 		"docs:preview": "vitepress preview docs",

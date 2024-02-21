@@ -12,3 +12,6 @@ docs/.vitepress/cache
 
 # ignored
 **.ignored.*
+
+# txt file for LLM
+llm_txt

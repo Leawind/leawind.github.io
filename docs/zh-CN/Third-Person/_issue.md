@@ -4,60 +4,6 @@ search: false
 
 # Issue
 
-## @VersionSensitive
-
-## .gitattributes
-
-```
-* text=auto
-
-*.ts             text eol=lf
-*.js             text eol=lf
-*.py             text eol=lf
-*.java           text eol=lf
-*.kts            text eol=lf
-*.gradle         text eol=lf
-*.properties     text eol=lf
-*.json           text eol=lf
-*.yaml           text eol=lf
-*.toml           text eol=lf
-*.md             text eol=lf
-*.html           text eol=lf
-*.htm            text eol=lf
-*.css            text eol=lf
-
-*.sln  text eol=crlf
-
-*.png  binary
-*.jpg  binary
-*.ico  binary
-*.gif  binary
-*.mp3  binary
-*.ogg  binary
-```
-
-## Roadmap?
-
-## 文档中应当介绍如何彻底卸载该模组
-
-## issue labels
-
-https://github.com/vuejs/vitepress/labels
-
-## GUI 中实现 2D 物理效果
-
-## 玩家半透明效果
-
-参考 ShoulderSurfing
-
-https://github.com/Exopandora/ShoulderSurfing/commit/d488ec52e24897e47551cf2767f9372f7707c94b
-
-## 飞行时转向相机落点会怎样
-
-## pick 距离过远时 MISS
-
-## 奔跑时迅速转向
-
 ## 使用数据包来决定手持瞄准的物品
 
 ## 在配置屏幕中显示内置匹配规则
@@ -71,30 +17,6 @@ https://github.com/Exopandora/ShoulderSurfing/commit/d488ec52e24897e47551cf2767f
 ## 放置床的方向
 
 ## 添加配置：玩家 pickResult 与相机 pickResult 不同时，禁用交互
-
-<hr />
-
-## 记住第三人称状态
-
-## 望远镜
-
-## 相机远离玩家的速度
-
-默认速度较慢，当玩家移动时，根据移动速度和方向决定速度。
-
-## 捐赠按钮动画
-
-## 使用食物时不自动旋转
-
-## 鼠标停止操作一段时间后，视角跟随玩家移动而转动（视角自动跟随）
-
-## 瞄准时自动从中间切换到两侧视角
-
-https://www.mcmod.cn/class/12699.html
-
-## 加个龙之谷的视角方式
-
-> 因为我童年的 3D 启蒙就是它，很习惯他的人物视角放置
 
 ## 角色头部能在角色朝向准星时的一定范围内会看着准星
 
