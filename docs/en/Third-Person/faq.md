@@ -16,3 +16,9 @@ If you encounter game crashes or freezes, you can report the issues on GitHub, a
 ## Update to 1.20+ / Port to 1.18.2/1.16.5/1.12.2/1.8 ...?
 
 I plan to port the mod to other versions once it is sufficiently refined.
+
+## Unable to Automatically Aim for a Certain Item
+
+If the item is in vanilla Minecraft, please submit an [issue](https://github.com/LEAWIND/Third-Person/issues) on GitHub.
+
+For items from other mods, you can manually add configurations or create a resource pack. Refer to [Detailed Features - Resource Packs](./details#resource-packs) for guidance. You can also reach out to the authors of the relevant mods and kindly request them to include the necessary resources in upcoming versions.
