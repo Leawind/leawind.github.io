@@ -1,7 +1,7 @@
 ---
 prev:
-  text: ⚙️Configuration
-  link: './configuration'
+  text: 📖Detailed Features
+  link: ./details
 next:
   text: 💬FAQ
   link: ./faq

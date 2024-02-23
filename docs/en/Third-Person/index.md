@@ -16,8 +16,8 @@ features:
   - title: Introduction
     link: ./intro
     icon: 🗒
-  - title: Mod Configuration
-    link: ./configuration
+  - title: Detailed features
+    link: ./details
     icon: ⚙️
   - title: Changelog
     link: ./changelog

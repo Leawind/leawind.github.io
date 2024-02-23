@@ -23,7 +23,7 @@ export default {
 					link: '.',
 					items: [
 						{ text: "🗒Introduction", link: './intro', },
-						{ text: "⚙️Configuration", link: './configuration', },
+						{ text: "📖Details", link: './details', },
 						{ text: "📝Changelog", link: './changelog', },
 						{ text: "💬FAQ", link: './faq', },
 						{ text: "🖼Gallery", link: './gallery', },

@@ -1,8 +1,8 @@
 ---
 prev: false
 next:
-  text: 🗒Introduction
-  link: ./configuration
+  text: 📖Detailed Features
+  link: ./details
 ---
 
 # Leawind's Third Person
@@ -32,13 +32,17 @@ A short press of CapsLock can switch between left and right perspectives, while 
 
 ### Adjust Camera Position
 
+:::details
 While holding Z, moving the mouse can adjust the camera offset (player's position on the screen), and using the mouse scroll wheel can adjust the camera's distance from the player.
+:::
 
-### Aim Mode
+### Auto Activate Aim Mode
 
+:::details
 Under specific conditions, you can enter aim mode. Aim mode uses a different camera offset than the normal mode and can be adjusted separately.
 
-The mod will automatically enter aim mode based on the player's held items. For example, under the default configuration, aiming with a bow, trident, or holding items like a charged crossbow or ender pearl will automatically trigger aim mode. You can change these rules in the [configuration](./configuration.md).
+The mod will automatically enter aim mode based on the player's held items. For example, under the default configuration, aiming with a bow, trident, or holding items like a charged crossbow or ender pearl will automatically trigger aim mode. You can change these rules in the [Detailed features](./details.md).
+:::
 
 ::: warning
 If you have Optifine installed, please disable the following option; otherwise, the third-person camera rotation may not be smooth.

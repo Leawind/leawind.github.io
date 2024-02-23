@@ -7,8 +7,6 @@ search: false
 ## logger 名称
 leawind_third_person -> Leawind's Third Person
 
-## 在配置屏幕中显示内置匹配规则
-
 ## 首次使用的教程
 
 添加选项：启用教程

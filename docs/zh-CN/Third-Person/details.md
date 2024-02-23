@@ -1,14 +1,10 @@
 ---
 prev:
-
-    text: 🗒简介
-    link: './intro'
-
+  text: 🗒简介
+  link: './intro'
 next:
-
-    text: 📝更新日志
-    link: ./changelog
-
+  text: 📝更新日志
+  link: ./changelog
 ---
 
 # 📖 详细特性
@@ -43,40 +39,40 @@ next:
 
 ```json
 {
-	"hold_to_aim": [
-		"minecraft:crossbow{Charged:1b}",
-		"minecraft:ender_pearl",
-		"minecraft:snowball",
-		"minecraft:egg",
-		"minecraft:splash_potion",
-		"minecraft:lingering_potion",
-		"minecraft:experience_bottle"
-	],
-	"use_to_aim": [
-		"minecraft:bow",
-		"minecraft:trident"
-	]
+    "hold_to_aim": [
+        "minecraft:crossbow{Charged:1b}",
+        "minecraft:ender_pearl",
+        "minecraft:snowball",
+        "minecraft:egg",
+        "minecraft:splash_potion",
+        "minecraft:lingering_potion",
+        "minecraft:experience_bottle"
+    ],
+    "use_to_aim": [
+        "minecraft:bow",
+        "minecraft:trident"
+    ]
 }
 ```
 :::
 
-### 第三方资源包
+### 额外的资源包
 
 通过添加额外的资源包，可以使其他物品也在第三人称下自动进入瞄准模式。
 
-`assets/<命名空间>/item_patterns/aiming_check/<名称>.json`
+`assets/<命名空间>/item_patterns/aiming_check/<任意名称>.json`
 
 :::details 类型定义
 ```ts
 type AimingCheck = {
-	hold_to_aim?: string[];	// 可选
-	use_to_aim?: string[];	// 可选
+    hold_to_aim?: string[];	// 可选
+    use_to_aim?: string[];	// 可选
 }
 ```
 :::
 
 :::warning
-命名空间和名称可以任取，但是不同资源包中拥有相同路径的json文件会互相冲突，最终生效的文件将是所在资源包优先级最高的那个。
+命名空间和名称可以任取，但是不同资源包中拥有相同路径的 JSON 文件会互相冲突，最终生效的文件将是所在资源包优先级最高的那个。
 :::
 
 ## 物品模式
@@ -105,6 +101,6 @@ _物品模式_ 是一种规则，用于根据 NBT 标签来匹配拥有某些特
 | `minecraft.egg`        | 鸡蛋                                            |
 | `minecraft:egg`        | 鸡蛋                                            |
 | `egg`                  | 鸡蛋                                            |
-| `crossbow`             | 弩（拥有任意 NBT 标签）                         |
+| `crossbow`             | 弩（无论是否已装填）                         |
 | `crossbow{Charged:1b}` | 已装填的弩                                      |
 | `{Charged:1b}`         | NBT 标签里有 Charged 属性，且值为 1b 的任意物品 |
