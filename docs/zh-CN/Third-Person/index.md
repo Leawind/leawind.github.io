@@ -16,9 +16,9 @@ features:
   - title: 简介
     link: ./intro
     icon: 🗒
-  - title: 模组配置
-    link: ./configuration
-    icon: ⚙️
+  - title: 详细特性
+    link: ./details
+    icon: 📖
   - title: 更新日志
     link: ./changelog
     icon: 📝

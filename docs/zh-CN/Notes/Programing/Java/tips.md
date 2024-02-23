@@ -55,7 +55,9 @@ long now = new Date().getTime();
 long now = Calendar.getInstance().getTimeInMillis();
 ```
 
-## `@SuppressWarnings`
+## 注解
+
+### `@SuppressWarnings`
 
 ```java
 @SuppressWarnings("unused")
@@ -67,3 +69,18 @@ long now = Calendar.getInstance().getTimeInMillis();
 -   `rawtypes` 未使用泛型
 -   `serial`
 -   `all` 所有警告
+
+### `@SafeVarargs`
+
+用于标记一个具有可变数量的参数的方法，方法不会对这些参数执行任何不安全的操作。
+
+### `@NotNull` 和 `@Nullable`
+
+### `@Override`
+
+覆写父类方法或实现接口方法
+
+### `@com.google.gson.annotations.Expose`
+
+在GSON上调用`excludeFieldsWithoutExposeAnnotation()`即可使GSON忽略非@Expose字段。
+

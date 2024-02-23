@@ -25,7 +25,7 @@ export default {
 					link: '.',
 					items: [
 						{ text: "🗒简介", link: './intro', },
-						{ text: "⚙️模组配置", link: './configuration', },
+						{ text: "📖详细特性", link: './details', },
 						{ text: "📝更新日志", link: './changelog', },
 						{ text: "💬常见问题", link: './faq', },
 						{ text: "🖼图册", link: './gallery', },

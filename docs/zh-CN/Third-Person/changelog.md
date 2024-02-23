@@ -1,7 +1,7 @@
 ---
 prev:
-  text: ⚙️模组配置
-  link: './configuration'
+  text: 📖详细特性
+  link: './details'
 next:
   text: 💬常见问题
   link: ./faq

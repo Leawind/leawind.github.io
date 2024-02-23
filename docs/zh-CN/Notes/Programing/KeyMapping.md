@@ -15,7 +15,6 @@
 | ctrl+alt+       |          |
 | ctrl+shift+alt+ |          |
 
-
 | key              | function                             | Sys |
 | ---------------- | ------------------------------------ | --- |
 | F1               | help                                 |     |
@@ -50,7 +49,7 @@
 | ctrl+F           | search                               |     |
 | ctrl+G           | jump to line                         |     |
 | ctrl+H           | history                              |     |
-| ctrl+I           | toggle _`i`_/`i`                     |     |
+| ctrl+I           | toggle _ `i` _/ `i`                  |     |
 | ctrl+N           | open new                             |     |
 | ctrl+O           | open file                            |     |
 | ctrl+P           | print                                |     |
@@ -64,8 +63,9 @@
 | ctrl+Z           | undo                                 |     |
 | ctrl+Tab         | switch tab                           |     |
 | ctrl+`           | open terminal                        |     |
-| ctrl+`=`         | zoom in                              |     |
-| ctrl+`-`         | zoom out                             |     |
+| ctrl+,           | open IDEsettings                     |     |
+| ctrl+ `=`        | zoom in                              |     |
+| ctrl+ `-`        | zoom out                             |     |
 | ctrl+/           | toggle comment                       |     |
 | ctrl+\           | split                                |     |
 |                  |                                      |     |

@@ -4,7 +4,8 @@ search: false
 
 # Issue
 
-## 使用数据包来决定手持瞄准的物品
+## logger 名称
+leawind_third_person -> Leawind's Third Person
 
 ## 在配置屏幕中显示内置匹配规则
 
@@ -113,6 +114,7 @@ https://space.bilibili.com/500810858
 | mcbbs          | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
 | Youtube        | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
 | X              | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
+| BuyMeACoffees   |                                    |                                                     |                                                                   |     |     |     |     |     |     |
 | Twitch         | ?                                  |                                                     |                                                                   |     |     |     |     |     |     |
 | Facebook       |                                    |                                                     |                                                                   |     |     |     |     |     |     |
 | Tiktok         |                                    |                                                     |                                                                   |     |     |     |     |     |     |

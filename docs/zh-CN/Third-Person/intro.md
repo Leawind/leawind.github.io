@@ -1,8 +1,8 @@
 ---
 prev: false
 next:
-  text: ⚙️模组配置
-  link: ./configuration
+  text: 📖详细特性
+  link: ./details
 ---
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
@@ -30,15 +30,19 @@ next:
 
 短按CapsLock可切换左右，按住CapsLock可以切换到居中。
 
-### 调整相机位置
+### 调整相机相对玩家的位置
 
+:::details
 按住 Z 时，移动鼠标可以调整相机偏移量（玩家在屏幕上的位置），使用鼠标滚轮可以调整相机到玩家的距离。
+:::
 
-### 瞄准模式
+### 自动进入瞄准模式
 
+:::details
 特定条件下可以进入瞄准模式。瞄准模式与普通模式使用不同的相机偏移量，可以分别调整。
 
-会根据玩家手持物品判断当前是否应当自动进入瞄准模式。例如在默认配置的规则下，当玩家使用弓、三叉戟瞄准，或手持上弦的弩、末影珍珠等物品时会自动进入瞄准模式。你可以在[配置](./configuration.md)中更改相关规则。
+会根据玩家手持物品判断当前是否应当自动进入瞄准模式。例如在默认配置的规则下，当玩家使用弓、三叉戟瞄准，或手持上弦的弩、末影珍珠等物品时会自动进入瞄准模式。你可以在[配置](./details)中更改相关规则。
+:::
 
 ::: warning
 如果你安装了 Optifine，请关闭以下选项，否则第三人称时转动视角可能会不流畅。
@@ -46,7 +50,7 @@ next:
 选项 / 视频设置 / 性能 / 快速运算
 :::
 
-## 链接
+## 相关链接
 
 * [Github 仓库](https://github.com/LEAWIND/Third-Person)
 * [Gitee 镜像仓库](https://gitee.com/leawind/Third-Person)
