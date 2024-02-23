@@ -53,7 +53,7 @@ next:
 		"minecraft:experience_bottle"
 	],
 	"use_to_aim": [
-		"minecraft:fbow",
+		"minecraft:bow",
 		"minecraft:trident"
 	]
 }
