@@ -37,7 +37,9 @@ next:
 
 本模组内置资源包中包含适用于原版 Minecraft 的瞄准模式判定规则。
 
-:::details `assets/minecraft/item_patterns/aiming_check/vanilla.json`
+:::details 内置的原版相关规则
+
+`assets/minecraft/item_patterns/aiming_check/vanilla.json`
 
 ```json
 {
@@ -62,8 +64,9 @@ next:
 
 通过添加额外的资源包，可以使其他物品也在第三人称下自动进入瞄准模式。
 
-:::details `assets/<命名空间>/item_patterns/aiming_check/<名称>.json`
-类型定义：
+`assets/<命名空间>/item_patterns/aiming_check/<名称>.json`
+
+:::details 类型定义
 ```ts
 type AimingCheck = {
 	hold_to_aim?: string[];	// 可选
