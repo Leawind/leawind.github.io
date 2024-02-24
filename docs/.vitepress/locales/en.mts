@@ -9,12 +9,13 @@ export default {
 	themeConfig: {
 		nav: [
 			{
-				text: 'Projects',
+				text: '🌐Projects',
 				items: [
 					{ text: "Leawind's Third Person", link: '/en/Third-Person/' },
 					{ text: 'MCAFS', link: '/en/mcafs/' },
-				]
+				],
 			},
+			{ text: '💰Donate', link: '/en/donate' },
 		],
 		sidebar: {
 			'/en/Third-Person': [

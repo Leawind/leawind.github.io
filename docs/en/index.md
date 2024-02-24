@@ -9,7 +9,7 @@ hero:
   image: 
   actions:
     - theme: brand
-      text: Donate
+      text: 💰Donate
       link: /en/donate
 features:
   - title: Leawind's Third Person

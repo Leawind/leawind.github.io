@@ -9,7 +9,7 @@ hero:
   image: 
   actions:
     - theme: brand
-      text: 捐赠
+      text: 💰捐赠
       link: /zh-CN/donate
     - theme: alt
       text: 笔记

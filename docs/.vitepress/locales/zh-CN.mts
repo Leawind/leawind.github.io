@@ -9,7 +9,7 @@ export default {
 	themeConfig: {
 		nav: [
 			{
-				text: '项目',
+				text: '🌐项目',
 				items: [
 					{ text: "Leawind的第三人称", link: '/zh-CN/Third-Person/' },
 					{ text: 'MCAFS', link: '/zh-CN/mcafs/' },
@@ -17,6 +17,7 @@ export default {
 			},
 			{ text: '笔记', link: '/zh-CN/Notes/' },
 			{ text: '杂项', link: '/zh-CN/misc/' },
+			{ text: '💰捐赠', link: '/zh-CN/donate' },
 		],
 		sidebar: {
 			'/zh-CN/Third-Person': [
