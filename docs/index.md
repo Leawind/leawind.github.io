@@ -4,8 +4,16 @@ title: redirecting
 ---
 
 <script>
-try{
-	window.location.replace("/zh-CN/")
-}catch(e){
+
+try {
+	switch (navigator.language.toLowerCase()) {
+		case 'zh-cn':
+			location.replace("/zh-CN/");
+			break;
+		default:
+			location.replace("/en/");
+	}
+} catch (e) {
 }
+
 </script>
