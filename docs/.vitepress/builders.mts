@@ -22,6 +22,7 @@ export function buildSidebar(dir: string, name: string, docsRoot: string = 'docs
 		const dirName = name || path.basename(dir);
 		return {
 			text: dirName,
+			collapsed: true,
 			items: fs.readdirSync(dir).map(oName => {
 				const oPath = path.join(dir, oName);
 				if (!isOrHasPageFile(oPath)) return;
