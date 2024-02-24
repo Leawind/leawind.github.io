@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Leawind的第三人称
   text: 
-  tagline: 注意:本文档仅适用于最新版本（2.0.4+)
+  tagline: 注意：本文档仅适用于最新版本（2.0.4+)
   image: 
   actions:
     - theme: brand
