@@ -9,6 +9,27 @@ next:
 
 # Changelog
 
+## v2.0.6-mc1.19.2
+
+### Features
+
+* When the camera approaches the player, make player semi-transparent.
+* Save config when client stopping
+* Enable third person mode by default
+* Save third person mode in config
+  * Add config: `is_third_person_mode`
+* Temporarily switch to first person when using specific items (spyglass for vanilla)
+  * Add config: `use_to_first_person_pattern_expressions`
+* Change resource pack structure
+  * `assets/<namespace>/item_patterns/hold_to_aim/<anyname>.json` Enable aim mode when holding these items
+  * `assets/<namespace>/item_patterns/use_to_aim/<anyname>.json` Enable aim mode when using these items
+  * `assets/<namespace>/item_patterns/use_to_first_person/<anyname>.json` Temporarily switch to first person when using these items
+
+### Bug fix
+
+* Camera through glasses
+* Game crashing #44
+
 ## v2.0.5-mc1.19.2
 
 ### Features

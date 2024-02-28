@@ -9,6 +9,27 @@ next:
 
 # 更新日志
 
+## v2.0.6-mc1.19.2
+
+### 特性
+
+* 当相机靠近玩家时，玩家变得半透明
+* 关闭客户端时自动保存配置文件
+* 默认启用第三人称视角
+* 将是否启用第三人称视角保存到配置文件中
+  * 添加配置项：`is_third_person_mode`
+* 使用特定物品时，暂时进入第一人称视角（原版的望远镜）
+  * 添加配置项：`use_to_first_person_pattern_expressions`
+* 修改资源包结构
+  * `assets/<命名空间>/item_patterns/hold_to_aim/<任意名称>.json` 手持时进入瞄准状态
+  * `assets/<命名空间>/item_patterns/use_to_aim/<任意名称>.json` 使用时进入瞄准状态
+  * `assets/<命名空间>/item_patterns/use_to_first_person/<任意名称>.json` 使用时暂时切换成第一人称视角
+
+### 修复问题
+
+* 相机穿过玻璃
+* 游戏崩溃 #44
+
 ## v2.0.5-mc1.19.2
 
 ### 特性
