@@ -129,16 +129,7 @@ The mod's built-in resource pack includes _ItemPattern_ relevant to the vanilla 
 
 By adding additional resource packs, other items can also automatically enter aiming mode in third person view.
 
-`assets/<namespace>/item_patterns/aiming_check/<any_name>.json`
-
-:::details Type Definition
-```ts
-type AimingCheck = {
-    hold_to_aim?: string[];    // Optional
-    use_to_aim?: string[];     // Optional
-}
-```
-:::
+`assets/<namespace>/item_patterns/<hold_to_aim|use_to_aim|use_to_first_person>/<anyname>.json`
 
 :::warning
 Namespaces and names can be freely chosen, but JSON files with the same path in different resource packs will conflict with each other. The file with the highest priority in the resource pack will take effect.

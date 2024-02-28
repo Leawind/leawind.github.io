@@ -130,16 +130,7 @@ _物品模式_ 是一种规则，用于根据 NBT 标签来匹配拥有某些特
 
 通过添加额外的资源包，可以使其他物品也在第三人称下自动进入瞄准模式。
 
-`assets/<命名空间>/item_patterns/aiming_check/<任意名称>.json`
-
-:::details 类型定义
-```ts
-type AimingCheck = {
-    hold_to_aim?: string[];	// 可选
-    use_to_aim?: string[];	// 可选
-}
-```
-:::
+`assets/<命名空间>/item_patterns/<hold_to_aim|use_to_aim|use_to_first_person>/<任意名称>.json`
 
 :::warning
 命名空间和名称可以任取，但是不同资源包中拥有相同路径的 JSON 文件会互相冲突，最终生效的文件将是所在资源包优先级最高的那个。
