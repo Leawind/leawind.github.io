@@ -44,6 +44,12 @@ Under specific conditions, you can enter aim mode. Aim mode uses a different cam
 The mod will automatically enter aim mode based on the player's held items. For example, under the default configuration, aiming with a bow, trident, or holding items like a charged crossbow or ender pearl will automatically trigger aim mode. You can change these rules in the [Detailed features](./details.md).
 :::
 
+### Player Transparency
+
+:::details
+When the camera is close to the player or the crosshair is aimed at the player, the player becomes semi-transparent.
+:::
+
 ::: warning
 If you have Optifine installed, please disable the following option; otherwise, the third-person camera rotation may not be smooth.
 

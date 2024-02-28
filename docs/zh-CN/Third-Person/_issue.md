@@ -4,8 +4,7 @@ search: false
 
 # Issue
 
-## logger 名称
-leawind_third_person -> Leawind's Third Person
+## 除了玩家以外的实体无法半透明
 
 ## 首次使用的教程
 
@@ -13,7 +12,8 @@ leawind_third_person -> Leawind's Third Person
 
 第一次完成教程后会自动将该选项禁用
 
-## 放置床的方向
+## 放置床的方向 
+
 
 ## 添加配置：玩家 pickResult 与相机 pickResult 不同时，禁用交互
 
@@ -112,7 +112,7 @@ https://space.bilibili.com/500810858
 | mcbbs          | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
 | Youtube        | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
 | X              | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
-| BuyMeACoffees   |                                    |                                                     |                                                                   |     |     |     |     |     |     |
+| BuyMeACoffees  |                                    |                                                     |                                                                   |     |     |     |     |     |     |
 | Twitch         | ?                                  |                                                     |                                                                   |     |     |     |     |     |     |
 | Facebook       |                                    |                                                     |                                                                   |     |     |     |     |     |     |
 | Tiktok         |                                    |                                                     |                                                                   |     |     |     |     |     |     |

@@ -9,6 +9,24 @@ next:
 
 # Changelog
 
+## v2.0.5-mc1.19.2
+
+### Features
+
+* Remove config: `enable_buildin_item_aiming_rules`
+* Load ItemPatterns from resource pack
+* Rename config options
+  *  `holding_item_aiming_rules` to `hold_to_aim_item_pattern_expressions`
+  *  `using_item_aiming_rules` to `use_to_aim_item_pattern_expressions`
+* In Creative mode, you can directly pick blocks from the crosshair, even if player entity's sight is obstructed
+  * Add config: `use_camera_pick_in_creative`
+* Method `Entity#pick` returns MISS when hitResult distance is too far
+
+### Bug fix
+
+* Unable quickly turn when sprinting
+* Unable to join world in forge version #38
+
 ## v2.0.4-mc1.19.2
 
 ### Features

@@ -9,6 +9,24 @@ next:
 
 # 更新日志
 
+## v2.0.5-mc1.19.2
+
+### 特性
+
+* 移除配置项： `enable_buildin_item_aiming_rules`
+* 从资源包中加载物品模式
+* 重命名配置项
+  *  `holding_item_aiming_rules` -> `hold_to_aim_item_pattern_expressions`
+  *  `using_item_aiming_rules` -> `use_to_aim_item_pattern_expressions`
+* 创造模式下，即便玩家视线被遮挡，也可以直接从相机选取方块，
+  * 添加配置项： `use_camera_pick_in_creative`
+* 方法 `Entity#pick` 返回 MISS 当选取目标太远时
+
+### 修复问题
+
+* Unable quickly turn when sprinting
+* Unable to join world in forge version #38
+
 ## v2.0.4-mc1.19.2
 
 ### 特性
@@ -30,7 +48,7 @@ next:
 
 ### Other
 
-Optimizing and slight refactoring.
+优化代码和稍稍重构
 
 ## v2.0.3-mc1.19.2
 
