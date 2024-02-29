@@ -77,12 +77,13 @@ https://space.bilibili.com/500810858
 | mcbbs          | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
 | Youtube        | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
 | X              | publish,issue                      |                                                     |                                                                   |     |     |     |     |     |     |
-| Twitch         | ?                                  |                                                     |                                                                   |     |     |     |     |     |     |
-| Facebook       |                                    |                                                     |                                                                   |     |     |     |     |     |     |
-| Tiktok         |                                    |                                                     |                                                                   |     |     |     |     |     |     |
-| Instagram      |                                    |                                                     |                                                                   |     |     |     |     |     |     |
-| Reddit         |                                    |                                                     |                                                                   |     |     |     |     |     |     |
-| NeteaseMyWorld | earn money                         |                                                     |                                                                   |     |     |     |     |     |     |
+| Twitch         | spread                             |                                                     |                                                                   |     |     |     |     |     |     |
+| Facebook       | spread                             |                                                     |                                                                   |     |     |     |     |     |     |
+| Douyin         | spread                             |                                                     |                                                                   |     |     |     |     |     |     |
+| Tiktok         | spread                             |                                                     |                                                                   |     |     |     |     |     |     |
+| Instagram      | spread                             |                                                     |                                                                   |     |     |     |     |     |     |
+| Reddit         | spread                             |                                                     |                                                                   |     |     |     |     |     |     |
+| NeteaseMyWorld | earn                               |                                                     |                                                                   |     |     |     |     |     |     |
 |                |                                    |                                                     |                                                                   |     |     |     |     |     |     |
 
 ## Urls

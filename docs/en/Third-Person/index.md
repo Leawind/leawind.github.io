@@ -3,7 +3,7 @@ layout: home
 hero:
   name: Leawind's Third Person
   text:
-  tagline: Notice:This doc is only for the latest version (2.0.4+)
+  tagline: Notice:This doc is only for the latest version (2.0.6+)
   image: 
   actions:
     - theme: brand

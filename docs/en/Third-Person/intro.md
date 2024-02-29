@@ -5,24 +5,24 @@ next:
   link: ./details
 ---
 
-# Leawind's Third Person
-
-This mod provides enhanced third person perspective.
-
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
 
 [![](https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&color=F1643%5E&cacheSeconds=3600&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/leawind-third-person)
 [![](https://img.shields.io/modrinth/dt/S3D3QF0M?style=flat&logo=modrinth&color=17B85A&cacheSeconds=3600&label=Downloads)](https://modrinth.com/mod/leawind-third-person)
+
+# Leawind's Third Person
+
+This mod provides enhanced third person perspective.
 
 ::: info
 This is a client-side mod.
 :::
 
 ::: warning
-This documentation is only for the latest version (2.0.4+).
+This documentation is only for the latest version (2.0.6+).
 :::
 
-## Basic Features
+## Features
 
 Switch between first-person and third-person perspectives by pressing F5.
 
@@ -62,7 +62,7 @@ Options / Video Settings / Performance / Fast Math
 * [Gitee Mirror Repository](https://gitee.com/leawind/Third-Person)
 * [Modrinth](https://modrinth.com/mod/leawind-third-person)
 * [CurseForge](https://www.curseforge.com/minecraft/mc-mods/leawind-third-person)
-* [mcmod](https://www.mcmod.cn/class/12699.html)
+* [MC百科](https://www.mcmod.cn/class/12699.html)
 * [Author's Bilibili Account](https://space.bilibili.com/314412977)
 
 ## Downloads

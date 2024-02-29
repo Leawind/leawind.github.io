@@ -6,20 +6,20 @@ next:
 ---
 
 ![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)
- 
-# Leawind的第三人称
-
-这个模组提供了改进的第三人称视角。
 
 [![](https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&color=F1643%5E&cacheSeconds=3600&label=Downloads)](https://www.curseforge.com/minecraft/mc-mods/leawind-third-person)
 [![](https://img.shields.io/modrinth/dt/S3D3QF0M?style=flat&logo=modrinth&color=17B85A&cacheSeconds=3600&label=Downloads)](https://modrinth.com/mod/leawind-third-person)
+
+# Leawind的第三人称
+
+这个模组提供了改进的第三人称视角。
 
 ::: info
 这是一个客户端模组。
 :::
 
 ::: warning
-本文档仅适用于最新版本（2.0.4+)
+本文档仅适用于最新版本（2.0.6+)
 :::
 
 ## 基本特性
@@ -62,7 +62,7 @@ next:
 * [Gitee 镜像仓库](https://gitee.com/leawind/Third-Person)
 * [Modrinth](https://modrinth.com/mod/leawind-third-person)
 * [CurseForge](https://www.curseforge.com/minecraft/mc-mods/leawind-third-person)
-* [mcmod](https://www.mcmod.cn/class/12699.html)
+* [MC百科](https://www.mcmod.cn/class/12699.html)
 * [作者的B站账号](https://space.bilibili.com/314412977)
 
 ## 下载
