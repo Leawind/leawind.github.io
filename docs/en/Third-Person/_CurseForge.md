@@ -33,7 +33,7 @@ This mod provides an enhanced third-person perspective.
 
 ## Links
 
-* [Mod Document](https://leawind.github.io/en/Third-Person/)
+* [Mod Wiki](https://leawind.github.io/en/Third-Person/)
 * [Github](https://github.com/LEAWIND/Third-Person)
 * [Modrinth](https://modrinth.com/mod/leawind-third-person)
 * [MC百科](https://www.mcmod.cn/class/12699.html)
