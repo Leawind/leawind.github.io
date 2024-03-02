@@ -13,8 +13,8 @@ hero:
       link: /en/donate
 features:
   - title: Leawind's Third Person
-    details: A Minecraft mod provides better third person.
-    link: /en/Third-Person/
+    details: A practical, smooth, feature-rich third-person mod for Minecraft.
+    link: /Third-Person/en-US/
     icon: 
       dark: https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&logoColor=f16436&label=%20&color=4f4f4f
       light: https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&logoColor=4f4f4f&label=%20&color=f16436

@@ -19,8 +19,8 @@ hero:
       link: /zh-CN/misc/
 features:
   - title: Leawind的第三人称
-    details: 一个Minecraft模组，提供了更好的第三人称。
-    link: /zh-CN/Third-Person/
+    details: 一个实用、丝滑、功能丰富的 Minecraft 第三人称模组
+    link: /Third-Person/zh-CN/
     icon: 
       dark: https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&logoColor=f16436&label=%20&color=4f4f4f
       light: https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&logoColor=4f4f4f&label=%20&color=f16436
