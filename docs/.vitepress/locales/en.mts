@@ -11,32 +11,13 @@ export default {
 			{
 				text: '🌐Projects',
 				items: [
-					{ text: "Leawind's Third Person", link: '/en/Third-Person/' },
+					{ text: "Leawind's Third Person", link: 'https://leawind.github.io/Third-Person/en-US/' },
 					{ text: 'MCAFS', link: '/en/mcafs/' },
 				],
 			},
 			{ text: '💰Donate', link: '/en/donate' },
 		],
 		sidebar: {
-			'/en/Third-Person': [
-				{
-					text: "Leawind's Third Person",
-					link: '.',
-					items: [
-						{ text: "🗒Introduction", link: './intro', },
-						{ text: "📖Details", link: './details', },
-						{ text: "📝Changelog", link: './changelog', },
-						{ text: "💬FAQ", link: './faq', },
-						{ text: "🖼Gallery", link: './gallery', },
-						{
-							text: "Other",
-							items: [
-								{ text: '🏅Badges', link: './badges' },
-							]
-						},
-					],
-				},
-			]
 		},
 		footer: {
 			message: '<a href=/en/donate>💰Donate</a> <br> This doc is build by <a href=https://vitepress.dev>vitepress</a>',

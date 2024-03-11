@@ -11,7 +11,7 @@ export default {
 			{
 				text: '🌐项目',
 				items: [
-					{ text: "Leawind的第三人称", link: '/zh-CN/Third-Person/' },
+					{ text: "Leawind的第三人称", link: 'https://leawind.github.io/Third-Person/zh-CN/' },
 					{ text: 'MCAFS', link: '/zh-CN/mcafs/' },
 				]
 			},
@@ -20,25 +20,6 @@ export default {
 			{ text: '💰捐赠', link: '/zh-CN/donate' },
 		],
 		sidebar: {
-			'/zh-CN/Third-Person': [
-				{
-					text: "Leawind的第三人称",
-					link: '.',
-					items: [
-						{ text: "🗒简介", link: './intro', },
-						{ text: "📖详细特性", link: './details', },
-						{ text: "📝更新日志", link: './changelog', },
-						{ text: "💬常见问题", link: './faq', },
-						{ text: "🖼图册", link: './gallery', },
-						{
-							text: "其他",
-							items: [
-								{ text: '🏅徽章', link: './badges' },
-							]
-						},
-					]
-				},
-			],
 			'/zh-CN/Notes': buildSidebar('/zh-CN/Notes', '笔记'),
 			'/zh-CN/misc': buildSidebar('/zh-CN/misc', '杂项'),
 		},
