@@ -1,74 +1,102 @@
 import fs from 'fs';
 import path from 'path/posix';
+import { deprecate } from 'util';
+
+import { DefaultTheme } from 'vitepress';
+
 /**
  * 自动构建侧栏
  * 
- * @param dir  目录路径
+ * @param dirPath  目录路径
  * @param name 侧栏名称
  * @param [docsRoot='docs'] 文档根目录
+ * @deprecate
  */
-export function buildSidebar(dir: string, name: string, docsRoot: string = 'docs'): any {
-	dir = path.join(docsRoot, dir.replace(/^\/+/g, ''));
-	const sidebar = [parseDir(dir, name)];
-	sidebar[0].link = path.relative(docsRoot, dir).replace(/(^\/*)|(\/*$)/g, '/');
+export function buildSidebar(dirPath: string, docsRoot: string = 'docs'): any {
+	dirPath = path.join(docsRoot, dirPath.replace(/^\/+/g, ''));
+	const sidebar = buildDirSidebar(dirPath, docsRoot);
 	// console.debug(JSON.stringify(sidebar, null, 2));
+	sidebar.collapsed = false;
 	return sidebar;
+}
 
-	/**
-	 * @param dir 目录路径
-	 * @param [name=null] 显示名称
-	 */
-	function parseDir(dir: string, name: string | null = null) {
-		const dirName = name || path.basename(dir);
+/**
+ * @param dirPath 目录路径
+ * @param [name=null] 显示名称
+ */
+export function buildDirSidebar(dirPath: string, docsRoot: string): DefaultTheme.SidebarItem {
+	const dir = parse(dirPath);
+	const items: DefaultTheme.SidebarItem[] = [];
+	// 遍历目录，添加子元素
+	for (let iname of fs.readdirSync(dirPath)) {
+		const ipath = path.join(dirPath, iname);
+		if (!isOrHasPageFile(ipath)) continue;
+		// console.debug(`buildDirSidebar: ${ipath}`);
+		if (fs.statSync(ipath).isFile()) {
+			if (!iname.startsWith('index')) {
+				items.push({
+					text: parseFile(ipath).title,
+					link: '/' + path.relative(docsRoot, ipath),
+				});
+			}
+		} else {
+			items.push(buildDirSidebar(ipath, docsRoot));
+		}
+	}
+	// 
+	const result: DefaultTheme.SidebarItem = {
+		text: getDirTitle(dirPath),
+		collapsed: true,
+		items: items,
+	};
+	if (!dir.pureTitle)
+		result.link = path.relative(docsRoot, dirPath).replace(/(^\/*)|(\/*$)/g, '/');
+	return result;
+}
+
+
+/**
+ * 解析目录或文件
+ * 
+ * title 标题
+ * src 文件内容
+ * titleOnly 文件内容中是否仅含有标题
+ */
+function parse(filePath: string): { title: string; path: string; pureTitle?: boolean; src?: string; } {
+	if (!fs.existsSync(filePath))
 		return {
-			text: dirName,
-			collapsed: true,
-			items: fs.readdirSync(dir).map(oName => {
-				const oPath = path.join(dir, oName);
-				if (!isOrHasPageFile(oPath)) return;
-				if (fs.statSync(oPath).isFile()) {
-					if (oName.startsWith('index')) return;
-					return {
-						text: getTitle(oPath),
-						link: '/' + path.relative(docsRoot, oPath),
-					};
-				} else {
-					return parseDir(oPath, oName);
-				}
-			}).filter(i => i),
+			title: path.basename(filePath),
+			path: filePath,
+		};
+	const stat = fs.statSync(filePath);
+	if (stat.isFile()) {
+		return parseFile(filePath);
+	} else if (stat.isDirectory()) {
+		return parse(path.join(filePath, 'index.md'));
+	} else {
+		return {
+			title: path.basename(filePath),
+			path: filePath,
 		};
 	}
 }
-
-export function sidebarTree(dir: string, name: string, items: string[], docsRoot: string = 'docs') {
-	dir = path.join(docsRoot, dir.replace(/^\/+/g, ''));
-	const sidebar = [{
-		text: name,
-		items: items.map(oName => {
-			const oPath = path.join(dir, oName);
-			if (!fs.existsSync(oPath)) throw new Error(`File not found: ${oPath}`);
-			if (fs.statSync(oPath).isFile()) {
-				if (oName.startsWith('index')) return;
-				return {
-					text: getTitle(oPath),
-					link: '/' + path.relative(docsRoot, oPath),
-				};
-			} else {
-				return sidebarTree(oPath, oName, fs.readdirSync(oPath), docsRoot);
-			}
-		})
-	}];
-
-}
-
-
-function getTitle(filePath: string): string {
+function parseFile(filePath: string): { title: string; path: string; pureTitle: boolean; src: string; } {
 	const src: string = fs.readFileSync(filePath, 'utf-8');
 	const matches = /(\n|^)\s*#*#(.*)/.exec(src);
-	const result = matches === null ? path.basename(filePath) : matches[2];
-
-	// console.debug(filePath, result);
-	return result;
+	return {
+		title: matches === null ? path.basename(filePath) : matches[2],
+		path: filePath,
+		pureTitle: src.replace(/(\n|^)\s*#{1,}.*(\n|$)/, '').trim() === '',
+		src: src,
+	};
+}
+function getDirTitle(dirPath: string): string {
+	const indexFile = path.join(dirPath, 'index.md');
+	if (fs.existsSync(indexFile)) {
+		return parseFile(indexFile).title;
+	} else {
+		return path.basename(dirPath);
+	}
 }
 
 function isPageFile(filePath) {

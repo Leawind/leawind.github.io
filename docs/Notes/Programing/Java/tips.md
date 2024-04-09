@@ -84,3 +84,7 @@ long now = Calendar.getInstance().getTimeInMillis();
 
 在GSON上调用`excludeFieldsWithoutExposeAnnotation()`即可使GSON忽略非@Expose字段。
 
+## 复制数组
+
+```java
+```

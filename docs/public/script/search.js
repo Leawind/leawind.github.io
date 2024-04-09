@@ -1,5 +1,5 @@
 /**
- * https://leawind.github.io/zh-CN/?search=%s
+ * https://leawind.github.io/?search=%s
  * 
  * 如果没有 search 参数，则无操作。
  * 
