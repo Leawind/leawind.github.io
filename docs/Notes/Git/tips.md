@@ -4,7 +4,7 @@
 
 ### commit message 格式
 
-```javascript
+```
 <类型>[范围]: <标题>
 
 [主体内容]
