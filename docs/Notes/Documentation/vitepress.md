@@ -57,6 +57,7 @@ npm install nodejieba
 ```
 
 这样处理应该就可以了
+
 ```ts
 processTerm: term => {
 	term = term.toLowerCase();
@@ -79,4 +80,5 @@ processTerm: term => {
 	}
 },
 ```
+
 但是并不可以。
