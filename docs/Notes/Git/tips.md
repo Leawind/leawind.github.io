@@ -72,21 +72,23 @@ _注：提交信息应该尽可能准确描述本次提交内容_
 
 ## 常用命令
 
-| 命令                          | 描述                               |     |
-| ----------------------------- | ---------------------------------- | --- |
-| git branch -a                 | 查看所有分支                       |     |
-| git branch                    | 查看本地分支                       |     |
-| git branch -r                 | 查看远程分支                       |     |
-| git branch \<name>            | 创建分支，停留在当前分支           |     |
-| git switch \<name>            | 切换分支                           |     |
-| git switch -c \<name>         | 创建并切换分支                     |     |
-| git init                      | 初始化一个 git 仓库                |     |
-| git clone \<url>              | clone 一个 git 仓库                |     |
-| git add \<file>               | 添加文件到索引库                   |     |
-| git commit -m "\<message>"    | 提交更改                           |     |
-| git commit -a -m "\<message>" | 提交更改，自动将所有文件加入暂存区 |     |
-| git diff                      | 显示更改                           |     |
-| git clone -b \<branch> \<url> | 克隆指定分支                       |     |
-| git clone \<url>              | 克隆默认分支                       |     |
-| git reset --hard HEAD         | 丢弃所有更改                       |     |
-|                               |                                    |     |
+| 命令                           | 描述                               |     |
+| ------------------------------ | ---------------------------------- | --- |
+| git branch -a                  | 查看所有分支                       |     |
+| git branch                     | 查看本地分支                       |     |
+| git branch -r                  | 查看远程分支                       |     |
+| git branch \<name>             | 创建分支，停留在当前分支           |     |
+| git switch \<name>             | 切换分支                           |     |
+| git switch -c \<name>          | 创建并切换分支                     |     |
+| git init                       | 初始化一个 git 仓库                |     |
+| git clone \<url>               | clone 一个 git 仓库                |     |
+| git add \<file>                | 添加文件到索引库                   |     |
+| git commit -m "\<message>"     | 提交更改                           |     |
+| git commit -a -m "\<message>"  | 提交更改，自动将所有文件加入暂存区 |     |
+| git diff                       | 显示更改                           |     |
+| git clone -b \<branch> \<url>  | 克隆指定分支                       |     |
+| git clone \<url>               | 克隆默认分支                       |     |
+| git reset --hard HEAD          | 丢弃所有更改                       |     |
+| git rm -r --cached <file_name> |                                    |     |
+|                                |                                    |     |
+|                                |                                    |     |
