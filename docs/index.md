@@ -12,6 +12,9 @@ hero:
       text: 💰捐赠
       link: /donate
     - theme: alt
+      text: 笔记
+      link: /Notes/
+    - theme: alt
       text: 杂项
       link: /misc/
 features:
@@ -24,6 +27,6 @@ features:
       width: 81
   - title: MCAFS
     details: 一个FTP服务器，用于访问Minecraft的全局资源
-    link: /mcafs/
+    link: https://github.com/LEAWIND/mcafs
     icon: 🗂
 ---

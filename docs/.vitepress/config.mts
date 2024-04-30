@@ -42,11 +42,10 @@ export default defineConfig({
 				text: '🌐项目',
 				items: [
 					{ text: "Leawind的第三人称", link: 'https://leawind.github.io/Third-Person/zh-CN/?autolang' },
-					{ text: 'MCAFS', link: '/mcafs/' },
+					{ text: 'MCAFS', link: 'https://github.com/LEAWIND/mcafs' },
+					{ text: 'Docs-template', link: 'https://github.com/LEAWIND/docs-template' },
 				]
 			},
-			// { text: '笔记', link: '/Notes/' },
-			{ text: '杂项', link: '/misc/' },
 			{ text: '💰捐赠', link: '/donate' },
 		],
 		sidebar: {
