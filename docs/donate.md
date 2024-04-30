@@ -11,14 +11,14 @@ hero:
   image: 
 features:
 
+  - title: 微信
+    details: 🔍💬 <img src=/donate/wechat.png style="width:100%;image-rendering:pixelated">
+    icon: {src: /icons/wechat.svg}
+
   - title: 支付宝
     details: 💸👶 <img name=alipay src=/donate/alipay.png style="width:100%;image-rendering:pixelated"></img>
     link: https://qr.alipay.com/fkx13526acsazyxpidsxj0e
     icon: {src: /icons/alipay.svg}
-
-  - title: 微信
-    details: 🔍💬 <img src=/donate/wechat.png style="width:100%;image-rendering:pixelated">
-    icon: {src: /icons/wechat.svg}
 
   - title: 爱发电
     details: 💖⚡️ <img name=afdian src=/donate/afdian.png style="width:100%;image-rendering:pixelated"></img>
