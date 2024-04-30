@@ -1,115 +1,108 @@
 import fs from 'fs';
 import path from 'path/posix';
-import { deprecate } from 'util';
 
-import { DefaultTheme } from 'vitepress';
+import { DefaultTheme } from 'vitepress/theme';
+
+type FileDescriptor = {
+	// Directory title
+	title: string;
+	src?: string;
+	// There is only a title in the title file
+	titleOnly?: boolean;
+};
 
 /**
- * 自动构建侧栏
+ * Auto build side bar
  * 
- * @param dirPath  目录路径
- * @param name 侧栏名称
- * @param [docsRoot='docs'] 文档根目录
- * @deprecate
+ * @param dir  Directory path
+ * @param docsRoot Doc root
  */
-export function buildSidebar(dirPath: string, docsRoot: string = 'docs'): any {
-	dirPath = path.join(docsRoot, dirPath.replace(/^\/+/g, ''));
-	const sidebar = buildDirSidebar(dirPath, docsRoot);
+export function buildSidebar(dir: string, docsRoot: string = 'docs'): DefaultTheme.SidebarItem[] {
+	let dirPath = path.join(docsRoot, dir.replace(/^\/+/g, ''));
+	const sidebar = [buildDir(dirPath, false)];
 	// console.debug(JSON.stringify(sidebar, null, 2));
-	sidebar.collapsed = false;
 	return sidebar;
-}
 
-/**
- * @param dirPath 目录路径
- * @param [name=null] 显示名称
- */
-export function buildDirSidebar(dirPath: string, docsRoot: string): DefaultTheme.SidebarItem {
-	const dir = parse(dirPath);
-	const items: DefaultTheme.SidebarItem[] = [];
-	// 遍历目录，添加子元素
-	for (let iname of fs.readdirSync(dirPath)) {
-		const ipath = path.join(dirPath, iname);
-		if (!isOrHasPageFile(ipath)) continue;
-		// console.debug(`buildDirSidebar: ${ipath}`);
-		if (fs.statSync(ipath).isFile()) {
-			if (!iname.startsWith('index')) {
-				items.push({
-					text: parseFile(ipath).title,
-					link: '/' + path.relative(docsRoot, ipath),
-				});
+	/**
+	 * Build sidebar of directory
+	 * 
+	 * @param dirPath Directory path
+	 */
+	function buildDir(dirPath: string, collapsed = true): DefaultTheme.SidebarItem {
+		const dir = parseFile(dirPath);
+		const result: DefaultTheme.SidebarItem = {
+			text: dir.title,
+			collapsed,
+			items: (() => {
+				const items: DefaultTheme.SidebarItem[] = [];
+				const subNames = fs.readdirSync(dirPath);
+				subNames.sort();
+				for (const subName of subNames) {
+					const subPath = path.join(dirPath, subName);
+					if (isOrHasPageFile(subPath)) {
+						const subStat = fs.statSync(subPath);
+						if (subStat.isFile()) {
+							if (subName.startsWith('index')) continue;
+							items.push({
+								text: parseFile(subPath).title,
+								link: '/' + path.relative(docsRoot, subPath),
+							});
+						} else if (subStat.isDirectory()) {
+							const subdirSidebar = buildDir(subPath, true);
+							items.push(subdirSidebar);
+						}
+					}
+				}
+				return items;
+			})(),
+
+		};
+		if (!dir.titleOnly)
+			result.link = path.relative(docsRoot, dirPath).replace(/(^\/*)|(\/*$)/g, '/');
+		return result;
+	}
+
+	/**
+	 * Read file or directory metadata
+	 */
+	function parseFile(filePath: string): FileDescriptor {
+		const defaultTitle = path.basename(filePath);
+		if (fs.existsSync(filePath)) {
+			const stat = fs.statSync(filePath);
+			if (stat.isFile()) {
+				const srcFile: string = fs.readFileSync(filePath, 'utf-8');
+				const matches = /(\n|^)\s*#+\s*(.*)/.exec(srcFile);
+				return {
+					title: matches === null ? defaultTitle : matches[2],
+					src: srcFile,
+					titleOnly: srcFile.replace(/(\n|^)\s*#+\s*.*(\n|$)/, '').trim() === '',
+				};
+			} else if (stat.isDirectory()) {
+				const indexFilePath = path.join(filePath, 'index.md');
+				if (fs.existsSync(indexFilePath)) {
+					return parseFile(indexFilePath);
+				}
 			}
-		} else {
-			items.push(buildDirSidebar(ipath, docsRoot));
+		}
+		return {
+			title: defaultTitle,
+			titleOnly: true,
+		};
+	}
+
+	/**
+	 * Check if the specified path is a page file or a directory contains any page file.
+	 */
+	function isOrHasPageFile(apath: string) {
+		const stat = fs.statSync(apath);
+		if (stat.isFile()) {
+			return /.*\.(md)|(html)|(htm)$/i.test(apath);
+		} else if (stat.isDirectory()) {
+			for (const subName of fs.readdirSync(apath)) {
+				const subPath = path.join(apath, subName);
+				if (isOrHasPageFile(subPath)) return true;
+			}
+			return false;
 		}
 	}
-	// 
-	const result: DefaultTheme.SidebarItem = {
-		text: getDirTitle(dirPath),
-		collapsed: true,
-		items: items,
-	};
-	if (!dir.pureTitle)
-		result.link = path.relative(docsRoot, dirPath).replace(/(^\/*)|(\/*$)/g, '/');
-	return result;
-}
-
-
-/**
- * 解析目录或文件
- * 
- * title 标题
- * src 文件内容
- * titleOnly 文件内容中是否仅含有标题
- */
-function parse(filePath: string): { title: string; path: string; pureTitle?: boolean; src?: string; } {
-	if (!fs.existsSync(filePath))
-		return {
-			title: path.basename(filePath),
-			path: filePath,
-		};
-	const stat = fs.statSync(filePath);
-	if (stat.isFile()) {
-		return parseFile(filePath);
-	} else if (stat.isDirectory()) {
-		return parse(path.join(filePath, 'index.md'));
-	} else {
-		return {
-			title: path.basename(filePath),
-			path: filePath,
-		};
-	}
-}
-function parseFile(filePath: string): { title: string; path: string; pureTitle: boolean; src: string; } {
-	const src: string = fs.readFileSync(filePath, 'utf-8');
-	const matches = /(\n|^)\s*#*#(.*)/.exec(src);
-	return {
-		title: matches === null ? path.basename(filePath) : matches[2],
-		path: filePath,
-		pureTitle: src.replace(/(\n|^)\s*#{1,}.*(\n|$)/, '').trim() === '',
-		src: src,
-	};
-}
-function getDirTitle(dirPath: string): string {
-	const indexFile = path.join(dirPath, 'index.md');
-	if (fs.existsSync(indexFile)) {
-		return parseFile(indexFile).title;
-	} else {
-		return path.basename(dirPath);
-	}
-}
-
-function isPageFile(filePath) {
-	return /\.(md)|(html)|(htm)/i.test(path.parse(filePath).ext);
-}
-
-function hasPageFile(dirPath: string) {
-	for (const subname of fs.readdirSync(dirPath))
-		if (isPageFile(subname)) return true;
-	return false;
-}
-
-function isOrHasPageFile(apath: string) {
-	if (fs.statSync(apath).isFile()) return isPageFile(apath);
-	else return hasPageFile(apath);
 }
