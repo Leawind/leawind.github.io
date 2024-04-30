@@ -2,14 +2,10 @@
 
 ## links
 
-[JDK17](D:\Program_env\java\jdk-17.0.1)
-[java.exe(17)]("D:\Program_env\java\jdk-17.0.1\bin\java.exe")
-
 [JAVA 菜鸟教程](https://www.runoob.com/java/java-environment-setup.html)
 
-
 [IDEA 官方教程](https://www.jetbrains.com/zh-cn/idea/resources/)
-​	[创建java程序](https://www.jetbrains.com/help/idea/creating-and-running-your-first-java-application.html)
+​[创建java程序](https://www.jetbrains.com/help/idea/creating-and-running-your-first-java-application.html)
 
 ## 工程和模块 Project & Module
 

@@ -411,3 +411,12 @@ net.ipv4.icmp_echo_ignore_all = 0
 ```
 
 1 表示忽略 icmp 包，外界就无法 ping 通本机
+
+## 在 ubuntu 中启用休眠功能 
+
+### 使用 swapfile
+
+[How To Enable Hibernation On Ubuntu (When Using A Swap File)](https://www.linuxuprising.com/2021/08/how-to-enable-hibernation-on-ubuntu.html)
+
+
+

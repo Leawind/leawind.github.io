@@ -12,9 +12,6 @@ hero:
       text: 💰捐赠
       link: /donate
     - theme: alt
-      text: 笔记
-      link: /Notes/
-    - theme: alt
       text: 杂项
       link: /misc/
 features:
