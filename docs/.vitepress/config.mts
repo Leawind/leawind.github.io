@@ -45,7 +45,7 @@ export default defineConfig({
 					{ text: 'MCAFS', link: '/mcafs/' },
 				]
 			},
-			{ text: '笔记', link: '/Notes/' },
+			// { text: '笔记', link: '/Notes/' },
 			{ text: '杂项', link: '/misc/' },
 			{ text: '💰捐赠', link: '/donate' },
 		],
