@@ -10,7 +10,7 @@ cd helloworld
 ```
 
 ```bash
-$> gradle init
+gradle init
 
 Select type of project to generate:
   1: basic
@@ -52,7 +52,7 @@ BUILD SUCCESSFUL in 43s
 ```
 
 ```bash
-$> gradlew assemble
+gradlew assemble
 
 BUILD SUCCESSFUL in 5s
 2 actionable tasks: 2 executed

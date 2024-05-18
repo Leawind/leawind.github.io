@@ -235,7 +235,7 @@ sysctl -p
 ## 查看 socket
 
 ```sh
-$> ss -h
+ss -h
 Usage: ss [ OPTIONS ]
        ss [ OPTIONS ] [ FILTER ]
    -h, --help          this message
@@ -419,4 +419,12 @@ net.ipv4.icmp_echo_ignore_all = 0
 [How To Enable Hibernation On Ubuntu (When Using A Swap File)](https://www.linuxuprising.com/2021/08/how-to-enable-hibernation-on-ubuntu.html)
 
 
+## 查看CPU温度
 
+```sh
+sudo apt install lm-sensors
+```
+
+```sh
+watch -n1 sensors
+```

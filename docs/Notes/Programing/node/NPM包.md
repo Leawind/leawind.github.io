@@ -29,7 +29,7 @@ https://nodejs.org/en
 ### 在本地命令行登录 npm
 
 ```bash
-$> npm login
+npm login
 ```
 
 输入用户名，根据提示操作即可。
@@ -41,9 +41,9 @@ $> npm login
 为你的包创建一个目录，并执行 `npm init` 命令。
 
 ```bash
-$> mkdir mynpmpkg
-$> cd mynpmpkg
-$> npm init
+mkdir mynpmpkg
+cd mynpmpkg
+npm init
 ```
 
 现在可以根据提示填写相关信息，也可以一路回车，之后再手动修改`package.json`中的信息。

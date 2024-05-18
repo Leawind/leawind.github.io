@@ -1,4 +1,4 @@
-# Javascript
+# JavaScript
 
 ## String 和 ArrayBuffer 转换
 

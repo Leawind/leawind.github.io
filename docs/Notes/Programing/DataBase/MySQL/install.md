@@ -1,12 +1,10 @@
-# MySQL
+# 安装
 
-## 安装
-
-### Windows
+## Windows
 
 进入[官网的下载页面](https://dev.mysql.com/downloads/mysql/)，选择 mysql 版本和系统版本。
 
-#### 通过压缩包手动安装
+### 通过压缩包手动安装
 
 选择 `ZIP Archive` 下载压缩包并解压。
 
@@ -74,11 +72,11 @@ MySQL 服务已经启动成功。
 D:\MC\MCJE>
 ```
 
-#### 通过 MSI 安装
+### 通过 MSI 安装
 
 略
 
-### Ubuntu
+## Ubuntu
 
 [参考](https://zhuanlan.zhihu.com/p/610793026)
 
@@ -137,8 +135,6 @@ mysql> SELECT user,authentication_string,plugin,host FROM mysql.user;
 mysql>
 ```
 
-#### 配置文件
+### 配置文件
 
 配置文件位于 `/etc/mysql/mysql.conf.d/mysqld.cnf`
-
-未完待续
