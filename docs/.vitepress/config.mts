@@ -1,6 +1,8 @@
 import { defineConfig } from 'vitepress';
 import { buildSidebar } from "./builders.mts";
 
+const GOOGLE_ANALYTICS_ID = 'G-BHMTJH30EG';
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
 	base: '/',
@@ -10,7 +12,20 @@ export default defineConfig({
 	router: {
 		prefetchLinks: true,
 	},
-	head: [],
+	head: [
+		[
+			'script',
+			{
+				async: true,
+				src: `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`,
+			},
+		],
+		[
+			'script',
+			{},
+			`window.dataLayer = window.dataLayer || [];\nfunction gtag(){dataLayer.push(arguments);}\ngtag('js', new Date());\ngtag('config', '${GOOGLE_ANALYTICS_ID}');`,
+		],
+	],
 	themeConfig: {
 		externalLinkIcon: true,
 		socialLinks: [
