@@ -385,6 +385,7 @@ exit 0
 别名可以在 `~/.bash_aliases` 中定义。
 
 示例：
+
 ```sh
 alias cls=clear
 ```
@@ -412,14 +413,13 @@ net.ipv4.icmp_echo_ignore_all = 0
 
 1 表示忽略 icmp 包，外界就无法 ping 通本机
 
-## 在 ubuntu 中启用休眠功能 
+## 在 ubuntu 中启用休眠功能
 
 ### 使用 swapfile
 
 [How To Enable Hibernation On Ubuntu (When Using A Swap File)](https://www.linuxuprising.com/2021/08/how-to-enable-hibernation-on-ubuntu.html)
 
-
-## 查看CPU温度
+## 查看 CPU 温度
 
 ```sh
 sudo apt install lm-sensors
@@ -427,4 +427,15 @@ sudo apt install lm-sensors
 
 ```sh
 watch -n1 sensors
+```
+
+## 设置系统代理
+
+适用于所有登录的用户
+
+`/etc/profile.d/proxy.sh`
+
+```
+export http_proxy="http://10.10.1.10:8080/"
+export https_proxy="http://10.10.1.10:8080/"
 ```

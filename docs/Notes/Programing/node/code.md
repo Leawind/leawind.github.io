@@ -7,20 +7,16 @@
 ```ts
 /**
  * 遍历目录
- * 
+ *
  * @param dirPath 初始路径
  * @param callback 回调函数
  *     @param dir 所在目录
  *     @param files 该目录下所有文件名
  *     @param dirs 该目录下所有目录名
  * @param filter 目录过滤器，若返回true，表示该目录不遍历
- * @param [maxDepth=Infinity] 
+ * @param [maxDepth=Infinity]
  */
-function walkSync(dirPath: string,
-		 callback: (dir: string, files: string[], dirs: string[]) => (boolean | void),
-		 filter: (filePath: string) => boolean = x => true,
-		 maxDepth: number = Infinity
-): void {
+function walkSync(dirPath: string, callback: (dir: string, files: string[], dirs: string[]) => boolean | void, filter: (filePath: string) => boolean = x => true, maxDepth: number = Infinity): void {
 	if (maxDepth == 0) return;
 	if (!fs.existsSync(dirPath)) return;
 	const sublist = fs.readdirSync(dirPath);
@@ -43,24 +39,24 @@ function walkSync(dirPath: string,
 	}
 }
 ```
+
 :::
 
 :::details js
-```js
 
+```js
 /**
  * 遍历目录
- * 
+ *
  * @param dirPath 初始路径
  * @param callback 回调函数
  *     @param dir 所在目录
  *     @param files 该目录下所有文件名
  *     @param dirs 该目录下所有目录名
  * @param filter 目录过滤器，若返回true，表示该目录不遍历
- * @param [maxDepth=Infinity] 
+ * @param [maxDepth=Infinity]
  */
-function walkSync(dirPath, callback, filter = x => true, maxDepth = Infinity
-) {
+function walkSync(dirPath, callback, filter = x => true, maxDepth = Infinity) {
 	if (maxDepth == 0) return;
 	if (!fs.existsSync(dirPath)) return;
 	const sublist = fs.readdirSync(dirPath);
@@ -83,15 +79,31 @@ function walkSync(dirPath, callback, filter = x => true, maxDepth = Infinity
 	}
 }
 ```
-:::
 
+:::
 
 ## BiMap
 
 ```ts
-export default class BiMap<A, B>{
+/**
+ * BiMap
+ *
+ * 1 to 1 mapping
+ *
+ * @author: Leawind <leawind@yeah.net>
+ * @description Bidirectional Map
+ *
+ */
+export default class BiMap<A, B> {
 	private ab: Map<A, B> = new Map();
 	private ba: Map<B, A> = new Map();
+
+	/**
+	 * Returns the size of the BiMap.
+	 */
+	get size(): number {
+		return this.ab.size;
+	}
 
 	public clear(): this {
 		this.ab.clear();
@@ -107,13 +119,13 @@ export default class BiMap<A, B>{
 		this.ba.delete(b);
 	}
 	public forEach(callbackfn: (a: A, b: B, bimap: BiMap<A, B>) => void) {
-		this.ab.forEach((value, key, map) => callbackfn(key, value, this));
+		this.ab.forEach((b, a) => callbackfn(a, b, this));
 	}
 
-	public AtoB(a: A): B | undefined {
+	public toB(a: A): B | undefined {
 		return this.ab.get(a);
 	}
-	public BtoA(b: B): A | undefined {
+	public toA(b: B): A | undefined {
 		return this.ba.get(b);
 	}
 
@@ -123,7 +135,15 @@ export default class BiMap<A, B>{
 	public hasB(b: B): boolean {
 		return this.ba.has(b);
 	}
-
+	/**
+	 * Set mapping `a <==> b`
+	 *
+	 * if `a` is already mapped, it will be overwritten, so as `b`
+	 *
+	 * @param a value A
+	 * @param b value B
+	 * @returns The BiMap instance.
+	 */
 	public set(a: A, b: B): this {
 		if (this.hasA(a)) this.ba.delete(this.ab.get(a)!);
 		if (this.hasB(b)) this.ab.delete(this.ba.get(b)!);
@@ -131,16 +151,44 @@ export default class BiMap<A, B>{
 		this.ba.set(b, a);
 		return this;
 	}
-	get size(): number {
-		return this.ab.size;
+
+	public clone(): BiMap<A, B> {
+		const cp = new BiMap<A, B>();
+		cp.ab = new Map(this.ab);
+		cp.ba = new Map(this.ba);
+		return cp;
+	}
+
+	public toString(): string {
+		let result = `BiMap{\n`;
+		this.ba.forEach((a, b) => {
+			result += `  ${a} <==> ${this.squeeze(b)},\n`;
+		});
+		result += '}';
+		return result;
+	}
+
+	private squeeze(obj: any, limit: number = 64, tail: number = 16): string {
+		let name: string = '';
+		try {
+			name = '' + obj;
+		} catch (e) {
+			name = '<Error in toString()>';
+		}
+		const s = name.replace(/\n/g, '\\n').replace(/\t/g, '\\t');
+		return s.length <= limit ? (s as string) : `${s.slice(0, limit - tail - 3)}...${s.slice(-tail)}`;
 	}
 }
-
 ```
 
 ## CoMap
 
 ```ts
+/**
+ * CoMap
+ *
+ * n to n mapping
+ */
 export default class CoMap<A, B> {
 	private abb: Map<A, Set<B>> = new Map();
 	private baa: Map<B, Set<A>> = new Map();
@@ -150,14 +198,23 @@ export default class CoMap<A, B> {
 		this.baa.clear();
 		return this;
 	}
+	/**
+	 * delete a and all b associated with a
+	 */
 	public deleteA(a: A) {
 		this.abb.get(a)?.forEach(b => this.baa.get(b)?.delete(a));
 		this.abb.delete(a);
 	}
+	/**
+	 * delete b and all a associated with b
+	 */
 	public deleteB(b: B) {
 		this.baa.get(b)?.forEach(a => this.abb.get(a)?.delete(b));
 		this.baa.delete(b);
 	}
+	/**
+	 * delete a-b association
+	 */
 	public deleteAB(a: A, b: B) {
 		if (this.abb.has(a)) {
 			this.abb.get(a)!.delete(b);
@@ -168,19 +225,33 @@ export default class CoMap<A, B> {
 			this.baa.get(b)!.size === 0 && this.baa.delete(b);
 		}
 	}
+	/**
+	 * iterate a-b association
+	 */
 	public forEachAB(callbackfn: (a: A, b: B, comap: CoMap<A, B>) => void) {
 		this.abb.forEach((bs, a) => bs.forEach(b => callbackfn(a, b, this)));
 	}
+	/**
+	 * iterate each b in a
+	 */
 	public forEachBInA(a: A, callbackfn: (a: A, b: B, comap: CoMap<A, B>) => void) {
 		this.abb.get(a)?.forEach(b => callbackfn(a, b, this));
 	}
+	/**
+	 * iterate each a in b
+	 */
 	public forEachAInB(b: B, callbackfn: (a: A, b: B, comap: CoMap<A, B>) => void) {
 		this.baa.get(b)?.forEach(a => callbackfn(a, b, this));
 	}
-
+	/**
+	 * get all associated b of a
+	 */
 	public aToBB(a: A): Set<B> {
 		return this.abb.get(a) || new Set();
 	}
+	/**
+	 * get all associated a of b
+	 */
 	public bToAA(b: B): Set<A> {
 		return this.baa.get(b) || new Set();
 	}
@@ -197,7 +268,7 @@ export default class CoMap<A, B> {
 	}
 	get size(): number {
 		let s = 0;
-		this.abb.forEach(bs => s += bs.size);
+		this.abb.forEach(bs => (s += bs.size));
 		return s;
 	}
 }
@@ -232,7 +303,6 @@ export default class Sets {
 		return s;
 	}
 }
-
 ```
 
 ## Tree
@@ -272,20 +342,19 @@ export interface ITreeNode {
 	removeChild(node: ITreeNode, modifyChild: boolean): this;
 }
 
-
 export class Tree<T> implements ITree {
 	root: ITreeNode;
 	constructor(root: ITreeNode) {
 		this.root = root;
 	}
 	get nodes(): Set<ITreeNode> {
-		throw new Error("Method not implemented.");
+		throw new Error('Method not implemented.');
 	}
 	get leaves(): Set<ITreeNode> {
-		throw new Error("Method not implemented.");
+		throw new Error('Method not implemented.');
 	}
 	get size(): number {
-		throw new Error("Method not implemented.");
+		throw new Error('Method not implemented.');
 	}
 }
 
@@ -351,5 +420,4 @@ export default class TreeNode<T> implements ITreeNode {
 		return this;
 	}
 }
-
 ```

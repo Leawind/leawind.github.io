@@ -2,16 +2,26 @@
 
 ## 如何开始一个 typescript 项目
 
-省流：
+### 省流
 
-> ```sh
-> pnpm init
-> pnpm i -D @types/node
-> pnpm i typescript
-> pnpm tsc --init
-> pnpm i -D rimraf
-> pnpm i -D npm-run-all
-> ```
+:::code-group
+
+```sh [terminal]
+pnpm init
+pnpm i -D @types/node
+pnpm i typescript
+pnpm tsc --init
+pnpm i -D rimraf
+pnpm i -D npm-run-all
+```
+
+```json [package.json]
+
+```
+
+:::
+
+### 详细步骤
 
 在新建文件夹中初始化 npm 项目
 
@@ -57,7 +67,7 @@ pnpm tsc --init
 		"allowUnreachableCode": false,
 		"alwaysStrict": true,
 		"removeComments": false,
-		"inlineSourceMap": true
+		"inlineSourceMap": true,
 		"allowImportingTsExtensions": true
 	},
 	"include": ["src/**/*"]

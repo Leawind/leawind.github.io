@@ -1,4 +1,35 @@
-# Git Tips
+# Git
+
+## `.gitignore`
+
+::: code-group
+
+```gitignore [npm]
+.vscode/
+out/
+dist/
+node_modules/
+
+```
+
+w
+
+```gitignore [vscode-extension]
+out/
+dist/
+node_modules/
+*.vsix
+
+```
+
+:::
+
+## `.gitattributes`
+
+```gitattributes
+* text eol=lf
+
+```
 
 ## Git Commit 规范
 
