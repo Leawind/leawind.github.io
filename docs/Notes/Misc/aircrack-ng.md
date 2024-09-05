@@ -2,10 +2,6 @@
 
 [Aircrack-ng 官网](https://www.aircrack-ng.org/)
 
-:::warning
-此文档还未完善 #TODO
-:::
-
 ## 使网卡进入监听模式
 
 查看当前无线网卡标识
