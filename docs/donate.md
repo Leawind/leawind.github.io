@@ -23,7 +23,7 @@ features:
 
   - title: 爱发电
     details: 💖⚡️ <img alt="爱发电" name=afdian src=/donate/afdian.png style="width:100%;image-rendering:pixelated"></img>
-    link: https://afdian.net/a/Leawind
+    link: https://afdian.com/a/Leawind
     icon:
       src: /icons/afdian.png
 
