@@ -63,8 +63,8 @@ export default defineConfig({
 			{ text: '💰捐赠', link: '/donate' },
 		],
 		sidebar: {
-			'/Notes': buildSidebar('Notes'),
-			'/misc': buildSidebar('misc'),
+			"/Notes": buildSidebar("Notes"),
+			"/misc": buildSidebar("misc"),
 		},
 		footer: {
 			message: '<a href=/donate>💰捐赠</a> <br> 本文档使用 <a href=https://vitepress.dev>vitepress</a> 构建',
