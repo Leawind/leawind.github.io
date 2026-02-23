@@ -25,8 +25,4 @@ features:
       dark: https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&logoColor=f16436&label=%20&color=4f4f4f
       light: https://img.shields.io/curseforge/dt/930880?style=flat&logo=curseforge&logoColor=4f4f4f&label=%20&color=f16436
       width: 81
-  - title: MCAFS
-    details: 一个FTP服务器，用于访问Minecraft的全局资源
-    link: https://github.com/LEAWIND/mcafs
-    icon: 🗂
 ---
