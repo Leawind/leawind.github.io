@@ -24,7 +24,6 @@ export default defineConfig({
 		[
 			"script",
 			{
-				async: true,
 				src: `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_ID}`,
 			},
 		],
