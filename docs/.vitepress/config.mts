@@ -1,10 +1,10 @@
-import { defineConfig } from "vitepress";
 import { buildSidebar } from "./builders.mts";
+import { withMermaid } from "vitepress-plugin-mermaid";
 
 const GOOGLE_ANALYTICS_ID = "G-BHMTJH30EG";
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid({
 	base: "/",
 	srcDir: ".",
 	cleanUrls: true,
