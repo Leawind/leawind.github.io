@@ -1,13 +1,23 @@
-# npm
-node_modules
+node_modules/
 
-# vitepress
-docs/.vitepress/dist
-docs/.vitepress/cache
+# IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
 
-# vscode
-.vscode
+# Generated files
+/dist/
+**/.vitepress/cache/
 
+# dotenv
+.env
+.env.*
+!.env.example
+
+# Obsidian
+.obsidian/
+
+# draft
 .draft
 
 # ignored
