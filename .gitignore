@@ -15,3 +15,13 @@ docs/.vitepress/cache
 
 # txt file for LLM
 llm_txt
+
+# AI tools
+/.ai/
+.clinerules/
+.cursorrules/
+.kilo/
+.marscode/
+.lingma/
+.trae/
+.codebuddy/
