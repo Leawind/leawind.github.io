@@ -1,8 +1,8 @@
 import 'jsr:@std/dotenv@0.225.6/load'
 import { DefaultTheme, defineConfig, UserConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
-import locales from './locales.ts'
-import { buildRewrites } from './utils/sidebar.ts'
+import localesConfig from './server/build-config.ts'
+import { buildRewrites } from './server/sidebar.ts'
 
 const BASE = '/'
 const GOOGLE_ANALYTICS_ID = 'G-BHMTJH30EG'
@@ -13,7 +13,7 @@ let config: UserConfig = {
   srcDir: '.',
   outDir: '../dist',
   cleanUrls: true,
-  rewrites: buildRewrites('docs', Object.keys(locales)),
+  rewrites: buildRewrites('docs', Object.keys(localesConfig)),
 
   title: 'Leawind的文档',
   description: '',
@@ -46,28 +46,16 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
     ],
+    ['link', { rel: 'icon', href: '/icons/LTP_mid.png' }],
   ],
 
   lastUpdated: true,
 
   themeConfig: {
     externalLinkIcon: true,
+    logo: '/icons/LTP_mid.png',
     search: {
       provider: 'local',
-      options: {
-        miniSearch: {
-          options: {
-            processTerm: (term: string) => {
-              term = term.toLowerCase()
-                .replace(/([\u4e00-\u9fff])/g, '$1 ')
-                .trim().replace(/\s+/g, ' ')
-              const terms = term.split(' ')
-              return terms.length === 1 ? term : terms
-            },
-          },
-          searchOptions: {},
-        },
-      },
     },
     socialLinks: [
       {
@@ -102,7 +90,7 @@ gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
       copyright: 'Copyright © 2024 Leawind',
     },
   },
-  locales,
+  locales: localesConfig,
 } satisfies UserConfig<DefaultTheme.Config>
 
 if (!isDev) {
