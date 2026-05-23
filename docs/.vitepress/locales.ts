@@ -12,7 +12,7 @@ export default {
           { text: '🏠首页', link: '/zh_cn/' },
           { text: '💰捐赠', link: '/zh_cn/donate' },
           {
-            text: 'Mod',
+            text: 'Minecraft',
             items: [
               { text: 'SystemStorageLib', link: '/zh_cn/SystemStorageLib' },
               {
@@ -72,7 +72,7 @@ export default {
           { text: '🏠Home', link: '/en_us/' },
           { text: '💰Donate', link: '/en_us/donate' },
           {
-            text: 'Mod',
+            text: 'Minecraft',
             items: [
               { text: 'SystemStorageLib', link: '/en_us/SystemStorageLib' },
               {
