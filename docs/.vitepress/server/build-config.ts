@@ -7,7 +7,7 @@ type LocaleConfigValue<ThemeConfig = any> = LocaleConfig<ThemeConfig>[string]
 
 const BASE = 'docs'
 const EDIT_LINK_PATTERN =
-  'https://github.com/LEAWIND/leawind.github.io/edit/main/docs/:path'
+  'https://github.com/Leawind/leawind.github.io/edit/main/docs/:path'
 
 /**
  * Assemble VitePress locale configs from raw locale data.

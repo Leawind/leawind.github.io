@@ -47,7 +47,7 @@ const locales: Record<string, LocaleEntry> = {
         items: [
           {
             text: 'Docs-template',
-            link: 'https://github.com/LEAWIND/docs-template',
+            link: 'https://github.com/Leawind/docs-template',
           },
         ],
       },
@@ -102,7 +102,7 @@ const locales: Record<string, LocaleEntry> = {
         items: [
           {
             text: 'Docs-template',
-            link: 'https://github.com/LEAWIND/docs-template',
+            link: 'https://github.com/Leawind/docs-template',
           },
         ],
       },

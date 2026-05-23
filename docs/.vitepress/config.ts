@@ -60,7 +60,7 @@ gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
     socialLinks: [
       {
         icon: 'github',
-        link: 'https://github.com/LEAWIND/leawind.github.io',
+        link: 'https://github.com/Leawind/leawind.github.io',
       },
       {
         link: 'https://space.bilibili.com/314412977',
