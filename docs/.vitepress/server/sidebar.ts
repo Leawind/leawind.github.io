@@ -206,7 +206,17 @@ export function buildRewrites(
 
     for (const entry of dir.listSync()) {
       if (entry.isFileSync()) {
-        if (entry.name === 'index.md') { continue }
+        if (entry.name === 'index.md') {
+          const relativePath = entry.relative(basePath).toString()
+          const segments = relativePath.split('/')
+          const stripped = segments.map(stripPrefix)
+          // 仅当去掉前缀后目录路径发生变化时才生成 rewrite
+          if (segments.some((s, i) => s !== stripped[i])) {
+            // 保留 .md 后缀，交给 VitePress 自己转换为 .html
+            rewrites[relativePath] = stripped.join('/')
+          }
+          continue
+        }
 
         const baseName = stripPrefix(entry.nameNoExt)
         const relativePath = entry.relative(basePath).toString()
