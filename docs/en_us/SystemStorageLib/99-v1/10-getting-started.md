@@ -45,7 +45,7 @@ ScopeStorage myMod = lib.scope("my-mod");
 
 **Scope naming rules:**
 
-- Length between 2 and 63 characters
+- Length between 2 and 128 characters
 - Must not start or end with `-`, `+`, or `.`
 - Allowed characters: digits, ASCII letters, `_`, `-`, `+`, `.`
 
@@ -56,6 +56,19 @@ String error = lib.validateScope("invalid scope!");
 if (error != null) {
     // handle invalid scope
 }
+
+// Or simply check if valid
+if (lib.isScopeValid("my-mod")) {
+    // scope name is valid
+}
+```
+
+List all known scopes using `getAllScopes()`:
+
+```java
+lib.getAllScopes().forEach(scopeName -> {
+    System.out.println("Found scope: " + scopeName);
+});
 ```
 
 ### 3. Access Store Types
@@ -148,7 +161,7 @@ MetaConfig config = meta.get();
 
 // Set custom directory for a scope
 PerScopeConfig perScope = config.getOrCreateScopeConfig("my-mod");
-perScope.customDirs().put(StoreType.CONFIG, Path.of("/custom/config/path"));
+perScope.setCustomDir(StoreType.CONFIG, Path.of("/custom/config/path"));
 meta.set(config);
 ```
 

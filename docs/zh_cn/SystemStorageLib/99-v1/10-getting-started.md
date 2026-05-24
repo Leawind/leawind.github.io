@@ -45,7 +45,7 @@ ScopeStorage myMod = lib.scope("my-mod");
 
 **Scope 命名规则：**
 
-- 长度在 2 到 63 个字符之间
+- 长度在 2 到 128 个字符之间
 - 不能以 `-`、`+` 或 `.` 开头或结尾
 - 允许的字符：数字、ASCII 字母、`_`、`-`、`+`、`.`
 
@@ -56,6 +56,19 @@ String error = lib.validateScope("invalid scope!");
 if (error != null) {
     // 处理无效的 scope
 }
+
+// 或者简单地检查是否有效
+if (lib.isScopeValid("my-mod")) {
+    // scope 名称有效
+}
+```
+
+使用 `getAllScopes()` 列出所有已知的 scope：
+
+```java
+lib.getAllScopes().forEach(scopeName -> {
+    System.out.println("Found scope: " + scopeName);
+});
 ```
 
 ### 3. 访问存储类型
@@ -148,7 +161,7 @@ MetaConfig config = meta.get();
 
 // 为 scope 设置自定义目录
 PerScopeConfig perScope = config.getOrCreateScopeConfig("my-mod");
-perScope.customDirs().put(StoreType.CONFIG, Path.of("/custom/config/path"));
+perScope.setCustomDir(StoreType.CONFIG, Path.of("/custom/config/path"));
 meta.set(config);
 ```
 

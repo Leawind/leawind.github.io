@@ -64,7 +64,7 @@ MetaConfig config = lib.metaConfig().get();
 PerScopeConfig perScope = config.getOrCreateScopeConfig("my-mod");
 
 // 覆写此 scope 的 cache 目录
-perScope.customDirs().put(StoreType.CACHE, Path.of("/ssd/cache/my-mod"));
+perScope.setCustomDir(StoreType.CACHE, Path.of("/ssd/cache/my-mod"));
 
 lib.metaConfig().set(config);
 ```

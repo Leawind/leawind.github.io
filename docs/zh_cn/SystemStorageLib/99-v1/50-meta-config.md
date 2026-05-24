@@ -47,7 +47,10 @@ public final class MetaConfig {
 
 // PerScopeConfig — 每个 scope 的设置
 public final class PerScopeConfig {
-    Map<StoreType<?>, Path> customDirs();
+    Map<StoreType<?>, Path> customDirs();           // 只读视图
+    void setCustomDir(StoreType<?> type, Path path); // 设置自定义目录
+    void unsetCustomDir(StoreType<?> type);          // 移除某个类型的自定义目录
+    void resetCustomDirs();                          // 移除所有自定义目录
 }
 ```
 
@@ -78,8 +81,8 @@ MetaConfig config = meta.get();
 PerScopeConfig perScope = config.getOrCreateScopeConfig("my-mod");
 
 // 设置自定义目录
-perScope.customDirs().put(StoreType.CACHE, Path.of("/ssd/cache/my-mod"));
-perScope.customDirs().put(StoreType.DATA, Path.of("/mnt/shared/data/my-mod"));
+perScope.setCustomDir(StoreType.CACHE, Path.of("/ssd/cache/my-mod"));
+perScope.setCustomDir(StoreType.DATA, Path.of("/mnt/shared/data/my-mod"));
 
 // 写入磁盘
 meta.set(config);

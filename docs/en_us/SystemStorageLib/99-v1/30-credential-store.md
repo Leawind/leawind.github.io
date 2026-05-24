@@ -21,7 +21,7 @@ The `CredentialStore` provides **encrypted persistent key-value storage** for se
 
 ### Data Loss Tolerance
 
-The credential store may tolerate data loss in certain situations:
+The credential store may lose data in certain situations:
 
 - User switching
 - VM configuration changes

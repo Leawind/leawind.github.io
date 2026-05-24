@@ -4,7 +4,7 @@ title: Meta Configuration
 
 # Meta Configuration
 
-The **Meta Configuration** system provides a centralized way to configure storage paths per scope without modifying mod code. It is serialized as JSON using Mojang's DataFixerUpper codec system.
+The **Meta Configuration** system provides a centralized way to configure storage paths per scope without modifying mod code. It uses Mojang's DataFixerUpper codec system to serialize as JSON.
 
 ## Overview
 
@@ -47,7 +47,10 @@ public final class MetaConfig {
 
 // PerScopeConfig — per-scope settings
 public final class PerScopeConfig {
-    Map<StoreType<?>, Path> customDirs();
+    Map<StoreType<?>, Path> customDirs();           // read-only view
+    void setCustomDir(StoreType<?> type, Path path); // set custom directory
+    void unsetCustomDir(StoreType<?> type);          // remove custom dir for a type
+    void resetCustomDirs();                          // remove all custom dirs
 }
 ```
 
@@ -78,8 +81,8 @@ MetaConfig config = meta.get();
 PerScopeConfig perScope = config.getOrCreateScopeConfig("my-mod");
 
 // Set custom directories
-perScope.customDirs().put(StoreType.CACHE, Path.of("/ssd/cache/my-mod"));
-perScope.customDirs().put(StoreType.DATA, Path.of("/mnt/shared/data/my-mod"));
+perScope.setCustomDir(StoreType.CACHE, Path.of("/ssd/cache/my-mod"));
+perScope.setCustomDir(StoreType.DATA, Path.of("/mnt/shared/data/my-mod"));
 
 // Write to disk
 meta.set(config);
