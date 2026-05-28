@@ -4,13 +4,17 @@ title: Getting Started
 
 # Getting Started
 
-## Add Dependency
+### Adding Dependencies
 
-### Gradle
+`gradle.properties`:
+
+```properties
+system_storage_lib_version=0.1.0
+```
 
 ::: code-group
 
-```kotlin [Kotlin]
+```kotlin [build.gradle.kts]
 repositories {
     maven("https://jitpack.io")
 }
@@ -20,7 +24,7 @@ dependencies {
 }
 ```
 
-```groovy [Groovy]
+```groovy [build.gradle]
 repositories {
     maven { url 'https://jitpack.io' }
 }
@@ -32,13 +36,37 @@ dependencies {
 
 :::
 
+::: code-group
+
+```json [fabric.mod.json]
+{
+  "depends": {
+    "system_storage_lib": ">=${system_storage_lib_version}"
+  }
+}
+```
+
+```toml [(neoforge.)mods.toml]
+[[dependencies.example_mod]]
+modId="system_storage_lib"
+mandatory=true
+versionRange="[${system_storage_lib_version},)"
+ordering="NONE"
+side="SERVER" # CLIENT / SERVER / BOTH
+```
+
+:::
+
+````
+:::
+
 ## Basic Usage
 
 ### Getting the Library Instance
 
 The library is a singleton, accessed via `SystemStorageLib.getInstance()`.
 
-In local testing environments, to avoid affecting data in the system, you can create a custom instance using the builder pattern:
+In local testing environments, to avoid affecting data in the system, you can create a custom instance using `.builder()`:
 
 ```java
 SystemStorageLib lib = SystemStorageLib.builder()
@@ -49,7 +77,7 @@ SystemStorageLib lib = SystemStorageLib.builder()
     .maxLogFileSize(1024 * 1024) // 1MB
     .maxLogArchiveFiles(3)
     .build();
-```
+````
 
 ### Creating a Scope
 
@@ -89,15 +117,13 @@ if (error != null) {
 
 ### Selecting Storage Type
 
-Each scope has access to five storage types:
-
-| Storage Type  | Purpose                                                                 | Typical Content               |
-| ------------- | ----------------------------------------------------------------------- | ----------------------------- |
-| `CACHE`       | Regenerable cache data                                                  | Thumbnails                    |
-| `CONFIG`      | Configuration files                                                     |                               |
-| `CREDENTIALS` | Sensitive data requiring encryption                                     | API tokens, OAuth keys        |
-| `DATA`        | Persistent data that can be shared across machines                      | Downloaded works from others  |
-| `DATA_LOCAL`  | Machine-specific persistent data, or expensive-to-regenerate cache data | Session data, temporary state |
+| `StoreType` Enum Value | Storage Type | Description                                                             |
+| ---------------------- | ------------ | ----------------------------------------------------------------------- |
+| `CACHE`                | Cache        | Regenerable data, such as thumbnails                                    |
+| `CONFIG`               | Config       | Configuration files, such as user preferences                           |
+| `CREDENTIALS`          | Credentials  | Sensitive data requiring encryption, such as tokens, keys, etc.         |
+| `DATA`                 | Data         | Persistent data that can be shared across machines                      |
+| `DATA_LOCAL`           | Local Data   | Machine-specific persistent data, or expensive-to-regenerate cache data |
 
 Obtain a `Storage` instance via the `Scope#storage(StoreType)` method:
 
@@ -126,8 +152,9 @@ CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(Credentia
 Usage:
 
 ```java
-credentials.set("api-key", "sk-abc123...");
-String token = credentials.get("api-key");
+credentials.set("discord-token", "abc123...");
+String token = credentials.get("discord-token"); // "abc123..."
+credentials.remove("discord-token");
 ```
 
 ### Cross-process Locking

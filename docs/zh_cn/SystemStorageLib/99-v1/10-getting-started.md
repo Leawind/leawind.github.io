@@ -4,13 +4,17 @@ title: 快速开始
 
 # 快速开始
 
-## 添加依赖
+### 引入依赖
 
-### Gradle
+`gradle.properties`:
+
+```properties
+system_storage_lib_version=0.1.0
+```
 
 ::: code-group
 
-```kotlin [Kotlin]
+```kotlin [build.gradle.kts]
 repositories {
     maven("https://jitpack.io")
 }
@@ -20,7 +24,7 @@ dependencies {
 }
 ```
 
-```groovy [Groovy]
+```groovy [build.gradle]
 repositories {
     maven { url 'https://jitpack.io' }
 }
@@ -32,13 +36,34 @@ dependencies {
 
 :::
 
+::: code-group
+
+```json [fabric.mod.json]
+{
+  "depends": {
+    "system_storage_lib": ">=${system_storage_lib_version}"
+  }
+}
+```
+
+```toml [(neoforge.)mods.toml]
+[[dependencies.example_mod]]
+modId="system_storage_lib"
+mandatory=true
+versionRange="[${system_storage_lib_version},)"
+ordering="NONE"
+side="SERVER" # CLIENT / SERVER / BOTH
+```
+
+:::
+
 ## 基本用法
 
 ### 获取库实例
 
 该库是单例，通过 `SystemStorageLib.getInstance()` 访问。
 
-在本地测试环境中，为了避免影响系统中的数据，可以使用构建器模式创建自定义实例：
+在本地测试环境中，为了避免影响系统中的数据，可以使用 `.builder()` 创建自定义实例：
 
 ```java
 SystemStorageLib lib = SystemStorageLib.builder()
@@ -89,15 +114,13 @@ if (error != null) {
 
 ### 选择存储类型
 
-每个 scope 都可访问五种存储类型：
-
-| 存储类型      | 用途                                                   | 典型内容             |
-| ------------- | ------------------------------------------------------ | -------------------- |
-| `CACHE`       | 可再生的缓存数据                                       | 缩略图               |
-| `CONFIG`      | 配置文件                                               |                      |
-| `CREDENTIALS` | 需要加密的敏感数据                                     | API 令牌、OAuth 密钥 |
-| `DATA`        | 可跨机器共享的持久化数据                               | 下载的他人作品       |
-| `DATA_LOCAL`  | 特定于当前机器的持久化数据，或重新生成代价高的缓存数据 | 会话数据、临时状态   |
+| `StoreType` 枚举值 | 存储类型 | 描述                                                   |
+| ------------------ | -------- | ------------------------------------------------------ |
+| `CACHE`            | 缓存     | 可再生数据，例如缩略图                                 |
+| `CONFIG`           | 配置     | 配置文件，如用户偏好                                   |
+| `CREDENTIALS`      | 凭据     | 需要加密的敏感数据，如令牌、密钥等                     |
+| `DATA`             | 数据     | 可跨机器共享的持久化数据                               |
+| `DATA_LOCAL`       | 本地数据 | 特定于当前机器的持久化数据，或重新生成代价高的缓存数据 |
 
 通过 `Scope#storage(StoreType)` 方法获取 `Storage` 实例：
 

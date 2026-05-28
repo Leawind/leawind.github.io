@@ -18,13 +18,13 @@ A Minecraft library mod that provides **system-level persistent storage** for ot
 
 ## API Version
 
-> [!Warning] 🚧
->
-> This is currently an unstable, unofficial release. The API is subject to breaking changes at any time.
-
 | Version     | Status   |
 | ----------- | -------- |
 | [v1](./v1/) | Unstable |
+
+> [!Warning] 🚧
+>
+> This is currently an unstable, unofficial release. The API is subject to breaking changes at any time.
 
 > [!Tip]
 >
