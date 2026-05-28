@@ -23,112 +23,108 @@ dependencies {
 
 ## 基本用法
 
-### 1. 获取库实例
+### 获取库实例
 
-该库是单例，通过 `SystemStorageLib.getInstance()` 访问：
+该库是单例，通过 `SystemStorageLib.getInstance()` 访问。
 
-```java
-import io.github.leawind.systemstoragelib.v1.api.SystemStorageLib;
-
-SystemStorageLib lib = SystemStorageLib.getInstance();
-```
-
-### 2. 创建 Scope
-
-Scope 是一个隔离的存储命名空间。每个模组应使用自己唯一的 scope 名称：
+在本地测试环境中，为了避免影响系统中的数据，可以使用构建器模式创建自定义实例：
 
 ```java
-import io.github.leawind.systemstoragelib.v1.api.ScopeStorage;
-
-ScopeStorage myMod = lib.scope("my-mod");
+SystemStorageLib lib = SystemStorageLib.builder()
+    .logsDir(Path.of("./logs"))
+    .metaConfigDir(Path.of("./config"))
+    .storeDir(StoreType.CACHE, Path.of("./cache"))
+    .storeDir(StoreType.DATA, Path.of("./data"))
+    .maxLogFileSize(1024 * 1024) // 1MB
+    .maxLogArchiveFiles(3)
+    .build();
 ```
 
-**Scope 命名规则：**
+### 创建 Scope
+
+Scope 是一个隔离的存储命名空间。通常建议每个模组使用自己唯一的 scope 名称：
+
+```java
+Scope scope = SystemStorageLib.getInstance().scope("example_mod");
+```
+
+Scope 命名规则：
 
 - 长度在 2 到 128 个字符之间
 - 不能以 `-`、`+` 或 `.` 开头或结尾
 - 允许的字符：数字、ASCII 字母、`_`、`-`、`+`、`.`
 
-可以在使用前验证 scope 名称：
+> [!Note]
+>
+> 推荐的命名规范：
+>
+> ```
+> <mod_id>[.<scope_name>]
+> ```
+>
+> 例如：
+>
+> - `example_mod`
+> - `example_mod.alpha`
+
+可以使用 `validateScopeName` 方法验证 scope 名称：
 
 ```java
-String error = lib.validateScope("invalid scope!");
+String error = SystemStorageLib.getInstance().validateScopeName("invalid scope!");
 if (error != null) {
-    // 处理无效的 scope
-}
-
-// 或者简单地检查是否有效
-if (lib.isScopeValid("my-mod")) {
-    // scope 名称有效
+    // 处理无效的 scope 名称
 }
 ```
 
-使用 `getAllScopes()` 列出所有已知的 scope：
-
-```java
-lib.getAllScopes().forEach(scopeName -> {
-    System.out.println("Found scope: " + scopeName);
-});
-```
-
-### 3. 访问存储类型
+### 选择存储类型
 
 每个 scope 都可访问五种存储类型：
 
+| 存储类型      | 用途                                                   | 可自定义 | 典型内容             |
+| ------------- | ------------------------------------------------------ | :------: | -------------------- |
+| `CACHE`       | 可再生的缓存数据                                       |    ✅    | 缩略图               |
+| `CONFIG`      | 配置文件                                               |    ✅    |                      |
+| `CREDENTIALS` | 需要加密的敏感数据                                     |    ❌    | API 令牌、OAuth 密钥 |
+| `DATA`        | 可跨机器共享的持久化数据                               |    ✅    | 下载的他人作品       |
+| `DATA_LOCAL`  | 特定于当前机器的持久化数据，或重新生成代价高的缓存数据 |    ✅    | 会话数据、临时状态   |
+
+通过 `Scope#storage(StoreType)` 方法获取 `Storage` 实例：
+
 ```java
-import io.github.leawind.systemstoragelib.v1.api.StoreType;
-import io.github.leawind.systemstoragelib.v1.api.managers.StorageManager;
-import io.github.leawind.systemstoragelib.v1.api.managers.CredentialStore;
-
-// 通用存储管理器
-StorageManager config = myMod.storage(StoreType.CONFIG);
-StorageManager data = myMod.storage(StoreType.DATA);
-StorageManager cache = myMod.storage(StoreType.CACHE);
-StorageManager dataLocal = myMod.storage(StoreType.DATA_LOCAL);
-
-// 加密凭据存储
-CredentialStore credentials = myMod.storage(StoreType.CREDENTIALS);
+Storage data = scope.storage(StoreType.DATA);
 ```
 
-### 4. 读写数据
-
-#### 凭据存储（加密）
+#### 获取目录并直接操作文件系统
 
 ```java
-// 存储令牌
+Path dataDir = scope.storage(StoreType.DATA).getDirPath();
+
+// 使用标准 Java I/O 自由读写文件
+Path dataFile = dataDir.resolve("data.txt");
+String content = Files.readString(dataFile);
+```
+
+#### 使用加密凭据存储包装器
+
+使用 `StoreType.CREDENTIALS` 类型存储敏感数据时，建议使用 `CredentialStore` 包装器：
+
+```java
+CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(CredentialStore::of);
+```
+
+用法：
+
+```java
 credentials.set("api-key", "sk-abc123...");
-
-// 获取
 String token = credentials.get("api-key");
-
-// 检查是否存在
-if (credentials.exists("api-key")) {
-    // ...
-}
-
-// 删除
-credentials.remove("api-key");
 ```
 
-#### 通用存储（明文）
+### 跨进程锁
 
-对于 `CONFIG`、`DATA`、`CACHE` 和 `DATA_LOCAL`，直接操作文件系统：
-
-```java
-// 获取目录路径
-Path configDir = config.getDirPath();
-
-// 使用标准 Java I/O 读写文件
-Path settingsFile = configDir.resolve("settings.json");
-String content = Files.readString(settingsFile);
-```
-
-### 5. 跨进程锁
-
-所有存储管理器都提供 `ReadWriteLock` 以实现安全的并发访问：
+`Storage` 提供 `ReadWriteLock` 以实现安全的并发访问：
 
 ```java
-ReadWriteLock lock = config.getLock();
+ReadWriteLock lock = data.getLock();
 
 lock.readLock().lock();
 try {
@@ -145,41 +141,15 @@ try {
 }
 ```
 
-### 6. 元配置
-
-按 scope 覆写默认存储路径：
-
-```java
-import io.github.leawind.systemstoragelib.v1.api.managers.MetaConfigManager;
-import io.github.leawind.systemstoragelib.v1.api.metaconfig.MetaConfig;
-import io.github.leawind.systemstoragelib.v1.api.metaconfig.PerScopeConfig;
-
-MetaConfigManager meta = lib.metaConfig();
-
-// 读取当前配置
-MetaConfig config = meta.get();
-
-// 为 scope 设置自定义目录
-PerScopeConfig perScope = config.getOrCreateScopeConfig("my-mod");
-perScope.setCustomDir(StoreType.CONFIG, Path.of("/custom/config/path"));
-meta.set(config);
-```
-
-### 7. 日志
+### 日志
 
 每个 scope 都有自己带 scope 标记的 logger：
 
 ```java
-org.slf4j.Logger logger = myMod.logger();
-logger.info("Hello from my-mod!");
+org.slf4j.Logger logger = scope.logger();
+logger.info("Hello from example_mod!");
 ```
 
-库还提供了全局 logger 和日志目录：
-
-```java
-// 全局库 logger
-org.slf4j.Logger libLogger = lib.logger();
-
-// 日志目录
-Path logsDir = lib.getLogsDir();
-```
+> [!Note]
+>
+> 通过 `scope.logger()` 获取的 logger 会额外将日志写入独立的日志目录中，其路径可通过 `SystemStorageLib#getLogsDir()` 获取。

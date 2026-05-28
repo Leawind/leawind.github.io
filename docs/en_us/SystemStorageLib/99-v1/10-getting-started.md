@@ -4,9 +4,9 @@ title: Getting Started
 
 # Getting Started
 
-## Dependency
+## Dependencies
 
-SystemStorageLib is available via [JitPack](https://jitpack.io/#Leawind/SystemStorageLib).
+SystemStorageLib is published through [JitPack](https://jitpack.io/#Leawind/SystemStorageLib).
 
 ### Gradle
 
@@ -16,119 +16,115 @@ repositories {
 }
 
 dependencies {
-    // Check the latest version on JitPack
+    // Check JitPack for the latest version
     modImplementation("com.github.Leawind:SystemStorageLib:<version>")
 }
 ```
 
 ## Basic Usage
 
-### 1. Get the Library Instance
+### Getting the Library Instance
 
-The library is a singleton accessed via `SystemStorageLib.getInstance()`:
+The library is a singleton, accessed via `SystemStorageLib.getInstance()`.
 
-```java
-import io.github.leawind.systemstoragelib.v1.api.SystemStorageLib;
-
-SystemStorageLib lib = SystemStorageLib.getInstance();
-```
-
-### 2. Create a Scope
-
-A scope is an isolated storage namespace. Each mod should use its own unique scope name:
+In local testing environments, to avoid affecting data in the system, you can create a custom instance using the builder pattern:
 
 ```java
-import io.github.leawind.systemstoragelib.v1.api.ScopeStorage;
-
-ScopeStorage myMod = lib.scope("my-mod");
+SystemStorageLib lib = SystemStorageLib.builder()
+    .logsDir(Path.of("./logs"))
+    .metaConfigDir(Path.of("./config"))
+    .storeDir(StoreType.CACHE, Path.of("./cache"))
+    .storeDir(StoreType.DATA, Path.of("./data"))
+    .maxLogFileSize(1024 * 1024) // 1MB
+    .maxLogArchiveFiles(3)
+    .build();
 ```
 
-**Scope naming rules:**
+### Creating a Scope
+
+A Scope is an isolated storage namespace. It's generally recommended that each mod use its own unique scope name:
+
+```java
+Scope scope = SystemStorageLib.getInstance().scope("example_mod");
+```
+
+Scope naming rules:
 
 - Length between 2 and 128 characters
-- Must not start or end with `-`, `+`, or `.`
+- Cannot start or end with `-`, `+`, or `.`
 - Allowed characters: digits, ASCII letters, `_`, `-`, `+`, `.`
 
-You can validate a scope name before using it:
+> [!Note]
+>
+> Recommended naming convention:
+>
+> ```
+> <mod_id>[.<scope_name>]
+> ```
+>
+> Examples:
+>
+> - `example_mod`
+> - `example_mod.alpha`
+
+You can validate scope names using the `validateScopeName` method:
 
 ```java
-String error = lib.validateScope("invalid scope!");
+String error = SystemStorageLib.getInstance().validateScopeName("invalid scope!");
 if (error != null) {
-    // handle invalid scope
-}
-
-// Or simply check if valid
-if (lib.isScopeValid("my-mod")) {
-    // scope name is valid
+    // Handle invalid scope name
 }
 ```
 
-List all known scopes using `getAllScopes()`:
+### Selecting Storage Type
+
+Each scope has access to five storage types:
+
+| Storage Type    | Purpose                                                      | Customizable | Typical Content              |
+| --------------- | ------------------------------------------------------------ | :----------: | ---------------------------- |
+| `CACHE`         | Regenerable cache data                                       |      ✅      | Thumbnails                   |
+| `CONFIG`        | Configuration files                                          |      ✅      |                              |
+| `CREDENTIALS`   | Sensitive data requiring encryption                          |      ❌      | API tokens, OAuth keys       |
+| `DATA`          | Persistent data that can be shared across machines           |      ✅      | Downloaded works from others |
+| `DATA_LOCAL`    | Machine-specific persistent data, or expensive-to-regenerate cache data |      ✅      | Session data, temporary state|
+
+Obtain a `Storage` instance via the `Scope#storage(StoreType)` method:
 
 ```java
-lib.getAllScopes().forEach(scopeName -> {
-    System.out.println("Found scope: " + scopeName);
-});
+Storage data = scope.storage(StoreType.DATA);
 ```
 
-### 3. Access Store Types
-
-Each scope gives you access to five store types:
+#### Getting the Directory and Manipulating the File System Directly
 
 ```java
-import io.github.leawind.systemstoragelib.v1.api.StoreType;
-import io.github.leawind.systemstoragelib.v1.api.managers.StorageManager;
-import io.github.leawind.systemstoragelib.v1.api.managers.CredentialStore;
+Path dataDir = scope.storage(StoreType.DATA).getDirPath();
 
-// General-purpose storage managers
-StorageManager config = myMod.storage(StoreType.CONFIG);
-StorageManager data = myMod.storage(StoreType.DATA);
-StorageManager cache = myMod.storage(StoreType.CACHE);
-StorageManager dataLocal = myMod.storage(StoreType.DATA_LOCAL);
-
-// Encrypted credential store
-CredentialStore credentials = myMod.storage(StoreType.CREDENTIALS);
+// Freely read and write files using standard Java I/O
+Path dataFile = dataDir.resolve("data.txt");
+String content = Files.readString(dataFile);
 ```
 
-### 4. Read and Write Data
+#### Using the Encrypted Credential Store Wrapper
 
-#### Credential Store (encrypted)
+When storing sensitive data with `StoreType.CREDENTIALS`, it's recommended to use the `CredentialStore` wrapper:
 
 ```java
-// Store a token
+CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(CredentialStore::of);
+```
+
+Usage:
+
+```java
 credentials.set("api-key", "sk-abc123...");
-
-// Retrieve it
 String token = credentials.get("api-key");
-
-// Check existence
-if (credentials.exists("api-key")) {
-    // ...
-}
-
-// Remove
-credentials.remove("api-key");
 ```
 
-#### General Storage (plain)
+### Cross-process Locking
 
-For `CONFIG`, `DATA`, `CACHE`, and `DATA_LOCAL`, you work directly with the filesystem:
-
-```java
-// Get the directory path
-Path configDir = config.getDirPath();
-
-// Read/write files using standard Java I/O
-Path settingsFile = configDir.resolve("settings.json");
-String content = Files.readString(settingsFile);
-```
-
-### 5. Cross-Process Locking
-
-All store managers provide a `ReadWriteLock` for safe concurrent access:
+`Storage` provides a `ReadWriteLock` to achieve safe concurrent access:
 
 ```java
-ReadWriteLock lock = config.getLock();
+ReadWriteLock lock = data.getLock();
 
 lock.readLock().lock();
 try {
@@ -145,41 +141,15 @@ try {
 }
 ```
 
-### 6. Meta Configuration
+### Logging
 
-Override default storage paths per scope:
-
-```java
-import io.github.leawind.systemstoragelib.v1.api.managers.MetaConfigManager;
-import io.github.leawind.systemstoragelib.v1.api.metaconfig.MetaConfig;
-import io.github.leawind.systemstoragelib.v1.api.metaconfig.PerScopeConfig;
-
-MetaConfigManager meta = lib.metaConfig();
-
-// Read current config
-MetaConfig config = meta.get();
-
-// Set custom directory for a scope
-PerScopeConfig perScope = config.getOrCreateScopeConfig("my-mod");
-perScope.setCustomDir(StoreType.CONFIG, Path.of("/custom/config/path"));
-meta.set(config);
-```
-
-### 7. Logging
-
-Each scope gets its own scoped logger:
+Each scope has its own logger marked with the scope tag:
 
 ```java
-org.slf4j.Logger logger = myMod.logger();
-logger.info("Hello from my-mod!");
+org.slf4j.Logger logger = scope.logger();
+logger.info("Hello from example_mod!");
 ```
 
-The library also provides a global logger and a logs directory:
-
-```java
-// Global library logger
-org.slf4j.Logger libLogger = lib.logger();
-
-// Logs directory
-Path logsDir = lib.getLogsDir();
-```
+> [!Note]
+>
+> The logger obtained via `scope.logger()` will additionally write logs to a separate log directory, whose path can be obtained via `SystemStorageLib#getLogsDir()`.

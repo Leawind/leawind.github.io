@@ -4,47 +4,33 @@ title: v1
 
 # SystemStorageLib v1
 
-A Minecraft library mod that provides **system-level persistent storage** for other mods.
-
-It handles cross-process file locking, encrypted credential storage, and follows platform conventions for data directories (XDG on Linux, AppData on Windows, Library on macOS).
-
 ## Quick Overview
 
 ```java
-// Get the singleton instance
-SystemStorageLib lib = SystemStorageLib.getInstance();
+Scope scope = SystemStorageLib.getInstance().scope("example_mod");
 
-// Create or get a scope (isolated storage namespace for your mod)
-ScopeStorage scope = lib.scope("my-mod");
+Storage storage = scope.storage(StoreType.CREDENTIALS);
+CredentialStore credentials = CredentialStore.of(storage);
+credentials.set("some_token", "secret_value_123");
 
-// Access different store types
-StorageManager config = scope.storage(StoreType.CONFIG);
-StorageManager data = scope.storage(StoreType.DATA);
-CredentialStore credentials = scope.storage(StoreType.CREDENTIALS);
+String token = credentials.get("some_token"); // "secret_value_123"
 ```
 
-## Key Features
+## Core Features
 
-- **Scope-based isolation** — each mod gets its own scope, preventing conflicts
-- **Five store types** — `CREDENTIALS`, `CONFIG`, `DATA`, `CACHE`, `DATA_LOCAL` with distinct semantics
-- **Encrypted credential storage** — AES-256-GCM with PBKDF2 key derivation bound to the local machine
-- **Cross-process locking** — file-based reentrant read-write lock
-- **Platform-aware paths** — follows XDG/Windows/macOS conventions via [directories-jvm](https://github.com/dirs-dev/directories-jvm)
-- **Meta config** — supports per-scope custom directory overrides
-- **Multi-loader support** — Fabric, Forge, NeoForge
-- **Java 17 compatible**
+- **Scope-based Isolation** — Each mod has its own scope to avoid conflicts
+- **Five Storage Types** — `CREDENTIALS`, `CONFIG`, `DATA`, `CACHE`, `DATA_LOCAL`, each with different semantics
+- **Encrypted Credential Storage** — AES-256-GCM with PBKDF2 key derivation, bound to the current system
+- **Cross-process Locking** — File-based reentrant read-write locks
+- **Platform-aware Paths** — Follow XDG/Windows/macOS conventions via [directories-jvm](https://github.com/dirs-dev/directories-jvm)
+- **Meta Configuration** — Custom directory overrides for each scope
 
-## Storage Locations
+## Storage Types
 
-All data is stored under a root directory named `mc_system_storage` within platform-appropriate locations:
-
-| Store Type    | Purpose                                    | Customizable |
-| ------------- | ------------------------------------------ | :----------: |
-| `CREDENTIALS` | Encrypted sensitive data (tokens, secrets) |      ❌      |
-| `CONFIG`      | User-editable configuration files          |      ✅      |
-| `DATA`        | Persistent data, shareable across machines |      ✅      |
-| `CACHE`       | Machine-local or costly-to-regenerate data |      ✅      |
-| `DATA_LOCAL`  | Renewable, cheap-to-regenerate data        |      ✅      |
-
-- **License**: [MIT](https://github.com/Leawind/SystemStorageLib/blob/main/LICENSE)
-- **Source**: [GitHub](https://github.com/Leawind/SystemStorageLib)
+| Storage Type    | Purpose                                                      | Customizable Path |
+| --------------- | ------------------------------------------------------------ | :---------------: |
+| `CACHE`         | Regenerable cache data                                       |        ✅         |
+| `CONFIG`        | Configuration files                                          |        ✅         |
+| `CREDENTIALS`   | Sensitive data requiring encryption (tokens, keys, etc.)     |        ❌         |
+| `DATA`          | Persistent data that can be shared across machines           |        ✅         |
+| `DATA_LOCAL`    | Machine-specific persistent data, or expensive-to-regenerate cache data |        ✅         |
