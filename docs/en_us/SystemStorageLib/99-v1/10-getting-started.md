@@ -6,7 +6,7 @@ title: Getting Started
 
 ## Dependencies
 
-SystemStorageLib is published through [JitPack](https://jitpack.io/#Leawind/SystemStorageLib).
+System Storage Lib is published through [JitPack](https://jitpack.io/#Leawind/SystemStorageLib).
 
 ### Gradle
 

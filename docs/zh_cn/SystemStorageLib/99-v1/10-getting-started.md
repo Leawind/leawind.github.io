@@ -6,7 +6,7 @@ title: 快速入门
 
 ## 依赖
 
-SystemStorageLib 通过 [JitPack](https://jitpack.io/#Leawind/SystemStorageLib) 发布。
+System Storage Lib 通过 [JitPack](https://jitpack.io/#Leawind/SystemStorageLib) 发布。
 
 ### Gradle
 

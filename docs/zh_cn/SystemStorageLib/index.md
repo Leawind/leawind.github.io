@@ -1,8 +1,8 @@
 ---
-title: SystemStorageLib
+title: System Storage Lib
 ---
 
-# SystemStorageLib
+# System Storage Lib
 
 > [!Warning] 🚧
 >
@@ -10,7 +10,7 @@ title: SystemStorageLib
 
 > [!Tip]
 >
-> 本文档旨在指导开发者如何使用 SystemStorageLib，而非事无巨细地罗列 API。仅展示关键 API 方法，更多细节请参考源码。
+> 本文档旨在指导开发者如何使用 System Storage Lib，而非事无巨细地罗列 API。仅展示关键 API 方法，更多细节请参考源码。
 
 一个 Minecraft 库模组，为其他模组提供**系统级持久化存储**，支持跨进程文件锁、加密凭据存储，并遵循各平台的数据目录约定（Linux 上的 XDG，Windows 上的 AppData，macOS 上的 Library）。
 

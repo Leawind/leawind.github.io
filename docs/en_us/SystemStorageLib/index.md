@@ -1,8 +1,8 @@
 ---
-title: SystemStorageLib
+title: System Storage Lib
 ---
 
-# SystemStorageLib
+# System Storage Lib
 
 > [!Warning] 🚧
 >
@@ -10,7 +10,7 @@ title: SystemStorageLib
 
 > [!Tip]
 >
-> This document aims to guide developers on how to use SystemStorageLib rather than exhaustively listing all APIs. It only demonstrates key API methods; refer to the source code for more details.
+> This document aims to guide developers on how to use System Storage Lib rather than exhaustively listing all APIs. It only demonstrates key API methods; refer to the source code for more details.
 
 A Minecraft library mod that provides **system-level persistent storage** for other mods, supporting cross-process file locks, encrypted credential storage, and following platform-specific data directory conventions (XDG on Linux, AppData on Windows, Library on macOS).
 
