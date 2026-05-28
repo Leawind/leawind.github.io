@@ -6,13 +6,13 @@ title: Storage Locations
 
 ## Default Storage Paths by Type
 
-| Storage Type    | Default Path                                                 |
-| :-------------- | :----------------------------------------------------------- |
-| `CACHE`         | `{cacheDir}/mc_system_storage/cache/{scope}/`                |
-| `CONFIG`        | `{configDir}/mc_system_storage/config/{scope}/`              |
-| `CREDENTIALS`   | `{dataDir}/mc_system_storage/credentials/{scope}/`           |
-| `DATA`          | `{dataDir}/mc_system_storage/data/{scope}/`                  |
-| `DATA_LOCAL`    | `{dataLocalDir}/mc_system_storage/data_local/{scope}/`       |
+| Storage Type  | Default Path                                           |
+| :------------ | :----------------------------------------------------- |
+| `CACHE`       | `{cacheDir}/mc_system_storage/cache/{scope}/`          |
+| `CONFIG`      | `{configDir}/mc_system_storage/config/{scope}/`        |
+| `CREDENTIALS` | `{dataDir}/mc_system_storage/credentials/{scope}/`     |
+| `DATA`        | `{dataDir}/mc_system_storage/data/{scope}/`            |
+| `DATA_LOCAL`  | `{dataLocalDir}/mc_system_storage/data_local/{scope}/` |
 
 Where:
 

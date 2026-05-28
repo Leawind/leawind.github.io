@@ -27,10 +27,10 @@ String token = credentials.get("some_token"); // "secret_value_123"
 
 ## Storage Types
 
-| Storage Type    | Purpose                                                      | Customizable Path |
-| --------------- | ------------------------------------------------------------ | :---------------: |
-| `CACHE`         | Regenerable cache data                                       |        ✅         |
-| `CONFIG`        | Configuration files                                          |        ✅         |
-| `CREDENTIALS`   | Sensitive data requiring encryption (tokens, keys, etc.)     |        ❌         |
-| `DATA`          | Persistent data that can be shared across machines           |        ✅         |
-| `DATA_LOCAL`    | Machine-specific persistent data, or expensive-to-regenerate cache data |        ✅         |
+| Storage Type  | Purpose                                                                 | Customizable Path |
+| ------------- | ----------------------------------------------------------------------- | :---------------: |
+| `CACHE`       | Regenerable cache data                                                  |        ✅         |
+| `CONFIG`      | Configuration files                                                     |        ✅         |
+| `CREDENTIALS` | Sensitive data requiring encryption (tokens, keys, etc.)                |        ❌         |
+| `DATA`        | Persistent data that can be shared across machines                      |        ✅         |
+| `DATA_LOCAL`  | Machine-specific persistent data, or expensive-to-regenerate cache data |        ✅         |
