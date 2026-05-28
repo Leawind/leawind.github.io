@@ -6,8 +6,6 @@ title: Getting Started
 
 ## Dependencies
 
-System Storage Lib is published through [JitPack](https://jitpack.io/#Leawind/SystemStorageLib).
-
 ### Gradle
 
 ```kotlin
@@ -16,7 +14,6 @@ repositories {
 }
 
 dependencies {
-    // Check JitPack for the latest version
     modImplementation("com.github.Leawind:SystemStorageLib:<version>")
 }
 ```
@@ -80,13 +77,13 @@ if (error != null) {
 
 Each scope has access to five storage types:
 
-| Storage Type    | Purpose                                                      | Customizable | Typical Content              |
-| --------------- | ------------------------------------------------------------ | :----------: | ---------------------------- |
-| `CACHE`         | Regenerable cache data                                       |      ✅      | Thumbnails                   |
-| `CONFIG`        | Configuration files                                          |      ✅      |                              |
-| `CREDENTIALS`   | Sensitive data requiring encryption                          |      ❌      | API tokens, OAuth keys       |
-| `DATA`          | Persistent data that can be shared across machines           |      ✅      | Downloaded works from others |
-| `DATA_LOCAL`    | Machine-specific persistent data, or expensive-to-regenerate cache data |      ✅      | Session data, temporary state|
+| Storage Type  | Purpose                                                                 | Typical Content               |
+| ------------- | ----------------------------------------------------------------------- | ----------------------------- |
+| `CACHE`       | Regenerable cache data                                                  | Thumbnails                    |
+| `CONFIG`      | Configuration files                                                     |                               |
+| `CREDENTIALS` | Sensitive data requiring encryption                                     | API tokens, OAuth keys        |
+| `DATA`        | Persistent data that can be shared across machines                      | Downloaded works from others  |
+| `DATA_LOCAL`  | Machine-specific persistent data, or expensive-to-regenerate cache data | Session data, temporary state |
 
 Obtain a `Storage` instance via the `Scope#storage(StoreType)` method:
 

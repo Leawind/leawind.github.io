@@ -37,7 +37,7 @@ This is intentional — the encryption key is bound to the local machine and use
 - **Key Material**: `username:user.home:machine-id`
 - **Salt**: `SystemStorageLib-CredentialStore-v1` (static)
 
-Keys are **never stored in plaintext**; filenames only use SHA-256 digests.
+Keys are stored as hashes, not plaintext.
 
 ### Basic Usage
 
@@ -59,6 +59,6 @@ Each credential file is integrity-verified during reading via GCM authentication
 
 ## Limitations
 
-- **No Key Listing**: Keys are stored as SHA-256 hashes, so stored keys cannot be enumerated. You need to track keys yourself.
+- **No Key Listing**: Keys are stored as hashes, so stored keys cannot be enumerated.
 - **No TTL/Expiration**: Credentials do not expire automatically.
 - **Environment Binding**: After user profile changes or OS reinstallation, credentials will be unreadable.

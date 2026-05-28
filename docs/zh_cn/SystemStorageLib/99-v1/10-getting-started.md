@@ -6,8 +6,6 @@ title: 快速入门
 
 ## 依赖
 
-System Storage Lib 通过 [JitPack](https://jitpack.io/#Leawind/SystemStorageLib) 发布。
-
 ### Gradle
 
 ```kotlin
@@ -16,7 +14,6 @@ repositories {
 }
 
 dependencies {
-    // 在 JitPack 上查看最新版本
     modImplementation("com.github.Leawind:SystemStorageLib:<version>")
 }
 ```
@@ -80,13 +77,13 @@ if (error != null) {
 
 每个 scope 都可访问五种存储类型：
 
-| 存储类型      | 用途                                                   | 可自定义 | 典型内容             |
-| ------------- | ------------------------------------------------------ | :------: | -------------------- |
-| `CACHE`       | 可再生的缓存数据                                       |    ✅    | 缩略图               |
-| `CONFIG`      | 配置文件                                               |    ✅    |                      |
-| `CREDENTIALS` | 需要加密的敏感数据                                     |    ❌    | API 令牌、OAuth 密钥 |
-| `DATA`        | 可跨机器共享的持久化数据                               |    ✅    | 下载的他人作品       |
-| `DATA_LOCAL`  | 特定于当前机器的持久化数据，或重新生成代价高的缓存数据 |    ✅    | 会话数据、临时状态   |
+| 存储类型          | 用途                          | 典型内容            |
+| ------------- | --------------------------- | --------------- |
+| `CACHE`       | 可再生的缓存数据                    | 缩略图             |
+| `CONFIG`      | 配置文件                        |                 |
+| `CREDENTIALS` | 需要加密的敏感数据                   | API 令牌、OAuth 密钥 |
+| `DATA`        | 可跨机器共享的持久化数据                | 下载的他人作品         |
+| `DATA_LOCAL`  | 特定于当前机器的持久化数据，或重新生成代价高的缓存数据 | 会话数据、临时状态       |
 
 通过 `Scope#storage(StoreType)` 方法获取 `Storage` 实例：
 
