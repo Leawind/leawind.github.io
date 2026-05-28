@@ -4,11 +4,13 @@ title: Getting Started
 
 # Getting Started
 
-## Dependencies
+## Add Dependency
 
 ### Gradle
 
-```kotlin
+::: code-group
+
+```kotlin [Kotlin]
 repositories {
     maven("https://jitpack.io")
 }
@@ -17,6 +19,18 @@ dependencies {
     modImplementation("com.github.Leawind:SystemStorageLib:<version>")
 }
 ```
+
+```groovy [Groovy]
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    modImplementation "com.github.Leawind:SystemStorageLib:<version>"
+}
+```
+
+:::
 
 ## Basic Usage
 
