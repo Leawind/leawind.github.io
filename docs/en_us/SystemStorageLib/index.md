@@ -2,33 +2,38 @@
 title: System Storage Lib
 ---
 
+<div align="center">
+<img src="/icons/system_storage_lib.png" style="width: 8em; margin: 3em auto; image-rendering: pixelated;">
+
 # System Storage Lib
 
-> [!Warning] 🚧
->
-> Currently an unstable pre-release version. APIs may undergo breaking changes at any time.
+</div>
 
-> [!Tip]
->
-> This document aims to guide developers on how to use System Storage Lib rather than exhaustively listing all APIs. It only demonstrates key API methods; refer to the source code for more details.
-
-A Minecraft library mod that provides **system-level persistent storage** for other mods, supporting cross-process file locks, encrypted credential storage, and following platform-specific data directory conventions (XDG on Linux, AppData on Windows, Library on macOS).
+A Minecraft library mod that provides **system-level persistent storage** for other mods, featuring cross-process file locking, encrypted credential storage, and adherence to platform-specific data directory conventions (XDG on Linux, AppData on Windows, Library on macOS).
 
 ## Design Principles
 
-- Give and take: Ensure users can cleanly remove all files stored by this library mod in the system
-- Adapt to the environment: Allow customization of storage locations for large data to prevent excessive consumption of system partition space
+- **Come and go**: Ensure users can cleanly delete all files stored by this library mod within the system.
+- **Disk-Aware Placement**: Allow customization of storage locations for large-volume data to prevent excessive consumption of system partition space.
 
-## API Versions
+## API Version
 
-| Version | Status     |
-| ------- | ---------- |
-| v1      | Unstable   |
+> [!Warning] 🚧
+>
+> This is currently an unstable, unofficial release. The API is subject to breaking changes at any time.
+
+| Version     | Status   |
+| ----------- | -------- |
+| [v1](./v1/) | Unstable |
+
+> [!Tip]
+>
+> This documentation is intended to guide developers on how to use System Storage Lib, rather than exhaustively enumerating every API detail. Only key API methods are presented herein; please consult the source code for comprehensive details.
 
 ---
 
 - **License**: [MIT License]
-- **Source**: [GitHub - Leawind/SystemStorageLib]
+- **Source Code**: [GitHub - Leawind/SystemStorageLib]
 
 ---
 

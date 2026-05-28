@@ -17,8 +17,17 @@ features:
     link: https://leawind.github.io/Third-Person/zh-CN
     icon:
       src: /icons/LTP_mid.png
-      width: 81
   - title: System Storage Lib
     details: 一个用于存储系统级持久化数据的库模组
     link: ./SystemStorageLib
+    icon:
+      src: /icons/system_storage_lib.png
 ---
+
+<style>
+div.VPFeatures img.VPImage {
+  image-rendering: pixelated;
+  width: 5em;
+  margin: auto;
+}
+</style>

@@ -19,6 +19,17 @@ features:
       src: /icons/LTP_mid.png
       width: 81
   - title: System Storage Lib
-    details: A system-level persistent storage library for Minecraft mods.
+    details: A system-level persistent storage library mod
     link: ./SystemStorageLib
+    icon:
+      src: /icons/system_storage_lib.png
+      width: 81
 ---
+
+<style>
+div.VPFeatures img.VPImage {
+  image-rendering: pixelated;
+  width: 5em;
+  margin: auto;
+}
+</style>
