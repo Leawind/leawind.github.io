@@ -9,7 +9,7 @@ title: Getting Started
 `gradle.properties`:
 
 ```properties
-system_storage_lib_version=0.1.0
+system_storage_lib_version=0.1.0-beta.1
 ```
 
 ::: code-group
@@ -57,9 +57,6 @@ side="SERVER" # CLIENT / SERVER / BOTH
 
 :::
 
-````
-:::
-
 ## Basic Usage
 
 ### Getting the Library Instance
@@ -69,15 +66,15 @@ The library is a singleton, accessed via `SystemStorageLib.getInstance()`.
 In local testing environments, to avoid affecting data in the system, you can create a custom instance using `.builder()`:
 
 ```java
-SystemStorageLib lib = SystemStorageLib.builder()
+SystemStorageLib lib = SystemStorageLib.builder(Path.of("./config/metaconfig"))
     .logsDir(Path.of("./logs"))
-    .metaConfigDir(Path.of("./config"))
     .storeDir(StoreType.CACHE, Path.of("./cache"))
+    .storeDir(StoreType.CONFIG, Path.of("./config"))
+    .storeDir(StoreType.CREDENTIALS, Path.of("./credentials"))
     .storeDir(StoreType.DATA, Path.of("./data"))
-    .maxLogFileSize(1024 * 1024) // 1MB
-    .maxLogArchiveFiles(3)
+    .storeDir(StoreType.DATA_LOCAL, Path.of("./data_local"))
     .build();
-````
+```
 
 ### Creating a Scope
 
@@ -152,9 +149,9 @@ CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(Credentia
 Usage:
 
 ```java
-credentials.set("discord-token", "abc123...");
-String token = credentials.get("discord-token"); // "abc123..."
-credentials.remove("discord-token");
+credentials.set("api-key", "sk-abc123...");
+String token = credentials.get("api-key");
+credentials.remove("api-key");
 ```
 
 ### Cross-process Locking

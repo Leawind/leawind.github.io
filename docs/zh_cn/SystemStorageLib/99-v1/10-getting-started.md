@@ -9,7 +9,7 @@ title: 快速开始
 `gradle.properties`:
 
 ```properties
-system_storage_lib_version=0.1.0
+system_storage_lib_version=0.1.0-beta.1
 ```
 
 ::: code-group
@@ -63,16 +63,18 @@ side="SERVER" # CLIENT / SERVER / BOTH
 
 该库是单例，通过 `SystemStorageLib.getInstance()` 访问。
 
-在本地测试环境中，为了避免影响系统中的数据，可以使用 `.builder()` 创建自定义实例：
+在本地测试环境中，为了避免影响系统中的数据，可以使用 `.builder()` 创建自定义实例。
+
+Builder 构造时必须指定 `metaConfigDir`，其余项为可选：
 
 ```java
-SystemStorageLib lib = SystemStorageLib.builder()
+SystemStorageLib lib = SystemStorageLib.builder(Path.of("./config/metaconfig"))
     .logsDir(Path.of("./logs"))
-    .metaConfigDir(Path.of("./config"))
     .storeDir(StoreType.CACHE, Path.of("./cache"))
+    .storeDir(StoreType.CONFIG, Path.of("./config"))
+    .storeDir(StoreType.CREDENTIALS, Path.of("./credentials"))
     .storeDir(StoreType.DATA, Path.of("./data"))
-    .maxLogFileSize(1024 * 1024) // 1MB
-    .maxLogArchiveFiles(3)
+    .storeDir(StoreType.DATA_LOCAL, Path.of("./data_local"))
     .build();
 ```
 

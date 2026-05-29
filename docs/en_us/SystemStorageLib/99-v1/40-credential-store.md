@@ -34,7 +34,7 @@ This is intentional — the encryption key is bound to the local machine and use
 
 - **Algorithm**: AES-256-GCM (authenticated encryption with associated data)
 - **Key Derivation**: PBKDF2WithHmacSHA256, 65,536 iterations
-- **Key Material**: `username:user.home:machine-id`
+- **密钥材料**：`user.name:user.home:machineId`
 - **Salt**: `SystemStorageLib-CredentialStore-v1` (static)
 
 Keys are stored as hashes, not plaintext.
@@ -45,7 +45,9 @@ Keys are stored as hashes, not plaintext.
 CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(CredentialStore::of);
 
 credentials.set("discord-token", "abc123...");
-String token = credentials.get("discord-token"); // "abc123..."
+
+boolean exists = credentials.exists("discord-token"); // true
+String token = credentials.get("discord-token");      // "abc123..."
 credentials.remove("discord-token");
 ```
 

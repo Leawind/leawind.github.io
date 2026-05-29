@@ -6,13 +6,13 @@ title: 存储位置
 
 ## 各类型默认存储路径
 
-| 存储类型      | 默认路径                                               |
-| :------------ | :----------------------------------------------------- |
-| `CACHE`       | `{cacheDir}/mc_system_storage/cache/{scope}/`          |
-| `CONFIG`      | `{configDir}/mc_system_storage/config/{scope}/`        |
-| `CREDENTIALS` | `{dataDir}/mc_system_storage/credentials/{scope}/`     |
-| `DATA`        | `{dataDir}/mc_system_storage/data/{scope}/`            |
-| `DATA_LOCAL`  | `{dataLocalDir}/mc_system_storage/data_local/{scope}/` |
+| 存储类型      | 默认路径                                                |
+| :------------ | :------------------------------------------------------ |
+| `CACHE`       | `{cacheDir}/mc_system_storage/cache/{scope}/`           |
+| `CONFIG`      | `{configDir}/mc_system_storage/config/{scope}/`         |
+| `CREDENTIALS` | `{dataLocalDir}/mc_system_storage/credentials/{scope}/` |
+| `DATA`        | `{dataDir}/mc_system_storage/data/{scope}/`             |
+| `DATA_LOCAL`  | `{dataLocalDir}/mc_system_storage/data_local/{scope}/`  |
 
 其中：
 

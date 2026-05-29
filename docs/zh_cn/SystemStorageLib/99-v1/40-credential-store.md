@@ -34,7 +34,7 @@ title: 凭据存储
 
 - **算法**：AES-256-GCM（带关联数据的认证加密）
 - **密钥派生**：PBKDF2WithHmacSHA256，65,536 次迭代
-- **密钥材料**：`username:user.home:machine-id`
+- **密钥材料**：`user.name:user.home:machineId`
 - **盐值**：`SystemStorageLib-CredentialStore-v1`（静态）
 
 键名使用 SHA-256 摘要，不以明文存储。
@@ -45,7 +45,9 @@ title: 凭据存储
 CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(CredentialStore::of);
 
 credentials.set("discord-token", "abc123...");
-String token = credentials.get("discord-token"); // "abc123..."
+
+boolean exists = credentials.exists("discord-token"); // true
+String token = credentials.get("discord-token");      // "abc123..."
 credentials.remove("discord-token");
 ```
 
