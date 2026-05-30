@@ -1,10 +1,10 @@
 ---
-title: Getting Started
+title: Quick Start
 ---
 
-# Getting Started
+# Quick Start
 
-### Adding Dependencies
+## Adding Dependency
 
 `gradle.properties`:
 
@@ -57,28 +57,30 @@ side="SERVER" # CLIENT / SERVER / BOTH
 
 :::
 
-## Basic Usage
+## Obtaining Library Instance
 
-### Getting the Library Instance
+The library is a singleton, accessible via `SystemStorageLib.getInstance()`.
 
-The library is a singleton, accessed via `SystemStorageLib.getInstance()`.
-
-In local testing environments, to avoid affecting data in the system, you can create a custom instance using `.builder()`:
+In a local test environment, to avoid affecting data in the system, you can create a custom instance using `.builder()`.
 
 ```java
 SystemStorageLib lib = SystemStorageLib.builder(Path.of("./config/metaconfig"))
     .logsDir(Path.of("./logs"))
     .storeDir(StoreType.CACHE, Path.of("./cache"))
     .storeDir(StoreType.CONFIG, Path.of("./config"))
-    .storeDir(StoreType.CREDENTIALS, Path.of("./credentials"))
+    .storeDir(StoreType.SECRETS, Path.of("./secrets"))
     .storeDir(StoreType.DATA, Path.of("./data"))
     .storeDir(StoreType.DATA_LOCAL, Path.of("./data_local"))
     .build();
 ```
 
-### Creating a Scope
+> [!Note]
+>
+> The Builder requires all five `StoreType` paths to be provided, and each path must be unique, otherwise an `IllegalArgumentException` will be thrown.
 
-A Scope is an isolated storage namespace. It's generally recommended that each mod use its own unique scope name:
+## Creating a Scope
+
+A Scope is an isolated storage namespace. It is recommended that each mod uses its own unique scope name:
 
 ```java
 Scope scope = SystemStorageLib.getInstance().scope("example_mod");
@@ -103,82 +105,99 @@ Scope naming rules:
 > - `example_mod`
 > - `example_mod.alpha`
 
-You can validate scope names using the `validateScopeName` method:
+## Selecting Storage Type
+
+| `StoreType` Enum Value | Storage Type | Description                                                                                    |
+| ---------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| `CACHE`                | Cache        | Regenerable data, such as thumbnails                                                           |
+| `CONFIG`               | Config       | Configuration files, such as user preferences                                                  |
+| `SECRETS`              | Secrets      | Sensitive data requiring encryption, such as tokens, keys                                      |
+| `DATA`                 | Data         | Persistent data that can be shared across machines                                             |
+| `DATA_LOCAL`           | Local Data   | Persistent data specific to the current machine, or cache data that is expensive to regenerate |
+
+Use the `Scope#directory(StoreType)` method to obtain the directory path for the corresponding type:
 
 ```java
-String error = SystemStorageLib.getInstance().validateScopeName("invalid scope!");
-if (error != null) {
-    // Handle invalid scope name
-}
+Path dataDir = scope.directory(StoreType.DATA);
 ```
 
-### Selecting Storage Type
-
-| `StoreType` Enum Value | Storage Type | Description                                                             |
-| ---------------------- | ------------ | ----------------------------------------------------------------------- |
-| `CACHE`                | Cache        | Regenerable data, such as thumbnails                                    |
-| `CONFIG`               | Config       | Configuration files, such as user preferences                           |
-| `CREDENTIALS`          | Credentials  | Sensitive data requiring encryption, such as tokens, keys, etc.         |
-| `DATA`                 | Data         | Persistent data that can be shared across machines                      |
-| `DATA_LOCAL`           | Local Data   | Machine-specific persistent data, or expensive-to-regenerate cache data |
-
-Obtain a `Storage` instance via the `Scope#storage(StoreType)` method:
+### Direct File System Operations
 
 ```java
-Storage data = scope.storage(StoreType.DATA);
-```
+Path dataDir = scope.directory(StoreType.DATA);
 
-#### Getting the Directory and Manipulating the File System Directly
-
-```java
-Path dataDir = scope.storage(StoreType.DATA).getDirPath();
-
-// Freely read and write files using standard Java I/O
+// Use standard Java I/O to read and write files freely
 Path dataFile = dataDir.resolve("data.txt");
+Files.createDirectories(dataDir);
 String content = Files.readString(dataFile);
 ```
 
-#### Using the Encrypted Credential Store Wrapper
+### Using Accessor Wrappers
 
-When storing sensitive data with `StoreType.CREDENTIALS`, it's recommended to use the `CredentialStore` wrapper:
+For storage types that require additional functionality, use the `Scope#access()` factory method to create an accessor:
 
 ```java
-CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(CredentialStore::of);
+// Create an encrypted credential storage accessor
+SecretsAccessor secrets = scope.access(StoreType.SECRETS, SecretsAccessor::from);
+```
+
+The `access()` method accepts a `BiFunction<Path, Logger, T>` where `T extends DirectoryAccessor`.
+The built-in base class `AbstractDirectoryAccessor` provides common functionality such as path management, logging, change notification, and lock creation.
+
+## Encrypted Credential Storage
+
+When storing sensitive data using the `StoreType.SECRETS` type, it is recommended to use `SecretsAccessor`:
+
+```java
+SecretsAccessor secrets = scope.access(StoreType.SECRETS, SecretsAccessor::from);
 ```
 
 Usage:
 
 ```java
-credentials.set("api-key", "sk-abc123...");
-String token = credentials.get("api-key");
-credentials.remove("api-key");
+secrets.set("api-key", "sk-abc123...");
+String token = secrets.get("api-key");    // Returns null if not present
+boolean exists = secrets.exists("api-key");
+secrets.remove("api-key");
 ```
 
-### Cross-process Locking
+For details, see the [Secrets Store documentation](./secrets-store).
 
-`Storage` provides a `ReadWriteLock` to achieve safe concurrent access:
+## Cross-Process Locks
+
+`AbstractDirectoryAccessor` provides a static factory method `createLock(Path)` to create file-based, cross-process, reentrant read-write locks:
 
 ```java
-ReadWriteLock lock = data.getLock();
+import io.github.leawind.systemstoragelib.v1.api.accessors.AbstractDirectoryAccessor;
+
+Path lockFile = scope.directory(StoreType.DATA).resolve(".lock");
+var lock = AbstractDirectoryAccessor.createLock(lockFile);
 
 lock.readLock().lock();
 try {
-    // Read operations
+    // Read operation
 } finally {
     lock.readLock().unlock();
 }
 
 lock.writeLock().lock();
 try {
-    // Write operations
+    // Write operation
 } finally {
     lock.writeLock().unlock();
 }
 ```
 
-### Logging
+Lock characteristics:
 
-Each scope has its own logger marked with the scope tag:
+- **Multiple readers, single writer**: Multiple processes can hold the read lock simultaneously; the write lock is exclusive
+- **Reentrant**: The same thread can lock multiple times, requiring the same number of unlocks
+- **Lock downgrading**: A thread holding the write lock can acquire the read lock (downgrading supported), but read locks cannot be upgraded to write locks
+- `lock()` blocks until available, `tryLock()` returns `false` immediately
+
+## Logging
+
+Each scope has its own logger tagged with the scope name:
 
 ```java
 org.slf4j.Logger logger = scope.logger();
@@ -187,4 +206,44 @@ logger.info("Hello from example_mod!");
 
 > [!Note]
 >
-> The logger obtained via `scope.logger()` will additionally write logs to a separate log directory, whose path can be obtained via `SystemStorageLib#getLogsDir()`.
+> The logger obtained via `scope.logger()` additionally writes logs to a separate log directory, whose path can be obtained via `SystemStorageLib#getLogsDir()`.
+
+### Log Rotation
+
+Log rotation behavior can be configured via `MetaConfigStore`. The configuration file is in JSON format and supports cross-process hot reload:
+
+```json
+{
+  "max_log_file_size": 1048576,
+  "max_log_archive_files": 16
+}
+```
+
+- `max_log_file_size`: Maximum size of a single log file in bytes, defaults to 1MB
+- `max_log_archive_files`: Maximum number of rotation archive files, defaults to 16
+
+## Meta Configuration Management
+
+`MetaConfigStore` manages the library's global configuration and supports cross-process hot reload:
+
+```java
+MetaConfigStore metaConfig = SystemStorageLib.getInstance().metaConfig();
+
+// Read current configuration
+MetaConfig config = metaConfig.get();
+
+// Update configuration (writes to disk, cross-process safe)
+metaConfig.update(cfg -> {
+    cfg.setMaxLogFileSize(2 * 1024 * 1024);
+    cfg.setMaxLogArchiveFiles(32);
+});
+```
+
+When the configuration file is modified by an external process, the `onChanged` event is automatically triggered:
+
+```java
+metaConfig.onChanged().on(event -> {
+    MetaConfig newConfig = event.config();
+    // Respond to configuration changes
+});
+```

@@ -4,7 +4,7 @@ title: 快速开始
 
 # 快速开始
 
-### 引入依赖
+## 引入依赖
 
 `gradle.properties`:
 
@@ -57,28 +57,28 @@ side="SERVER" # CLIENT / SERVER / BOTH
 
 :::
 
-## 基本用法
-
-### 获取库实例
+## 获取库实例
 
 该库是单例，通过 `SystemStorageLib.getInstance()` 访问。
 
 在本地测试环境中，为了避免影响系统中的数据，可以使用 `.builder()` 创建自定义实例。
-
-Builder 构造时必须指定 `metaConfigDir`，其余项为可选：
 
 ```java
 SystemStorageLib lib = SystemStorageLib.builder(Path.of("./config/metaconfig"))
     .logsDir(Path.of("./logs"))
     .storeDir(StoreType.CACHE, Path.of("./cache"))
     .storeDir(StoreType.CONFIG, Path.of("./config"))
-    .storeDir(StoreType.CREDENTIALS, Path.of("./credentials"))
+    .storeDir(StoreType.SECRETS, Path.of("./secrets"))
     .storeDir(StoreType.DATA, Path.of("./data"))
     .storeDir(StoreType.DATA_LOCAL, Path.of("./data_local"))
     .build();
 ```
 
-### 创建 Scope
+> [!Note]
+>
+> Builder 要求传入所有五种 `StoreType` 路径，且各路径不能重复，否则抛出 `IllegalArgumentException`。
+
+## 创建 Scope
 
 Scope 是一个隔离的存储命名空间。通常建议每个模组使用自己唯一的 scope 名称：
 
@@ -105,62 +105,73 @@ Scope 命名规则：
 > - `example_mod`
 > - `example_mod.alpha`
 
-可以使用 `validateScopeName` 方法验证 scope 名称：
-
-```java
-String error = SystemStorageLib.getInstance().validateScopeName("invalid scope!");
-if (error != null) {
-    // 处理无效的 scope 名称
-}
-```
-
-### 选择存储类型
+## 选择存储类型
 
 | `StoreType` 枚举值 | 存储类型 | 描述                                                   |
 | ------------------ | -------- | ------------------------------------------------------ |
 | `CACHE`            | 缓存     | 可再生数据，例如缩略图                                 |
 | `CONFIG`           | 配置     | 配置文件，如用户偏好                                   |
-| `CREDENTIALS`      | 凭据     | 需要加密的敏感数据，如令牌、密钥等                     |
+| `SECRETS`          | 秘密     | 需要加密的敏感数据，如令牌、密钥等                     |
 | `DATA`             | 数据     | 可跨机器共享的持久化数据                               |
 | `DATA_LOCAL`       | 本地数据 | 特定于当前机器的持久化数据，或重新生成代价高的缓存数据 |
 
-通过 `Scope#storage(StoreType)` 方法获取 `Storage` 实例：
+通过 `Scope#directory(StoreType)` 方法获取对应类型的目录路径：
 
 ```java
-Storage data = scope.storage(StoreType.DATA);
+Path dataDir = scope.directory(StoreType.DATA);
 ```
 
-#### 获取目录并直接操作文件系统
+### 直接操作文件系统
 
 ```java
-Path dataDir = scope.storage(StoreType.DATA).getDirPath();
+Path dataDir = scope.directory(StoreType.DATA);
 
 // 使用标准 Java I/O 自由读写文件
 Path dataFile = dataDir.resolve("data.txt");
+Files.createDirectories(dataDir);
 String content = Files.readString(dataFile);
 ```
 
-#### 使用加密凭据存储包装器
+### 使用访问器包装
 
-使用 `StoreType.CREDENTIALS` 类型存储敏感数据时，建议使用 `CredentialStore` 包装器：
+对于需要额外功能的存储类型，可以使用 `Scope#access()` 工厂方法创建访问器：
 
 ```java
-CredentialStore credentials = scope.storage(StoreType.CREDENTIALS).map(CredentialStore::of);
+// 创建加密凭据存储访问器
+SecretsAccessor secrets = scope.access(StoreType.SECRETS, SecretsAccessor::from);
+```
+
+`access()` 方法接收 `BiFunction<Path, Logger, T>`，其中 `T extends DirectoryAccessor`。
+内置的访问器基类 `AbstractDirectoryAccessor` 提供了路径管理、日志、变更通知和锁创建等通用功能。
+
+## 加密凭据存储
+
+使用 `StoreType.SECRETS` 类型存储敏感数据时，建议使用 `SecretsAccessor`：
+
+```java
+SecretsAccessor secrets = scope.access(StoreType.SECRETS, SecretsAccessor::from);
 ```
 
 用法：
 
 ```java
-credentials.set("api-key", "sk-abc123...");
-String token = credentials.get("api-key");
+secrets.set("api-key", "sk-abc123...");
+String token = secrets.get("api-key");    // 若不存在返回 null
+boolean exists = secrets.exists("api-key");
+secrets.remove("api-key");
 ```
 
-### 跨进程锁
+详情请参阅[密钥存储文档](./secrets-store)。
 
-`Storage` 提供 `ReadWriteLock` 以实现安全的并发访问：
+## 跨进程锁
+
+`AbstractDirectoryAccessor` 提供静态工厂方法 `createLock(Path)` 创建基于文件的跨进程可重入读写锁：
 
 ```java
-ReadWriteLock lock = data.getLock();
+import io.github.leawind.systemstoragelib.v1.api.accessors.AbstractDirectoryAccessor;
+
+Path lockFile = scope.directory(StoreType.DATA).resolve(".lock");
+var lock = AbstractDirectoryAccessor.createLock(lockFile);
 
 lock.readLock().lock();
 try {
@@ -177,7 +188,14 @@ try {
 }
 ```
 
-### 日志
+锁的特性：
+
+- **多读互斥写**：多个进程可同时持有读锁，写锁独占
+- **可重入**：同一线程可多次加锁，需对应次数解锁
+- **锁降级**：持有写锁的线程可以获取读锁（支持降级），但读锁不能升级为写锁
+- `lock()` 阻塞直至可用，`tryLock()` 立即返回 `false`
+
+## 日志
 
 每个 scope 都有自己带 scope 标记的 logger：
 
@@ -189,3 +207,43 @@ logger.info("Hello from example_mod!");
 > [!Note]
 >
 > 通过 `scope.logger()` 获取的 logger 会额外将日志写入独立的日志目录中，其路径可通过 `SystemStorageLib#getLogsDir()` 获取。
+
+### 日志轮转
+
+通过 `MetaConfigStore` 可以配置日志轮转行为，配置文件为 JSON 格式，支持跨进程热重载：
+
+```json
+{
+  "max_log_file_size": 1048576,
+  "max_log_archive_files": 16
+}
+```
+
+- `max_log_file_size`：单个日志文件大小上限（字节），默认为 1MB
+- `max_log_archive_files`：轮转存档文件数量上限，默认为 16
+
+## 元配置管理
+
+`MetaConfigStore` 管理库的全局配置，支持跨进程热重载：
+
+```java
+MetaConfigStore metaConfig = SystemStorageLib.getInstance().metaConfig();
+
+// 读取当前配置
+MetaConfig config = metaConfig.get();
+
+// 更新配置（写入磁盘，跨进程安全）
+metaConfig.update(cfg -> {
+    cfg.setMaxLogFileSize(2 * 1024 * 1024);
+    cfg.setMaxLogArchiveFiles(32);
+});
+```
+
+当配置文件被外部进程修改时，`onChanged` 事件会自动触发：
+
+```java
+metaConfig.onChanged().on(event -> {
+    MetaConfig newConfig = event.config();
+    // 响应配置变更
+});
+```
