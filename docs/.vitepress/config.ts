@@ -1,4 +1,4 @@
-import 'jsr:@std/dotenv@0.225.6/load'
+import '@std/dotenv/load'
 import { DefaultTheme, defineConfig, UserConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import localesConfig from './server/build-config.ts'

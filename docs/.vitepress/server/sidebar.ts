@@ -1,7 +1,7 @@
 import log from '@leawind/inventory/log'
 import { Path, type PathLike } from '@leawind/inventory/fs'
 import * as fs from '@leawind/inventory/fs'
-import * as frontMatter from 'jsr:@std/front-matter@1.0.9'
+import * as frontMatter from '@std/front-matter'
 import { DefaultTheme } from 'vitepress/theme'
 
 /** 去掉路径片段中的 `NN-` 序号前缀 */

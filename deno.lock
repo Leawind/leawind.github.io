@@ -1,16 +1,21 @@
 {
   "version": "5",
   "specifiers": {
+    "jsr:@leawind/delegate@0.6": "0.6.0",
     "jsr:@leawind/inventory@~0.19.4": "0.19.4",
     "jsr:@std/collections@^1.1.3": "1.1.5",
     "jsr:@std/dotenv@0.225.6": "0.225.6",
+    "jsr:@std/dotenv@~0.225.6": "0.225.6",
     "jsr:@std/front-matter@1.0.9": "1.0.9",
+    "jsr:@std/front-matter@^1.0.9": "1.0.9",
+    "jsr:@std/fs@^1.0.22": "1.0.23",
     "jsr:@std/internal@^1.0.12": "1.0.13",
     "jsr:@std/path@^1.1.4": "1.1.4",
     "jsr:@std/toml@^1.0.3": "1.0.11",
     "jsr:@std/yaml@^1.0.5": "1.0.11",
     "npm:@vue/compiler-core@^3.5.32": "3.5.32",
     "npm:commander@^14.0.3": "14.0.3",
+    "npm:lay-sing@~0.4.2": "0.4.2",
     "npm:markdown-it-mathjax3@4": "4.3.2",
     "npm:mermaid@^11.14.0": "11.14.0",
     "npm:vitepress-plugin-mermaid@^2.0.17": "2.0.17_mermaid@11.14.0_vitepress@1.6.4__markdown-it-mathjax3@4.3.2__@algolia+client-search@5.50.1__search-insights@2.17.3_@algolia+client-search@5.50.1_markdown-it-mathjax3@4.3.2_search-insights@2.17.3",
@@ -19,10 +24,16 @@
     "npm:vue@^3.5.32": "3.5.32"
   },
   "jsr": {
+    "@leawind/delegate@0.6.0": {
+      "integrity": "37b5638a8ba0393d40f16f8cfc1788dff3b597bdb3251633d5893c9c366f3e24"
+    },
     "@leawind/inventory@0.19.4": {
       "integrity": "b8087b462eee3180f8d0d947c40a19e4c89dbc3d0d5a7d7140788c30117aa704",
       "dependencies": [
-        "jsr:@std/path"
+        "jsr:@leawind/delegate",
+        "jsr:@std/fs",
+        "jsr:@std/path",
+        "npm:lay-sing"
       ]
     },
     "@std/collections@1.1.5": {
@@ -36,6 +47,13 @@
       "dependencies": [
         "jsr:@std/toml",
         "jsr:@std/yaml"
+      ]
+    },
+    "@std/fs@1.0.23": {
+      "integrity": "3ecbae4ce4fee03b180fa710caff36bb5adb66631c46a6460aaad49515565a37",
+      "dependencies": [
+        "jsr:@std/internal",
+        "jsr:@std/path"
       ]
     },
     "@std/internal@1.0.13": {
@@ -1544,6 +1562,9 @@
         "vscode-languageserver-textdocument",
         "vscode-uri"
       ]
+    },
+    "lay-sing@0.4.2": {
+      "integrity": "sha512-kEkJosE2aguIdIhfS82UGXBdHm05Egc103FqPIy8t1+iC0ardeK58ZB28DTkuV1FV31oa97RpCWmWaCuMbm/LQ=="
     },
     "layout-base@1.0.2": {
       "integrity": "sha512-8h2oVEZNktL4BH2JCOI90iD1yXwL6iNW7KcCKT2QZgQJR2vbqDsldCTPRU9NifTCqHZci57XvQQ15YTu+sTYPg=="
