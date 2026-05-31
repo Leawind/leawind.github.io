@@ -17,4 +17,4 @@ Recommended reading:
 
 - [Storage Locations](./location)
 - [Getting Started](./getting-started)
-- [Secrets Store](./secrets-store)
+- [Secrets](./secrets)

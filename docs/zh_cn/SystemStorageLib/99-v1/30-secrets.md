@@ -35,7 +35,7 @@ title: 密钥存储
 - **算法**：AES-256-GCM（带关联数据的认证加密）
 - **密钥派生**：PBKDF2WithHmacSHA256，65,536 次迭代
 - **密钥材料**：`user.name:user.home:machineId`
-- **盐值**：`SystemStorageLib-SecretStore-v1`（静态）
+- **盐值**：`SystemStorageLib-MetaConfigAccessor-v1`（静态）
 
 键名使用 SHA-256 摘要，不以明文存储。
 

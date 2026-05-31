@@ -161,7 +161,7 @@ boolean exists = secrets.exists("api-key");
 secrets.remove("api-key");
 ```
 
-For details, see the [Secrets Store documentation](./secrets-store).
+For details, see the [Secrets documentation](./secrets).
 
 ## Cross-Process Locks
 
@@ -210,7 +210,7 @@ logger.info("Hello from example_mod!");
 
 ### Log Rotation
 
-Log rotation behavior can be configured via `MetaConfigStore`. The configuration file is in JSON format and supports cross-process hot reload:
+Log rotation behavior can be configured via `MetaConfigAccessor`. The configuration file is in JSON format and supports cross-process hot reload:
 
 ```json
 {
@@ -224,10 +224,10 @@ Log rotation behavior can be configured via `MetaConfigStore`. The configuration
 
 ## Meta Configuration Management
 
-`MetaConfigStore` manages the library's global configuration and supports cross-process hot reload:
+`MetaConfigAccessor` manages the library's global configuration and supports cross-process hot reload:
 
 ```java
-MetaConfigStore metaConfig = SystemStorageLib.getInstance().metaConfig();
+MetaConfigAccessor metaConfig = SystemStorageLib.getInstance().metaConfig();
 
 // Read current configuration
 MetaConfig config = metaConfig.get();

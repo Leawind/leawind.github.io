@@ -35,7 +35,7 @@ This is intentional — encryption keys are bound to the local machine and user 
 - **Algorithm**: AES-256-GCM (authenticated encryption with associated data)
 - **Key Derivation**: PBKDF2WithHmacSHA256, 65,536 iterations
 - **Key Material**: `user.name:user.home:machineId`
-- **Salt**: `SystemStorageLib-SecretStore-v1` (static)
+- **Salt**: `SystemStorageLib-MetaConfigAccessor-v1` (static)
 
 Key names are stored as SHA-256 digests, not in plaintext.
 

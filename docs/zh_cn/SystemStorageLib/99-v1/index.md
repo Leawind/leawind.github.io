@@ -17,4 +17,4 @@ title: v1
 
 - [存储位置](./location)
 - [快速开始](./getting-started)
-- [密钥存储](./secrets-store)
+- [密钥存储](./secrets)

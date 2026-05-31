@@ -161,7 +161,7 @@ boolean exists = secrets.exists("api-key");
 secrets.remove("api-key");
 ```
 
-详情请参阅[密钥存储文档](./secrets-store)。
+详情请参阅[密钥存储文档](./secrets)。
 
 ## 跨进程锁
 
@@ -210,7 +210,7 @@ logger.info("Hello from example_mod!");
 
 ### 日志轮转
 
-通过 `MetaConfigStore` 可以配置日志轮转行为，配置文件为 JSON 格式，支持跨进程热重载：
+通过 `MetaConfigAccessor` 可以配置日志轮转行为，配置文件为 JSON 格式，支持跨进程热重载：
 
 ```json
 {
@@ -224,10 +224,10 @@ logger.info("Hello from example_mod!");
 
 ## 元配置管理
 
-`MetaConfigStore` 管理库的全局配置，支持跨进程热重载：
+`MetaConfigAccessor` 管理库的全局配置，支持跨进程热重载：
 
 ```java
-MetaConfigStore metaConfig = SystemStorageLib.getInstance().metaConfig();
+MetaConfigAccessor metaConfig = SystemStorageLib.getInstance().metaConfig();
 
 // 读取当前配置
 MetaConfig config = metaConfig.get();
