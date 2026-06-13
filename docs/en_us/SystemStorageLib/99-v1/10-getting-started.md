@@ -41,14 +41,14 @@ dependencies {
 ```json [fabric.mod.json]
 {
   "depends": {
-    "system_storage_lib": ">=${system_storage_lib_version}"
+    "system-storage-lib": ">=${system-storage-lib_version}"
   }
 }
 ```
 
 ```toml [(neoforge.)mods.toml]
 [[dependencies.example_mod]]
-modId="system_storage_lib"
+modId="system-storage-lib"
 mandatory=true
 versionRange="[${system_storage_lib_version},)"
 ordering="NONE"

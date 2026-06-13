@@ -3,7 +3,7 @@ title: System Storage Lib
 ---
 
 <div align="center">
-<img src="/icons/system_storage_lib.png" style="width: 8em; margin: 3em auto; image-rendering: pixelated;">
+<img src="/icons/system-storage-lib.png" style="width: 8em; margin: 3em auto; image-rendering: pixelated;">
 
 # System Storage Lib
 

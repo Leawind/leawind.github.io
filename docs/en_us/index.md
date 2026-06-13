@@ -22,7 +22,7 @@ features:
     details: A system-level persistent storage library mod
     link: ./SystemStorageLib
     icon:
-      src: /icons/system_storage_lib.png
+      src: /icons/system-storage-lib.png
       width: 81
 ---
 

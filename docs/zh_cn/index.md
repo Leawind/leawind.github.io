@@ -21,7 +21,7 @@ features:
     details: 一个用于存储系统级持久化数据的库模组
     link: ./SystemStorageLib
     icon:
-      src: /icons/system_storage_lib.png
+      src: /icons/system-storage-lib.png
 ---
 
 <style>
