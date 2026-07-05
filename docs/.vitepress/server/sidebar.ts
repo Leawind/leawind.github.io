@@ -159,6 +159,31 @@ function getLink(file: PathLike, base: PathLike): string {
     .replace(/\.html?$/g, '')
 }
 
+/**
+ * 在侧边栏中查找指定页面的下一个页面链接。
+ * 如果当前页面是某个分组的根页面（index.md）且有子页面，返回第一个子页面的链接和标题。
+ */
+export function findNextLink(
+  sidebar: DefaultTheme.SidebarItem[],
+  relativePath: string,
+): { text: string; link: string } | undefined {
+  const normalizedPath = '/' + relativePath
+    .replace(/(?:(^|\/)index)?\.md$/, '$1')
+    .replace(/\/+$/, '')
+
+  for (const group of sidebar) {
+    if (group.link && group.link === normalizedPath && group.items?.length) {
+      const first = group.items[0]
+      if (first.link) { return { text: first.text, link: first.link } }
+    }
+    if (group.items) {
+      const nested = findNextLink(group.items, relativePath)
+      if (nested) { return nested }
+    }
+  }
+  return undefined
+}
+
 // ---- Rewrites ----
 
 /**

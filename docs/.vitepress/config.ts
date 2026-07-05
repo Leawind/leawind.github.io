@@ -2,11 +2,16 @@ import '@std/dotenv/load'
 import { DefaultTheme, defineConfig, UserConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import localesConfig from './server/build-config.ts'
-import { buildRewrites } from './server/sidebar.ts'
+import { buildRewrites, buildSidebars, findNextLink } from './server/sidebar.ts'
 
 const BASE = '/'
 const GOOGLE_ANALYTICS_ID = 'G-BHMTJH30EG'
 const isDev = Deno.args.includes('dev')
+
+const sidebars: DefaultTheme.SidebarMulti = {}
+for (const lang of Object.keys(localesConfig)) {
+  Object.assign(sidebars, buildSidebars('docs', lang))
+}
 
 let config: UserConfig = {
   base: BASE,
@@ -29,6 +34,27 @@ let config: UserConfig = {
     },
   },
   ignoreDeadLinks: true,
+
+  transformPageData(pageData) {
+    const fm = pageData.frontmatter as Record<string, unknown>
+    if (fm.next === false || fm.next) { return }
+
+    const segments = pageData.relativePath.split('/')
+    if (segments.length < 2) { return }
+    const lang = segments[0]
+    const dirName = segments.length >= 3 ? segments[1] : undefined
+    if (!dirName) { return }
+    const sidebarConfig = sidebars[`/${lang}/${dirName}`]
+    if (!sidebarConfig) { return }
+
+    const next = findNextLink(
+      sidebarConfig as DefaultTheme.SidebarItem[],
+      pageData.relativePath,
+    )
+    if (next) {
+      fm.next = next
+    }
+  },
 
   head: [
     [
