@@ -14,7 +14,7 @@ hero:
 features:
   - title: Leawind's Third-Person
     details: A third-person mod for Minecraft
-    link: https://leawind.github.io/Third-Person/en-US
+    link: https://leawind.github.io/Third-Person/en_us/
     icon:
       src: /icons/LTP_mid.png
       width: 81

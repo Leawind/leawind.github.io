@@ -14,7 +14,7 @@ hero:
 features:
   - title: Leawind的第三人称
     details: 一个 Minecraft 第三人称模组
-    link: https://leawind.github.io/Third-Person/zh-CN
+    link: https://leawind.github.io/Third-Person/zh_cn/
     icon:
       src: /icons/LTP_mid.png
   - title: System Storage Lib

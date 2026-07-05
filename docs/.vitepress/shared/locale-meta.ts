@@ -38,7 +38,7 @@ const locales: Record<string, LocaleEntry> = {
           { text: 'SystemStorageLib', link: '/zh_cn/SystemStorageLib' },
           {
             text: 'Leawind的第三人称',
-            link: 'https://leawind.github.io/Third-Person/zh-CN/?autolang',
+            link: 'https://leawind.github.io/Third-Person/zh_cn/?autolang',
           },
         ],
       },
@@ -93,7 +93,7 @@ const locales: Record<string, LocaleEntry> = {
           { text: 'SystemStorageLib', link: '/en_us/SystemStorageLib' },
           {
             text: "Leawind's Third-Person",
-            link: 'https://leawind.github.io/Third-Person/en-US/?autolang',
+            link: 'https://leawind.github.io/Third-Person/en_us/?autolang',
           },
         ],
       },
