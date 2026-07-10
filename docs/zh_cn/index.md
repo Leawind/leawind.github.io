@@ -12,7 +12,12 @@ hero:
       text: 💰捐赠
       link: ./donate
 features:
-  - title: Leawind的第三人称
+  - title: Perspective API
+    details: 一个为 Minecraft 客户端模组设计的相机视角管理框架
+    link: https://github.com/Leawind/Perspective-API
+    icon:
+      src: /icons/perspective-api.svg
+  - title: Leawind 的第三人称
     details: 一个 Minecraft 第三人称模组
     link: https://leawind.github.io/Third-Person/zh_cn/
     icon:
