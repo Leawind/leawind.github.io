@@ -17,12 +17,20 @@ node_modules/
 # Obsidian
 .obsidian/
 
+
 # AI tools
 /.ai/
+.claude/
 .clinerules/
+.codebuddy/
+.codex/
 .cursorrules/
 .kilo/
-.marscode/
+.kilocode/
 .lingma/
+.marscode/
+.mimocode/
+.opencode/
 .trae/
-.codebuddy/
+
+AGENTS-*.md
