@@ -33,8 +33,9 @@ const locales: Record<string, LocaleEntry> = {
       { text: '🏠首页', link: '/zh_cn/' },
       { text: '💰捐赠', link: '/zh_cn/donate' },
       {
-        text: 'Minecraft',
+        text: 'Minecraft 模组',
         items: [
+          { text: '视角 API', link: '/zh_cn/Perspective-API' },
           { text: 'SystemStorageLib', link: '/zh_cn/SystemStorageLib' },
           {
             text: 'Leawind的第三人称',
@@ -88,8 +89,12 @@ const locales: Record<string, LocaleEntry> = {
       { text: '🏠Home', link: '/en_us/' },
       { text: '💰Donate', link: '/en_us/donate' },
       {
-        text: 'Minecraft',
+        text: 'Minecraft Mods',
         items: [
+          {
+            text: 'Perspective API',
+            link: '/en_us/Perspective-API',
+          },
           { text: 'SystemStorageLib', link: '/en_us/SystemStorageLib' },
           {
             text: "Leawind's Third-Person",

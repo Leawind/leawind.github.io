@@ -14,7 +14,7 @@ hero:
 features:
   - title: Perspective API
     details: 一个为 Minecraft 客户端模组设计的相机视角管理框架
-    link: https://github.com/Leawind/Perspective-API
+    link: ./Perspective-API
     icon:
       src: /icons/perspective-api.svg
   - title: Leawind 的第三人称

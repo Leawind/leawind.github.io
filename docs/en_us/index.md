@@ -14,7 +14,7 @@ hero:
 features:
   - title: Perspective API
     details: A camera perspective management framework for Minecraft client mods
-    link: https://github.com/Leawind/Perspective-API
+    link: ./Perspective-API
     icon:
       src: /icons/perspective-api.svg
   - title: Leawind's Third Person
