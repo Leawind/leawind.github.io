@@ -28,14 +28,14 @@ const locales: Record<string, LocaleEntry> = {
     bcp47: 'zh-CN',
     label: '简体中文 (中国大陆)',
     title: 'Leawind的文档',
-    description: 'Leawind的文档站',
+    description: '',
     nav: [
-      { text: '🏠首页', link: '/zh_cn/' },
       { text: '💰捐赠', link: '/zh_cn/donate' },
       {
         text: 'Minecraft 模组',
         items: [
           { text: '视角 API', link: '/zh_cn/Perspective-API' },
+          { text: '视角 API 演示', link: '/zh_cn/Perspective-API/example' },
           { text: 'SystemStorageLib', link: '/zh_cn/SystemStorageLib' },
           {
             text: 'Leawind的第三人称',
@@ -44,12 +44,13 @@ const locales: Record<string, LocaleEntry> = {
         ],
       },
       {
-        text: '📦',
+        text: '🗑️',
         items: [
           {
             text: 'Docs-template',
             link: 'https://github.com/Leawind/docs-template',
           },
+          { text: 'Git-Parcel', link: 'https://github.com/Git-Parcel/Mod' },
         ],
       },
     ],
@@ -86,14 +87,14 @@ const locales: Record<string, LocaleEntry> = {
     title: "Leawind's Docs",
     description: "Leawind's documentation site",
     nav: [
-      { text: '🏠Home', link: '/en_us/' },
       { text: '💰Donate', link: '/en_us/donate' },
       {
         text: 'Minecraft Mods',
         items: [
+          { text: 'Perspective API', link: '/en_us/Perspective-API' },
           {
-            text: 'Perspective API',
-            link: '/en_us/Perspective-API',
+            text: 'Perspective API Demo',
+            link: '/en_us/Perspective-API/example',
           },
           { text: 'SystemStorageLib', link: '/en_us/SystemStorageLib' },
           {
@@ -103,12 +104,13 @@ const locales: Record<string, LocaleEntry> = {
         ],
       },
       {
-        text: '📦',
+        text: '🗑️',
         items: [
           {
             text: 'Docs-template',
             link: 'https://github.com/Leawind/docs-template',
           },
+          { text: 'Git-Parcel', link: 'https://github.com/Git-Parcel/Mod' },
         ],
       },
     ],
