@@ -4,6 +4,9 @@ title: 开发者指南
 
 # 开发者指南
 
+> [!WARNING]
+> 在发布正式版 `1.0.0` 之前，API 可能随时发生破坏性变更。
+
 ## 添加依赖
 
 > [!INFO]
@@ -36,24 +39,6 @@ dependencies {
   modImplementation("maven.modrinth:LIqveQm1:1.0.0-beta.9+fabric-26.2")
 }
 ```
-
-> [!TIP] 提示
->
-> 如果你使用 stonecutter，可以定义一个通用的用于添加模组依赖的函数：
->
-> ```kotlin
-> fun DependencyHandlerScope.modImplAlias(dependencyNotation: String) {
->   if (VersionNumber.parse(mod.minecraftVersion) >= VersionNumber.parse("26.1")) {
->     implementation(dependencyNotation)
->   } else {
->     add("modImplementation", dependencyNotation)
->   }
-> }
->
-> dependencies {
->   modImplAlias("maven.modrinth:LIqveQm1:${props["mod.perspective_api_version"]}+${mod.loader}-${mod.minecraftVersion}")
-> }
-> ```
 
 ### 添加 `com.google.auto.service` 依赖（可选）
 

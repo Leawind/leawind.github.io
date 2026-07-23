@@ -4,6 +4,9 @@ title: Developer Guide
 
 # Developer Guide
 
+> [!WARNING]
+> Before the release of the `1.0.0` version, the API is subject to breaking changes at any time.
+
 ## Adding the Dependency
 
 > [!INFO]
@@ -36,24 +39,6 @@ dependencies {
   modImplementation("maven.modrinth:LIqveQm1:1.0.0-beta.9+fabric-26.2")
 }
 ```
-
-> [!TIP]
->
-> If you use Stonecutter, you can define a helper function for adding mod dependencies:
->
-> ```kotlin
-> fun DependencyHandlerScope.modImplAlias(dependencyNotation: String) {
->   if (VersionNumber.parse(mod.minecraftVersion) >= VersionNumber.parse("26.1")) {
->     implementation(dependencyNotation)
->   } else {
->     add("modImplementation", dependencyNotation)
->   }
-> }
->
-> dependencies {
->   modImplAlias("maven.modrinth:LIqveQm1:${props["mod.perspective_api_version"]}+${mod.loader}-${mod.minecraftVersion}")
-> }
-> ```
 
 ### Adding `com.google.auto.service` (Optional)
 
