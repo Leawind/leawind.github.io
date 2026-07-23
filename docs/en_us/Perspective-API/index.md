@@ -15,6 +15,9 @@ hero:
     - theme: alt
       text: CurseForge
       link: https://www.curseforge.com/minecraft/mc-mods/perspective-api
+    - theme: brand
+      text: Demo
+      link: ./example
 features:
   - title: Player Guide
     details: Learn about the mod's features
