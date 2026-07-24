@@ -44,6 +44,12 @@ const locales: Record<string, LocaleEntry> = {
         ],
       },
       {
+        text: '其他',
+        items: [
+          { text: 'modstitch', link: '/zh_cn/Others/modstitch' },
+        ],
+      },
+      {
         text: '🗑️',
         items: [
           {

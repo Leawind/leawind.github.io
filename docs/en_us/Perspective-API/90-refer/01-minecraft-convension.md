@@ -22,10 +22,10 @@ When `pitch=0, yaw=0`, both the camera and the entity face South (+Z).
 
 ### Direction
 
-| Angle        | Axis | Positive Direction       | Negative Direction       |
-| ------------ | ---- | ------------------------ | ------------------------ |
-| pitch (xRot) | X    | Looking down             | Looking up               |
-| yaw (yRot)   | Y    | Clockwise from above     | Counter-clockwise from above |
+| Angle        | Axis | Positive Direction   | Negative Direction           |
+| ------------ | ---- | -------------------- | ---------------------------- |
+| pitch (xRot) | X    | Looking down         | Looking up                   |
+| yaw (yRot)   | Y    | Clockwise from above | Counter-clockwise from above |
 
 ## Quaternion (Camera)
 

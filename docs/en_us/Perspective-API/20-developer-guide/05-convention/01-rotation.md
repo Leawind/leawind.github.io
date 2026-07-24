@@ -10,11 +10,11 @@ In the public API of this mod, the rotation representation is always consistent,
 
 When using a vector to represent Euler angles, each dimension is defined as follows:
 
-| Dimension | Meaning        | Positive Direction                                |
-| --------- | -------------- | ------------------------------------------------- |
-| x         | Pitch          | Rotating downward                                 |
-| y         | Yaw            | Clockwise when viewed from above                  |
-| z         | Roll           | Clockwise around the view direction (i.e., counter-clockwise on screen) |
+| Dimension | Meaning | Positive Direction                                                      |
+| --------- | ------- | ----------------------------------------------------------------------- |
+| x         | Pitch   | Rotating downward                                                       |
+| y         | Yaw     | Clockwise when viewed from above                                        |
+| z         | Roll    | Clockwise around the view direction (i.e., counter-clockwise on screen) |
 
 For a 2D vector, treat z as 0.
 
