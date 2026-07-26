@@ -17,29 +17,29 @@ title: 玩家指南
 |     1.20.1     |   ✅   |    ❌    |       ✅       |
 |     1.20.4     |   ✅   |    ✅    |       ❌       |
 |     1.20.6     |   ✅   |    ✅    |       ❌       |
-|      1.21      |   ✅   |    ✅    |       ❌       |
+|    1.21(.1)    |   ✅   |    ✅    |       ❌       |
 |    1.21.11     |   ✅   |    ✅    |       ❌       |
 |     26.1.x     |   ✅   |    ✅    |       ❌       |
 |      26.2      |   ✅   |    ✅    |       ❌       |
 
 ## 操作
 
-本模组接管了原版的视角切换按键（默认F5）的功能。
+本模组接管了原版的视角切换按键（默认 `F5`）。
 
 - 短按：切换到下一个视角
-- 长按：打开视角轮盘，移动鼠标即可切换到相应视角
+- 长按：打开视角轮盘，移动鼠标选择视角，松开按键后切换
 
 <img src="/perspective_api/wheel.gif" class="demo-img"/>
 
 ## 配置界面
 
-安装 [YACL] 后，你可以通过模组列表打开本模组的配置界面。
+安装 [YACL] 后，可以通过模组列表打开本模组的配置界面。未安装也不会影响视角切换等核心功能。
 
 ![Config Screen](/perspective_api/config_screen.png)
 
 ## 配置文件
 
-配置文件位于 `.minecraft/config/perspective_api.json`
+配置文件位于 `.minecraft/config/perspective_api.json`。手动编辑前建议先退出游戏，避免运行中的配置保存覆盖文件内容。
 
 [YACL]: https://modrinth.com/mod/yacl
 [Modrinth]: https://modrinth.com/mod/perspective-api/versions

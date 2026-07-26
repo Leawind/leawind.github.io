@@ -17,7 +17,8 @@ title: 开发者指南
 
 ### 通过 Modrinth Maven 添加依赖
 
-格式：`"maven.modrinth:perspective-api:${version}+${loader}-${minecraft_version}"`
+坐标格式：`maven.modrinth:LIqveQm1:<API 版本>+<加载器>-<Minecraft 版本>`。
+请从版本页面选择与你的加载器和 Minecraft 版本完全对应的构件。
 
 ```kotlin
 repositories {
@@ -35,7 +36,7 @@ repositories {
 }
 
 dependencies {
-  // Use `implementation` for >=26.1
+  // Minecraft 26.1 及以上使用 implementation
   modImplementation("maven.modrinth:LIqveQm1:1.0.0-beta.9+fabric-26.2")
 }
 ```
@@ -49,13 +50,23 @@ dependencies {
 }
 ```
 
-利用它可以更加方便地实现 SPI，而无需手动编辑 service 文件。
+它可以为 `PerspectiveBehavior` 自动生成 Java SPI 服务文件，避免手动维护 `META-INF/services`。
+
+## 开始开发
+
+- [自定义视角](./perspective)：定义一种完整的相机模式
+- [视角修饰器](./modifier)：在任意视角上叠加相机效果
+- [覆盖链](./override-chain)：根据游戏状态临时强制切换视角
+- [迁移指南](./migration/)：从原版相机注入或早期测试版 API 迁移
+
+Perspective API 的位置、旋转和 FOV 始终通过统一的 `PerspectiveState` 暴露。开发者不需要针对不同 Minecraft 版本选择不同回调，也不应主动调用原版的 FOV 计算方法。
 
 ## 示例模组
 
-[视角 API 演示](https://github.com/Leawind/Perspective-API-Demo) 实现了一些自定义视角，可作为开发参考。
+[视角 API 演示](../../example/) 实现了多个自定义视角和修饰器，其[源码]可作为开发参考。
 
 ---
 
 [Github Releases]: https://github.com/Leawind/Perspective-API/releases
 [Modrinth Versions]: https://modrinth.com/mod/perspective-api/versions
+[源码]: https://github.com/Leawind/Perspective-API-Demo
