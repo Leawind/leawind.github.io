@@ -48,7 +48,7 @@ title: 旋转的表示方式
 
 > [!TIP]
 >
-> Minecraft 相机内部的恒等四元数朝向会随版本变化。Perspective API 会在桥接层处理这种差异，接入 API 的模组不应自行补偿。原版细节见 [Minecraft 旋转约定](../../refer/minecraft-convension)。
+> Minecraft 相机内部的恒等四元数朝向会随版本变化。Perspective API 会在桥接层处理这种差异，接入 API 的模组不应自行补偿。原版细节见 [Minecraft 旋转约定](../refer/minecraft-convension)。
 >
 > 本 API 固定采用 `+Z` 作为初始旋转的朝向，以对齐欧拉角零点约定。
 

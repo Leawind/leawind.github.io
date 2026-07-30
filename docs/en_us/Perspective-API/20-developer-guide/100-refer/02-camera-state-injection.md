@@ -1,12 +1,13 @@
 ---
 title: Camera State Injection Points
+description: Camera state injection points
 ---
 
 # Camera State Injection Points
 
 Perspective API supports multiple Minecraft versions. Different versions calculate camera position, rotation, and field of view (FOV) at different times, so the mod selects different injection points for each version in the `bridge` layer, then passes them to the `logic` layer via a unified event.
 
-These version differences are not exposed to the public API. `PerspectiveBehavior` and `PerspectiveModifier` consistently read and modify camera position, rotation, and FOV through the complete `PerspectiveState` across all versions.
+These version differences are not exposed to the public API. `PerspectiveBehavior` and `PerspectiveModifier` consistently read and modify camera position, rotation, and projection parameters through the complete `PerspectiveState` across all versions.
 
 ## Camera State Pipeline
 
@@ -18,7 +19,7 @@ Vanilla camera state
   -> Modifier chain
   -> Perspective transition
   -> Validity check
-  -> Write back to vanilla camera
+  -> Write back to the vanilla camera and world projection
 ```
 
 Mixins and loader events are only responsible for observing vanilla invocations and dispatching generic events. They do not execute perspective logic nor proactively call vanilla FOV calculation methods.
@@ -68,3 +69,9 @@ state.setFovDeg(state.getFovDeg() * 0.8f);
 ```
 
 Typically, the interval between adjacent render frames is very short, and vanilla sprint, death, and fluid FOV effects themselves change continuously, so this difference is usually imperceptible. This strategy avoids repeatedly executing the full camera pipeline, duplicating vanilla FOV algorithms, or splitting the public API for older versions, while maintaining consistent behavior across all Minecraft versions.
+
+## Orthographic projection
+
+When the final `PerspectiveState.projectionMode()` is `ProjectionMode.ORTHOGRAPHIC`, the `bridge` layer uses `getOrthographicHeight()` to construct a world orthographic projection matrix centered on the camera's forward axis. It also replaces the related projections for world rendering, culling, and the camera's near clipping plane. Non-world projections, including the user interface and held items, do not use this setting.
+
+The horizontal span of an orthographic projection is calculated from the viewport aspect ratio. See [Projection Modes](../convention/projection) for the public API and parameter meanings.

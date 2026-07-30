@@ -1,5 +1,6 @@
 ---
 title: Minecraft Rotation Convention
+description: Minecraft rotation conventions
 ---
 
 # Minecraft Rotation Convention
@@ -50,3 +51,5 @@ All versions use the YXZ rotation order to construct quaternions, differing only
 | < 1.21     | `rotationYXZ(-yaw, pitch, roll)`      | Unchanged  | 0          |
 
 The yaw offset compensates for the difference between the OpenGL convention (-Z forward) and the Minecraft convention (yaw=0 faces +Z South).
+
+These differences describe only Minecraft's internal implementation. Perspective API's public interface always uses the unified `+Z`-forward convention; mods using the API should not add version-specific offsets or sign inversions themselves.

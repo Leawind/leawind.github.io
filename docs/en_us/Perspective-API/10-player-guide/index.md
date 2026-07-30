@@ -17,29 +17,29 @@ title: Player Guide
 |      1.20.1       |   ✅   |    ❌    |       ✅       |
 |      1.20.4       |   ✅   |    ✅    |       ❌       |
 |      1.20.6       |   ✅   |    ✅    |       ❌       |
-|       1.21        |   ✅   |    ✅    |       ❌       |
+|      1.21(.1)     |   ✅   |    ✅    |       ❌       |
 |      1.21.11      |   ✅   |    ✅    |       ❌       |
 |      26.1.x       |   ✅   |    ✅    |       ❌       |
 |       26.2        |   ✅   |    ✅    |       ❌       |
 
 ## Controls
 
-This mod takes over the vanilla perspective toggle key (default F5).
+This mod takes over the vanilla perspective toggle key (default `F5`).
 
 - Short press: switch to the next perspective
-- Long press: open the perspective wheel — move your mouse to switch to the corresponding perspective
+- Long press: open the perspective wheel — move the mouse to choose a perspective, then release the key to switch
 
 <img src="/perspective_api/wheel.gif" class="demo-img"/>
 
 ## Config Screen
 
-With [YACL] installed, you can open the mod's config screen from the mod list.
+With [YACL] installed, you can open the mod's config screen from the mod list. YACL is optional and does not affect core perspective switching.
 
 ![Config Screen](/perspective_api/config_screen.png)
 
 ## Config File
 
-The config file is located at `.minecraft/config/perspective_api.json`
+The config file is located at `.minecraft/config/perspective_api.json`. Exit the game before editing it manually so an in-game save does not overwrite your changes.
 
 [YACL]: https://modrinth.com/mod/yacl
 [Modrinth]: https://modrinth.com/mod/perspective-api/versions

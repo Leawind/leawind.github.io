@@ -30,7 +30,7 @@ The zero Euler angle `(pitch, yaw, roll) = (0, 0, 0)` represents the following o
 
 > [!TIP]
 >
-> In the public API of this mod, the Euler angle convention is identical to the Euler angles used for entities and the camera in Minecraft source code — at least as of Minecraft 26.2, and likely for future versions as well.
+> This API's Euler-angle convention matches the one currently used by Minecraft entities and cameras. Even if vanilla's internal implementation changes in the future, the public API will retain the convention defined here.
 
 ## Quaternion
 
@@ -48,13 +48,13 @@ Unit quaternions are always used.
 
 > [!TIP]
 >
-> In Minecraft, the camera (`net.minecraft.client.Camera`) computes a quaternion from its Euler angles for rendering. Before 1.21, it uses South (+Z) as the identity quaternion orientation; from 1.21 onward, it uses North (-Z).
+> Minecraft's camera identity quaternion orientation changes across versions. Perspective API handles this difference in its bridge layer; API users should not compensate for it themselves. See [Minecraft Rotation Convention](../refer/minecraft-convension).
 >
-> The public API of this mod uses +Z as the initial rotation orientation to align with the Euler angle origin convention.
+> This API always uses `+Z` as the initial rotation orientation to align with the Euler-angle origin convention.
 
 ### Rotation Order
 
-When constructing a quaternion from Euler angles, the `Y X Z` order is used.
+When constructing a quaternion from Euler angles, the `Y-X-Z` rotation order is used. Use `PerspectiveMath.eulerDegToQuat` or `PerspectiveMath.eulerRadToQuat` to avoid reimplementing the conversion details.
 
 ## Unit Vector
 
@@ -62,8 +62,9 @@ A unit vector pointing from the origin to a target can represent orientation, bu
 
 Converting from Euler angles or quaternions to this format will lose the roll information.
 
-# Identifier Naming Convention
+## Identifier Naming Convention
 
-- When using Euler angles, use suffixes in identifiers to indicate the unit
-  - `Rad` for radians
-  - `Deg` for degrees
+Parameters and variables that represent angles must use a suffix that indicates the unit:
+
+- `Deg` for degrees, for example `fovDeg` and `yawDeg`
+- `Rad` for radians, for example `rollRad`

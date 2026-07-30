@@ -3,11 +3,12 @@ title: Perspective API
 layout: home
 hero:
   name: Perspective API
-  tagline: A client-side camera perspective management framework for Minecraft, decoupled from vanilla code.
+  text: Perspective API
+  tagline: A Minecraft client-side perspective management framework decoupled from vanilla code.
   image: /icons/perspective-api.svg
   actions:
     - theme: brand
-      text: Source Code
+      text: Source
       link: https://github.com/Leawind/Perspective-API
     - theme: alt
       text: Modrinth

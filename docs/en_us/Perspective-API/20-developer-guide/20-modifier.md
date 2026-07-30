@@ -2,63 +2,62 @@
 title: Perspective Modifier
 ---
 
-> [!NOTE]
->
-> 🚧 Under Construction 🚧
-
 # Perspective Modifier
 
-Perspective modifiers (`PerspectiveModifier`) allow layering additional camera effects on top of any perspective, without modifying the perspective itself.
+`PerspectiveModifier` layers camera effects—such as explosion shake, breathing motion, or temporary zoom—on top of any base perspective. Modifiers only process camera state; they do not switch perspectives.
 
-Modifiers execute after the base perspective's `applyTransform` and `applyFov`, but before transition interpolation. All modifiers run sequentially in ascending priority order.
+Modifiers run after the base perspective and before transition interpolation. Multiple modifiers modify the same target state in ascending `priority` order; equal priorities run in registration order.
 
-## Basic Usage
+## Implementing a modifier
 
 ```java
-public class CameraShakeModifier implements PerspectiveModifier {
+public final class CameraShakeModifier implements PerspectiveModifier {
+  private float intensity;
 
-    public static final String ID = "mymod.camera_shake";
-    private double shakeIntensity = 0.0;
+  public void trigger(float intensity) {
+    this.intensity = Math.max(this.intensity, intensity);
+  }
 
-    public void triggerShake(double intensity) {
-        this.shakeIntensity = intensity;
-    }
+  @Override
+  public boolean isAvailable() {
+    return intensity > 0.001f;
+  }
 
-    @Override
-    public @NonNull String id() { return ID; }
-
-    @Override
-    public boolean isAvailable() { return shakeIntensity > 0.01; }
-
-    @Override
-    public void applyTransform(
-        @NonNull PerspectiveContext ctx,
-        @NonNull Vector3d position,
-        @NonNull Quaternionf rotation) {
-
-        double time = System.currentTimeMillis() / 1000.0;
-        double shake = shakeIntensity * Math.exp(-3.0 * time);
-
-        Quaternionf yawRot = new Quaternionf()
-            .rotationAxis((float) Math.toRadians(shake * 45), PerspectiveMath.DOWN);
-        Quaternionf pitchRot = new Quaternionf()
-            .rotationAxis((float) Math.toRadians(shake * 30), PerspectiveMath.RIGHT);
-
-        rotation.mul(pitchRot, rotation).mul(yawRot, rotation);
-    }
+  @Override
+  public void apply(PerspectiveState.Mutable state, PerspectiveContext ctx) {
+    float phase = ctx.partialTicks() * 12.0f;
+    float yawRad = (float) Math.sin(phase) * intensity;
+    state.rotation().rotateLocalY(yawRad);
+    intensity *= 0.9f;
+  }
 }
 ```
 
-## Registering and Unregistering
+`apply` may modify `state.position()`, `state.rotation()`, and projection parameters (FOV or orthographic height). As with perspective callbacks, do not retain `state`, `ctx`, or their returned mutable objects outside the callback.
+
+## Registering and removing
+
+Modifiers do not have IDs themselves. The caller supplies a unique `key` when registering one:
 
 ```java
-PerspectiveAPI.getModifierChain().register("mymod.shake", 100, new CameraShakeModifier());
+CameraShakeModifier shake = new CameraShakeModifier();
 
-PerspectiveAPI.getModifierChain().unregister("mymod.shake");
+PerspectiveAPI.runWhenReady(
+    "mymod.camera_shake",
+    () -> PerspectiveAPI.getModifierChain().register(
+        "mymod.camera_shake", 100, shake));
 ```
 
-## Notes
+Remove it when it is no longer needed:
 
-- Modify the passed-in `position` and `rotation` objects directly; do not store their references
-- The value returned by `applyFov` must be within the `[0, 180]` range
-- Exceptions are caught and logged without affecting other modifiers
+```java
+PerspectiveAPI.getModifierChain().unregister("mymod.camera_shake");
+```
+
+Registering the same `key` again replaces the old entry and establishes a new same-priority insertion order.
+
+## Availability and fault tolerance
+
+When `isAvailable()` returns `false`, the modifier is skipped for the current frame but remains in the chain.
+
+Each modifier runs in an isolated protection boundary. If a modifier throws an exception or writes an invalid position, rotation, or FOV, its changes are rolled back and logged, and later modifiers still run. Do not rely on this for normal control flow; proactively avoid non-finite values and invalid quaternions in `apply`.

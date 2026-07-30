@@ -5,7 +5,7 @@ title: Developer Guide
 # Developer Guide
 
 > [!WARNING]
-> Before the release of the `1.0.0` version, the API is subject to breaking changes at any time.
+> Before the release of the stable version, the API is subject to breaking changes at any time.
 
 ## Adding the Dependency
 
@@ -17,7 +17,7 @@ title: Developer Guide
 
 ### Via Modrinth Maven
 
-Format: `"maven.modrinth:perspective-api:${version}+${loader}-${minecraft_version}"`
+Format: `maven.modrinth:LIqveQm1:<API version>+<loader>-<Minecraft version>`. Choose the artifact that exactly matches your loader and Minecraft version from the versions page.
 
 ```kotlin
 repositories {
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-  // Use `implementation` for >=26.1
+  // Use `implementation` for Minecraft 26.1 and later.
   modImplementation("maven.modrinth:LIqveQm1:1.0.0-beta.9+fabric-26.2")
 }
 ```
@@ -49,11 +49,21 @@ dependencies {
 }
 ```
 
-This makes SPI implementation more convenient, without having to manually edit service files.
+This automatically generates Java SPI service files for `PerspectiveBehavior`, avoiding manual maintenance of `META-INF/services`.
+
+## Getting Started
+
+- [Custom Perspective](./perspective): define a complete camera mode
+- [Projection Modes](./convention/projection): use perspective or orthographic projection
+- [Perspective Modifier](./modifier): layer camera effects on any perspective
+- [Override Chain](./override-chain): force a perspective temporarily based on game state
+- [Migration Guide](./migration/): migrate from vanilla camera injections or the early test API
+
+Perspective API exposes position, rotation, and projection parameters through a unified `PerspectiveState`. Your mod does not need version-specific callbacks or vanilla FOV/projection calculations.
 
 ## Demo Mod
 
-[Perspective API Demo](https://github.com/Leawind/Perspective-API-Demo) implements several custom perspectives and can be used as a development reference.
+[Perspective API Demo](../example/) implements several custom perspectives and modifiers. Its [source code](https://github.com/Leawind/Perspective-API-Demo) is available as a development reference.
 
 ---
 
