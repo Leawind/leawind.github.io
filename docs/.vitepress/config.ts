@@ -1,4 +1,3 @@
-import '@std/dotenv/load'
 import { DefaultTheme, defineConfig, UserConfig } from 'vitepress'
 import localesConfig, { sidebarsByLocale } from './server/build-config.ts'
 import { buildRewrites, findNextLink } from './server/sidebar.ts'
