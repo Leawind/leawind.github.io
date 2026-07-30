@@ -33,7 +33,7 @@ public final class CameraShakeModifier implements PerspectiveModifier {
 }
 ```
 
-`apply` 可同时修改 `state.position()`、`state.rotation()` 和 FOV。和视角回调一样，`state`、`ctx` 及其返回的可变对象均不得保存到回调之外。
+`apply` 可同时修改 `state.position()`、`state.rotation()` 和投影参数（FOV 或正交高度）。和视角回调一样，`state`、`ctx` 及其返回的可变对象均不得保存到回调之外。
 
 ## 注册和移除
 

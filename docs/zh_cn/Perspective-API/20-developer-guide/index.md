@@ -55,11 +55,12 @@ dependencies {
 ## 开始开发
 
 - [自定义视角](./perspective)：定义一种完整的相机模式
+- [投影模式](./convention/projection)：使用透视或正交投影渲染世界
 - [视角修饰器](./modifier)：在任意视角上叠加相机效果
 - [覆盖链](./override-chain)：根据游戏状态临时强制切换视角
 - [迁移指南](./migration/)：从原版相机注入或早期测试版 API 迁移
 
-Perspective API 的位置、旋转和 FOV 始终通过统一的 `PerspectiveState` 暴露。开发者不需要针对不同 Minecraft 版本选择不同回调，也不应主动调用原版的 FOV 计算方法。
+Perspective API 的位置、旋转和投影参数始终通过统一的 `PerspectiveState` 暴露。开发者不需要针对不同 Minecraft 版本选择不同回调，也不应主动调用原版的 FOV 或投影矩阵计算方法。
 
 ## 示例模组
 

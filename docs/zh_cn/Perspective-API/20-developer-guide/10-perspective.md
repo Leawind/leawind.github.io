@@ -22,11 +22,11 @@ public final class SideViewPerspective implements PerspectiveBehavior {
 
   @Override
   public void applyCameraState(
-      PerspectiveState.Mutable state, PerspectiveContext ctx) {
-    Entity entity = ctx.entity();
+      PerspectiveState.Mutable state, PerspectiveContext context) {
+    Entity entity = context.cameraEntity();
     if (entity == null) return;
 
-    Vec3 eye = entity.getEyePosition(ctx.partialTicks());
+    Vec3 eye = entity.getEyePosition(context.partialTicks());
     state.position().set(eye.x + 3.0, eye.y, eye.z);
     state.setFovDeg(70.0f);
   }
@@ -67,24 +67,23 @@ public void applyCameraState(
 }
 ```
 
-位置使用世界坐标，旋转使用单位四元数，FOV 的单位是角度。旋转约定见[旋转的表示方式](./convention/rotation)。
+位置使用世界坐标，旋转使用单位四元数，FOV 的单位是角度。默认使用透视投影；也可以设置正交投影，详见[投影模式](./convention/projection)。旋转约定见[旋转的表示方式](./convention/rotation)。
 
 `state` 和 `ctx` 都只在本次回调期间有效。不要保存它们，也不要保存
 `state.position()` 或 `state.rotation()` 返回对象的引用；若需要跨帧使用，请复制数值。
 
 ## 生命周期
 
-| 回调                   | 调用时机                                                     |
-| ---------------------- | ------------------------------------------------------------ |
-| `init`                 | 视角完成注册和初始化时调用一次                               |
-| `onActivate`           | 视角成为当前视角时调用                                       |
-| `onDeactivate`         | 视角不再是当前视角时调用                                     |
-| `clientTickWhenActive` | 视角激活期间，每个客户端游戏刻调用                           |
-| `preApplyWhenActive`   | 每个渲染帧中，在计算相机状态前调用                           |
-| `applyCameraState`     | 修改本帧的目标相机状态                                       |
-| `postApplyWhenActive`  | 最终状态写入相机后调用，适合依赖实际渲染视点的射线检测等操作 |
+| 回调                    | 调用时机                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| `init`                  | 视角完成注册和初始化时调用一次                               |
+| `onActivate`            | 视角成为当前视角时调用                                       |
+| `onDeactivate`          | 视角不再是当前视角时调用                                     |
+| `clientTickWhenActive`  | 视角激活期间，每个客户端游戏刻调用                           |
+| `applyCameraState`      | 修改本帧的目标相机状态                                       |
+| `afterApplyCameraState` | 最终状态写入相机后调用，适合依赖实际渲染视点的射线检测等操作 |
 
-通常在 `clientTickWhenActive` 更新游戏逻辑，在 `preApplyWhenActive` 读取逐帧输入，在 `applyCameraState` 中只计算相机状态。
+通常在 `clientTickWhenActive` 更新游戏逻辑，在 `applyCameraState` 中读取逐帧输入并计算相机状态；如需依赖实际写入相机的最终状态，可使用 `afterApplyCameraState`。
 
 ## 可用性与过渡
 

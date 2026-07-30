@@ -4,9 +4,9 @@ title: 相机状态注入位置
 
 # 相机状态注入位置
 
-Perspective API 支持多个 Minecraft 版本。不同版本计算相机位置、旋转和视场角（FOV）的时机并不相同，因此模组在 `bridge` 层为各版本选择不同的注入位置，再通过统一事件交给 `logic` 层处理。
+Perspective API 支持多个 Minecraft 版本。不同版本计算相机位置、旋转、视场角（FOV）和投影矩阵的时机并不相同，因此模组在 `bridge` 层为各版本选择不同的注入位置，再通过统一事件交给 `logic` 层处理。
 
-这些版本差异不会暴露到公共 API。`PerspectiveBehavior` 和 `PerspectiveModifier` 在所有版本中始终通过完整的 `PerspectiveState` 读取和修改相机位置、旋转与 FOV。
+这些版本差异不会暴露到公共 API。`PerspectiveBehavior` 和 `PerspectiveModifier` 在所有版本中始终通过完整的 `PerspectiveState` 读取和修改相机位置、旋转与投影参数。
 
 ## 相机状态管线
 
@@ -18,7 +18,7 @@ Perspective API 支持多个 Minecraft 版本。不同版本计算相机位置�
   -> Modifier 链
   -> 视角切换过渡
   -> 有效性检查
-  -> 写回原版相机
+  -> 写回原版相机和世界投影
 ```
 
 Mixin 和加载器事件只负责观察原版调用并发射通用事件，不执行视角业务，也不会主动调用原版的 FOV 计算方法。
@@ -70,3 +70,9 @@ state.setFovDeg(state.getFovDeg() * 0.8f);
 ```
 
 通常相邻渲染帧的间隔很短，而原版的疾跑、死亡和流体 FOV 效果本身也是连续变化的，因此这种差异通常不可见。该策略避免了重复执行完整相机管线、复制原版 FOV 算法或为旧版本拆分公共 API，同时使各 Minecraft 版本保持一致的行为。
+
+## 正交投影
+
+当最终 `PerspectiveState.projectionMode()` 为 `ProjectionMode.ORTHOGRAPHIC` 时，`bridge` 层会以 `getOrthographicHeight()` 构建以相机前方轴为中心的世界正交投影矩阵，并同步替换世界渲染、剔除和相机近裁剪面的相关投影。界面和手持物等非世界投影不使用该设置。
+
+正交投影的水平跨度由窗口宽高比计算。有关公共 API 的用法和参数含义，见[投影模式](../../developer-guide/convention/projection)。

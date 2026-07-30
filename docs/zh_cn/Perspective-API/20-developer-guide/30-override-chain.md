@@ -11,7 +11,7 @@ title: 覆盖链
 ```java
 PerspectiveAPI.runWhenReady(
     "mymod.cutscene_override",
-    () -> PerspectiveAPI.getOverrideChain().push(
+    () -> PerspectiveAPI.getOverrideChain().register(
         "mymod.cutscene",
         1000,
         () -> isCutsceneActive ? "mymod.cutscene_camera" : null));
@@ -26,8 +26,8 @@ PerspectiveAPI.runWhenReady(
 ```java
 PerspectiveOverrideChain overrides = PerspectiveAPI.getOverrideChain();
 
-if (overrides.has("mymod.cutscene")) {
-  overrides.pop("mymod.cutscene");
+if (overrides.contains("mymod.cutscene")) {
+  overrides.unregister("mymod.cutscene");
 }
 ```
 
