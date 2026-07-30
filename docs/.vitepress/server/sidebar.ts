@@ -1,4 +1,3 @@
-import log from '@leawind/inventory/log'
 import { Path, type PathLike } from '@leawind/inventory/fs'
 import * as fs from '@leawind/inventory/fs'
 import * as frontMatter from '@std/front-matter'
@@ -35,7 +34,14 @@ function sortByPrefix(a: { name: string }, b: { name: string }): number {
     const match = name.match(/^(\d+)-/)
     return match ? parseInt(match[1], 10) : Infinity
   }
-  return num(a.name) - num(b.name)
+  const aPrefix = num(a.name)
+  const bPrefix = num(b.name)
+  if (aPrefix !== bPrefix) { return aPrefix - bPrefix }
+  return a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+}
+
+function isMarkdownFile(entry: Path): boolean {
+  return entry.isFileSync() && entry.name.endsWith('.md')
 }
 
 /**
@@ -45,7 +51,7 @@ function sortByPrefix(a: { name: string }, b: { name: string }): number {
 function collectConflicts(entries: Path[]): Map<string, string[]> {
   const conflicts = new Map<string, string[]>()
   for (const entry of entries) {
-    if (!entry.isFileSync() || entry.name === 'index.md') { continue }
+    if (!isMarkdownFile(entry) || entry.name === 'index.md') { continue }
     const base = stripPrefix(entry.nameNoExt)
     if (!conflicts.has(base)) { conflicts.set(base, []) }
     conflicts.get(base)!.push(entry.name)
@@ -53,16 +59,22 @@ function collectConflicts(entries: Path[]): Map<string, string[]> {
   return conflicts
 }
 
-/** 检查冲突并打印错误，返回是否有冲突 */
-function checkConflicts(conflicts: Map<string, string[]>): boolean {
-  let hasConflict = false
+/** 检查冲突并抛出包含所有冲突文件的错误 */
+function assertNoConflicts(
+  dir: PathLike,
+  conflicts: Map<string, string[]>,
+): void {
+  const messages: string[] = []
   for (const [base, files] of conflicts) {
     if (files.length > 1) {
-      log.error(`文件名冲突: ${files.join(', ')} 去掉前缀后都映射到 "${base}"`)
-      hasConflict = true
+      messages.push(
+        `${files.join(', ')} 去掉前缀后都映射到 "${base}"`,
+      )
     }
   }
-  return hasConflict
+  if (messages.length > 0) {
+    throw new Error(`文件名冲突 (${dir}): ${messages.join('; ')}`)
+  }
 }
 
 // ---- Sidebar ----
@@ -108,13 +120,14 @@ function buildSidebarRecursive(
   const dirHasBody = indexInfo.body.trim() !== ''
 
   const entries = d.listSync()
-  if (checkConflicts(collectConflicts(entries))) { Deno.exit(1) }
+  assertNoConflicts(d, collectConflicts(entries))
 
   return {
     text: dirTitle,
     collapsed: true,
     ...(dirHasBody ? { link: getLink(d, b) } : {}),
     items: entries
+      .filter((entry) => entry.isDirectorySync() || isMarkdownFile(entry))
       .sort(sortByPrefix)
       .map((entry) => {
         if (entry.isFileSync()) {
@@ -148,8 +161,7 @@ export function parseFile(file: PathLike): {
       body: fm.body.trim(),
     }
   } catch (e) {
-    log.error(`Error parsing file ${file}: ${e}`)
-    return { attrs: {}, body: '' }
+    throw new Error(`无法解析 Markdown frontmatter: ${file}`, { cause: e })
   }
 }
 
@@ -207,24 +219,23 @@ export function buildRewrites(
 ): Record<string, string> {
   const rewrites: Record<string, string> = {}
   const basePath = Path.from(base)
-  let hasConflict = false
 
   for (const lang of langs) {
     scanDir(fs.P`${basePath}/${lang}`)
   }
 
-  if (hasConflict) { Deno.exit(1) }
   return rewrites
 
   function scanDir(dir: Path): void {
     const entries = dir.listSync()
-    if (checkConflicts(collectConflicts(entries))) { hasConflict = true }
+    assertNoConflicts(dir, collectConflicts(entries))
 
     for (const entry of entries) {
       if (entry.isDirectorySync()) {
         scanDir(entry)
         continue
       }
+      if (!isMarkdownFile(entry)) { continue }
 
       const relativePath = entry.relative(basePath).toString()
       const rewritten = stripPath(entry, basePath)

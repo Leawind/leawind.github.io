@@ -7,7 +7,7 @@
     "check:fmt": "deno fmt --check",
     "check:lint": "deno lint",
     "check:types": "deno check docs/.vitepress/config.ts docs/.vitepress/theme/index.ts docs/.vitepress/shared/redirect.ts",
-    "check:test": "deno test docs/.vitepress",
+    "check:test": "deno test --allow-read --allow-write docs/.vitepress",
     "check": "deno task check:fmt && deno task check:lint && deno task check:types && deno task check:test && deno task docs:build"
   },
   "nodeModulesDir": "auto",
