@@ -25,6 +25,24 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.9.0
+          cache: true
+
+      - name: Install dependencies
+        shell: bash
+        timeout-minutes: 5
+        run: |
+          for attempt in 1 2 3; do
+            if deno ci; then
+              break
+            fi
+            if [ "$attempt" -eq 3 ]; then
+              echo "::error::Failed to install dependencies after 3 attempts"
+              exit 1
+            fi
+            delay=$((attempt * 5))
+            echo "::warning::Dependency download failed; retrying in ${delay}s"
+            sleep "$delay"
+          done
 
       - name: Check and build documentation
         run: deno task check
