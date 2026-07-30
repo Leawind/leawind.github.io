@@ -2,8 +2,12 @@
   "tasks": {
     "vitepress": "deno run -A npm:vitepress",
     "docs:dev": "deno task vitepress dev docs",
-    "docs:build": "deno task vitepress build docs",
-    "docs:preview": "deno task vitepress preview docs"
+    "docs:build": "deno run -A --frozen npm:vitepress build docs",
+    "docs:preview": "deno task vitepress preview docs",
+    "check:fmt": "deno fmt --check",
+    "check:lint": "deno lint",
+    "check:types": "deno check docs/.vitepress/config.ts docs/.vitepress/theme/index.ts docs/.vitepress/shared/redirect.ts",
+    "check": "deno task check:fmt && deno task check:lint && deno task check:types && deno task docs:build"
   },
   "nodeModulesDir": "auto",
   "imports": {

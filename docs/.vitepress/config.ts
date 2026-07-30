@@ -1,16 +1,16 @@
 import '@std/dotenv/load'
 import { DefaultTheme, defineConfig, UserConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
-import localesConfig from './server/build-config.ts'
-import { buildRewrites, buildSidebars, findNextLink } from './server/sidebar.ts'
+import localesConfig, { sidebarsByLocale } from './server/build-config.ts'
+import { buildRewrites, findNextLink } from './server/sidebar.ts'
 
 const BASE = '/'
 const GOOGLE_ANALYTICS_ID = 'G-BHMTJH30EG'
 const isDev = Deno.args.includes('dev')
 
 const sidebars: DefaultTheme.SidebarMulti = {}
-for (const lang of Object.keys(localesConfig)) {
-  Object.assign(sidebars, buildSidebars('docs', lang))
+for (const localeSidebars of Object.values(sidebarsByLocale)) {
+  Object.assign(sidebars, localeSidebars)
 }
 
 let config: UserConfig = {

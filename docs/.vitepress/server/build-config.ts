@@ -9,6 +9,13 @@ const BASE = 'docs'
 const EDIT_LINK_PATTERN =
   'https://github.com/Leawind/leawind.github.io/edit/main/docs/:path'
 
+export const sidebarsByLocale = Object.fromEntries(
+  Object.entries(localeMeta).map(([key, loc]) => [
+    key,
+    buildSidebars(BASE, loc.lang),
+  ]),
+) satisfies Record<string, DefaultTheme.SidebarMulti>
+
 /**
  * Assemble VitePress locale configs from raw locale data.
  */
@@ -24,7 +31,7 @@ export default Object.fromEntries(
       description: loc.description,
       themeConfig: {
         nav: loc.nav,
-        sidebar: buildSidebars(BASE, loc.lang),
+        sidebar: sidebarsByLocale[key],
         editLink: {
           pattern: EDIT_LINK_PATTERN,
           text: loc.editLinkText,

@@ -174,7 +174,9 @@ export function findNextLink(
   for (const group of sidebar) {
     if (group.link && group.link === normalizedPath && group.items?.length) {
       const first = group.items[0]
-      if (first.link) { return { text: first.text, link: first.link } }
+      if (first.link && first.text) {
+        return { text: first.text, link: first.link }
+      }
     }
     if (group.items) {
       const nested = findNextLink(group.items, relativePath)
