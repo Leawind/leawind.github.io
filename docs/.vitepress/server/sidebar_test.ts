@@ -160,8 +160,8 @@ Deno.test('rewrites only Markdown documents', () => {
 Deno.test('reports conflicting public document paths without exiting', () => {
   withTempDocs(
     {
-      'docs/zh_cn/guide/10-start.md': '---\ntitle: First\n---',
       'docs/zh_cn/guide/20-start.md': '---\ntitle: Second\n---',
+      'docs/zh_cn/guide/10-start.md': '---\ntitle: First\n---',
     },
     (root) => {
       assertThrows(

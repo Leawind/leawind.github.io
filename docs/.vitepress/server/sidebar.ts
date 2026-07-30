@@ -37,7 +37,11 @@ function sortByPrefix(a: { name: string }, b: { name: string }): number {
   const aPrefix = num(a.name)
   const bPrefix = num(b.name)
   if (aPrefix !== bPrefix) { return aPrefix - bPrefix }
-  return a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+  return compareNames(a.name, b.name)
+}
+
+function compareNames(a: string, b: string): number {
+  return a < b ? -1 : a > b ? 1 : 0
 }
 
 function isMarkdownFile(entry: Path): boolean {
@@ -65,10 +69,15 @@ function assertNoConflicts(
   conflicts: Map<string, string[]>,
 ): void {
   const messages: string[] = []
-  for (const [base, files] of conflicts) {
+  const sortedConflicts = [...conflicts.entries()].sort(([a], [b]) =>
+    compareNames(a, b)
+  )
+  for (const [base, files] of sortedConflicts) {
     if (files.length > 1) {
       messages.push(
-        `${files.join(', ')} 去掉前缀后都映射到 "${base}"`,
+        `${
+          files.toSorted(compareNames).join(', ')
+        } 去掉前缀后都映射到 "${base}"`,
       )
     }
   }
