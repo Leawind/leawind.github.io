@@ -6,7 +6,7 @@ title: Modstitch
 
 > [!INFO]
 >
-> 作者：[isXander](https://github.com/isXander)
+> 本模组的作者：[isXander](https://github.com/isXander)
 >
 > 源码：[github.com/isXander/modstitch](https://github.com/isXander/modstitch)
 
