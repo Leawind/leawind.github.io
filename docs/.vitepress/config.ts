@@ -33,8 +33,6 @@ let config: UserConfig = {
       ],
     },
   },
-  ignoreDeadLinks: true,
-
   transformPageData(pageData) {
     const fm = pageData.frontmatter as Record<string, unknown>
     if (fm.next === false || fm.next) { return }

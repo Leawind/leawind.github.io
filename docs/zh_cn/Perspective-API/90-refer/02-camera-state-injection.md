@@ -75,4 +75,4 @@ state.setFovDeg(state.getFovDeg() * 0.8f);
 
 当最终 `PerspectiveState.projectionMode()` 为 `ProjectionMode.ORTHOGRAPHIC` 时，`bridge` 层会以 `getOrthographicHeight()` 构建以相机前方轴为中心的世界正交投影矩阵，并同步替换世界渲染、剔除和相机近裁剪面的相关投影。界面和手持物等非世界投影不使用该设置。
 
-正交投影的水平跨度由窗口宽高比计算。有关公共 API 的用法和参数含义，见[投影模式](../../developer-guide/convention/projection)。
+正交投影的水平跨度由窗口宽高比计算。有关公共 API 的用法和参数含义，见[投影模式](../developer-guide/convention/projection)。

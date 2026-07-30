@@ -24,10 +24,10 @@ jobs:
       - uses: actions/configure-pages@v4
       - uses: denoland/setup-deno@v2
         with:
-          deno-version: v2.7.x
+          deno-version: v2.9.0
 
-      - name: Build documentation
-        run: deno task docs:build
+      - name: Check and build documentation
+        run: deno task check
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
