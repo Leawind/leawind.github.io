@@ -44,7 +44,9 @@ PerspectiveAPI.runWhenReady("mymod.initialize_camera", () -> {
 });
 ```
 
-视角本身仍通过 Java SPI 发现，不要在这里手动注册 `PerspectiveBehavior`。
+固定的视角通常仍通过 Java SPI 发现；玩家预设等运行时数据则可在这里调用
+`PerspectiveRegistry.register(info, behavior)`，并保存返回的 `PerspectiveRegistration`，以便在预设
+被编辑或删除时调用 `updateInfo` 或 `unregister`。
 
 ## 检查临时对象的生命周期
 
@@ -59,7 +61,8 @@ cachedFovDeg = state.getFovDeg();
 ## 迁移检查清单
 
 - 删除对原版相机方法的 Mixin 和主动 FOV 计算
-- 为视角实现添加 `@PerspectiveBehavior.Info` 和 SPI 注册
+- 为 SPI 视角实现添加 `@PerspectiveInfo.Declaration` 和 SPI 注册
+- 对运行时创建的视角使用 `PerspectiveRegistry.register`，并保存注册句柄
 - 将完整相机状态集中到 `applyCameraState`
 - 将通用叠加效果拆分为修饰器
 - 将临时强制切换改为覆盖链

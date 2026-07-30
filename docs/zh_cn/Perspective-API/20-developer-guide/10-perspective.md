@@ -8,11 +8,11 @@ title: 自定义视角
 
 ## 注册视角
 
-实现类必须添加 `@PerspectiveBehavior.Info`，并通过 Java SPI 注册。推荐使用 [AutoService] 自动生成服务文件：
+实现类必须添加 `@PerspectiveInfo.Declaration`，并通过 Java SPI 注册。推荐使用 [AutoService] 自动生成服务文件：
 
 ```java
 @AutoService(PerspectiveBehavior.class)
-@PerspectiveBehavior.Info(
+@PerspectiveInfo.Declaration(
     id = SideViewPerspective.ID,
     baseType = PerspectiveBehavior.BaseType.THIRD_PERSON_BACK,
     priority = 10,
@@ -38,7 +38,7 @@ public final class SideViewPerspective implements PerspectiveBehavior {
 
 ## 元数据
 
-`@PerspectiveBehavior.Info` 的主要字段如下：
+`@PerspectiveInfo.Declaration` 的主要字段如下：
 
 | 字段             | 说明                                                   |
 | ---------------- | ------------------------------------------------------ |
@@ -50,8 +50,45 @@ public final class SideViewPerspective implements PerspectiveBehavior {
 | `switchable`     | 是否允许玩家通过视角切换器选中；关闭后仍可由覆盖链激活 |
 | `priority`       | 数值越小，在切换顺序中越靠前；也用于解决重复 ID        |
 
-如需指定启动时的默认视角，可在实现类上再添加 `@PerspectiveBehavior.Default`。
+如需指定启动时的默认视角，可在实现类上再添加 `@PerspectiveInfo.Default`。
 存在多个默认视角时，`priority` 较大的定义优先。
+
+## 运行时注册视角
+
+对于玩家保存的预设等运行时数据，可直接构造 `PerspectiveInfo` 并调用注册表。它不读取
+`PerspectiveBehavior` 类上的注解：
+
+```java
+PerspectiveInfo info =
+    PerspectiveInfo.builder("mymod.preset.combat", Component.literal("战斗视角"))
+        .baseType(PerspectiveBehavior.BaseType.THIRD_PERSON_BACK)
+        .priority(100)
+        .build();
+
+PerspectiveRegistration registration =
+    PerspectiveAPI.getRegistry().register(info, new CombatPresetPerspective());
+```
+
+每个已注册的 ID 和 `PerspectiveBehavior` **实例**都必须唯一。保留返回的
+`PerspectiveRegistration`：它是该次注册的句柄，只有它能更新或移除对应视角。因此，即使 ID
+之后被复用，旧句柄也不会误移除新视角。
+
+```java
+registration.updateInfo(
+    PerspectiveInfo.builder("mymod.preset.combat", Component.literal("战斗视角（新）"))
+        .baseType(PerspectiveBehavior.BaseType.THIRD_PERSON_BACK)
+        .priority(200)
+        .build());
+
+registration.unregister();
+```
+
+`updateInfo` 不能修改 ID，且已移除的句柄不能再更新。通过 `registration.perspective().info()`
+可以取得当前元数据；更新后 `Perspective` 实例本身保持不变。
+
+如需让运行时视角参与默认视角选择，使用
+`PerspectiveAPI.getRegistry().registerDefault(info, defaultPriority, behavior)`。最后一个默认视角
+不能被移除，以保证 API 始终能回退到一个默认视角。
 
 ## 修改相机状态
 

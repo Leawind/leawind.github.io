@@ -18,7 +18,6 @@
     "npm:lay-sing@~0.4.2": "0.4.2",
     "npm:markdown-it-mathjax3@4": "4.3.2",
     "npm:mermaid@^11.14.0": "11.14.0",
-    "npm:vitepress-plugin-mermaid@^2.0.17": "2.0.17_mermaid@11.14.0_vitepress@1.6.4__markdown-it-mathjax3@4.3.2__@algolia+client-search@5.50.1__search-insights@2.17.3_@algolia+client-search@5.50.1_markdown-it-mathjax3@4.3.2_search-insights@2.17.3",
     "npm:vitepress@*": "1.6.4_markdown-it-mathjax3@4.3.2_@algolia+client-search@5.50.1_search-insights@2.17.3",
     "npm:vitepress@^1.6.4": "1.6.4_markdown-it-mathjax3@4.3.2_@algolia+client-search@5.50.1_search-insights@2.17.3",
     "npm:vue@^3.5.32": "3.5.32"
@@ -243,9 +242,6 @@
         "@babel/helper-validator-identifier"
       ]
     },
-    "@braintree/sanitize-url@6.0.4": {
-      "integrity": "sha512-s3jaWicZd0pkP0jf5ysyHUI/RE7MHos6qlToFcGWXVp+ykHOy77OUMrfbgJ9it2C5bow7OIQwYYaHjk9XlBQ2A=="
-    },
     "@braintree/sanitize-url@7.1.2": {
       "integrity": "sha512-jigsZK+sMF/cuiB7sERuo9V7N9jx+dhmHHnQyDSVdpZwVutaBu7WvNYqMDLSgFgfB30n452TP3vjDAvFC973mA=="
     },
@@ -428,18 +424,6 @@
     },
     "@jridgewell/sourcemap-codec@1.5.5": {
       "integrity": "sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og=="
-    },
-    "@mermaid-js/mermaid-mindmap@9.3.0": {
-      "integrity": "sha512-IhtYSVBBRYviH1Ehu8gk69pMDF8DSRqXBRDMWrEfHoaMruHeaP2DXA3PBnuwsMaCdPQhlUUcy/7DBLAEIXvCAw==",
-      "dependencies": [
-        "@braintree/sanitize-url@6.0.4",
-        "cytoscape",
-        "cytoscape-cose-bilkent",
-        "cytoscape-fcose",
-        "d3",
-        "khroma",
-        "non-layered-tidy-tree-layout"
-      ]
     },
     "@mermaid-js/parser@1.1.0": {
       "integrity": "sha512-gxK9ZX2+Fex5zu8LhRQoMeMPEHbc73UKZ0FQ54YrQtUxE1VVhMwzeNtKRPAu5aXks4FasbMe4xB4bWrmq6Jlxw==",
@@ -828,7 +812,8 @@
       "integrity": "sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA=="
     },
     "@ungap/structured-clone@1.3.0": {
-      "integrity": "sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g=="
+      "integrity": "sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==",
+      "deprecated": true
     },
     "@upsetjs/venn.js@2.0.0": {
       "integrity": "sha512-WbBhLrooyePuQ1VZxrJjtLvTc4NVfpOyKx0sKqioq9bX1C1m7Jgykkn8gLrtwumBioXIqam8DLxp88Adbue6Hw==",
@@ -970,7 +955,8 @@
       ]
     },
     "@xmldom/xmldom@0.9.9": {
-      "integrity": "sha512-qycIHAucxy/LXAYIjmLmtQ8q9GPnMbnjG1KXhWm9o5sCr6pOYDATkMPiTNa6/v8eELyqOQ2FsEqeoFYmgv/gJg=="
+      "integrity": "sha512-qycIHAucxy/LXAYIjmLmtQ8q9GPnMbnjG1KXhWm9o5sCr6pOYDATkMPiTNa6/v8eELyqOQ2FsEqeoFYmgv/gJg==",
+      "deprecated": true
     },
     "acorn@8.16.0": {
       "integrity": "sha512-UVJyE9MttOsBQIDKw1skb9nAwQuR5wuGD3+82K6JgJlm/Y+KI92oNsMNGZCYdDsVtRHSak0pcV5Dno5+4jh9sw==",
@@ -1625,7 +1611,7 @@
     "mermaid@11.14.0": {
       "integrity": "sha512-GSGloRsBs+JINmmhl0JDwjpuezCsHB4WGI4NASHxL3fHo3o/BRXTxhDLKnln8/Q0lRFRyDdEjmk1/d5Sn1Xz8g==",
       "dependencies": [
-        "@braintree/sanitize-url@7.1.2",
+        "@braintree/sanitize-url",
         "@iconify/utils",
         "@mermaid-js/parser",
         "@types/d3",
@@ -1706,9 +1692,6 @@
       "dependencies": [
         "whatwg-url"
       ]
-    },
-    "non-layered-tidy-tree-layout@2.0.2": {
-      "integrity": "sha512-gkXMxRzUH+PB0ax9dUN0yYF0S25BqeAYqhgMaLUFmpXLEk7Fcu8f4emJuOAY0V8kjDICxROIKsTAKsV/v355xw=="
     },
     "nth-check@2.1.1": {
       "integrity": "sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==",
@@ -1991,16 +1974,6 @@
       ],
       "bin": true
     },
-    "vitepress-plugin-mermaid@2.0.17_mermaid@11.14.0_vitepress@1.6.4__markdown-it-mathjax3@4.3.2__@algolia+client-search@5.50.1__search-insights@2.17.3_@algolia+client-search@5.50.1_markdown-it-mathjax3@4.3.2_search-insights@2.17.3": {
-      "integrity": "sha512-IUzYpwf61GC6k0XzfmAmNrLvMi9TRrVRMsUyCA8KNXhg/mQ1VqWnO0/tBVPiX5UoKF1mDUwqn5QV4qAJl6JnUg==",
-      "dependencies": [
-        "mermaid",
-        "vitepress"
-      ],
-      "optionalDependencies": [
-        "@mermaid-js/mermaid-mindmap"
-      ]
-    },
     "vitepress@1.6.4_markdown-it-mathjax3@4.3.2_@algolia+client-search@5.50.1_search-insights@2.17.3": {
       "integrity": "sha512-+2ym1/+0VVrbhNyRoFFesVvBvHAVMZMK0rw60E3X/5349M1GuVdKeazuksqopEdvkKwKGs21Q729jX81/bkBJg==",
       "dependencies": [
@@ -2102,7 +2075,6 @@
       "npm:commander@^14.0.3",
       "npm:markdown-it-mathjax3@4",
       "npm:mermaid@^11.14.0",
-      "npm:vitepress-plugin-mermaid@^2.0.17",
       "npm:vitepress@^1.6.4",
       "npm:vue@^3.5.32"
     ]

@@ -1,19 +1,16 @@
 import '@std/dotenv/load'
 import { DefaultTheme, defineConfig, UserConfig } from 'vitepress'
-import { withMermaid } from 'vitepress-plugin-mermaid'
 import localesConfig, { sidebarsByLocale } from './server/build-config.ts'
 import { buildRewrites, findNextLink } from './server/sidebar.ts'
 
 const BASE = '/'
 const GOOGLE_ANALYTICS_ID = 'G-BHMTJH30EG'
-const isDev = Deno.args.includes('dev')
-
 const sidebars: DefaultTheme.SidebarMulti = {}
 for (const localeSidebars of Object.values(sidebarsByLocale)) {
   Object.assign(sidebars, localeSidebars)
 }
 
-let config: UserConfig = {
+const config: UserConfig = {
   base: BASE,
   srcDir: '.',
   outDir: '../dist',
@@ -25,8 +22,23 @@ let config: UserConfig = {
 
   markdown: {
     math: true,
+    config(md) {
+      const fence = md.renderer.rules.fence?.bind(md.renderer.rules)
+      md.renderer.rules.fence = (tokens, index, options, env, self) => {
+        const token = tokens[index]
+        if (token.info.trim() === 'mermaid') {
+          const graph = encodeURIComponent(token.content)
+          return `<MermaidDiagram id="mermaid-${index}" graph="${graph}" />`
+        }
+        return fence?.(tokens, index, options, env, self) ?? ''
+      }
+    },
   },
   vite: {
+    build: {
+      // Mermaid is loaded on demand; keep warning if its lazy chunk grows further.
+      chunkSizeWarningLimit: 650,
+    },
     server: {
       allowedHosts: [
         '.local',
@@ -116,9 +128,5 @@ gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
   },
   locales: localesConfig,
 } satisfies UserConfig<DefaultTheme.Config>
-
-if (!isDev) {
-  config = withMermaid(config)
-}
 
 export default defineConfig(config)
