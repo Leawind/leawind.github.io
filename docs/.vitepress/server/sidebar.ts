@@ -159,31 +159,40 @@ function getLink(file: PathLike, base: PathLike): string {
     .replace(/\.html?$/g, '')
 }
 
-/**
- * 在侧边栏中查找指定页面的下一个页面链接。
- * 如果当前页面是某个分组的根页面（index.md）且有子页面，返回第一个子页面的链接和标题。
- */
+/** 按侧边栏的深度优先阅读顺序查找指定页面的下一页。 */
 export function findNextLink(
   sidebar: DefaultTheme.SidebarItem[],
   relativePath: string,
 ): { text: string; link: string } | undefined {
-  const normalizedPath = '/' + relativePath
-    .replace(/(?:(^|\/)index)?\.md$/, '$1')
-    .replace(/\/+$/, '')
+  const pages: { text: string; link: string }[] = []
+  collectPages(sidebar)
 
-  for (const group of sidebar) {
-    if (group.link && group.link === normalizedPath && group.items?.length) {
-      const first = group.items[0]
-      if (first.link && first.text) {
-        return { text: first.text, link: first.link }
+  const currentIndex = pages.findIndex((page) =>
+    normalizePagePath(page.link) === normalizePagePath(relativePath)
+  )
+  return currentIndex >= 0 ? pages[currentIndex + 1] : undefined
+
+  function collectPages(items: DefaultTheme.SidebarItem[]): void {
+    for (const item of items) {
+      if (item.link && item.text) {
+        pages.push({ text: item.text, link: item.link })
+      }
+      if (item.items) {
+        collectPages(item.items)
       }
     }
-    if (group.items) {
-      const nested = findNextLink(group.items, relativePath)
-      if (nested) { return nested }
-    }
   }
-  return undefined
+}
+
+/** 将源文件路径和公开页面链接统一成无序号前缀的页面路径。 */
+function normalizePagePath(path: string): string {
+  const segments = path
+    .replace(/\.md$/, '')
+    .replace(/(^|\/)index$/, '$1')
+    .split('/')
+    .filter(Boolean)
+    .map(stripPrefix)
+  return '/' + segments.join('/')
 }
 
 // ---- Rewrites ----
