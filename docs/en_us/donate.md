@@ -19,7 +19,7 @@ features:
     icon: { src: /icons/alipay.svg }
 
   - title: Afdian
-    details: 💖⚡️ <img alt="Afdian" name=afdian src=/donate/afdian.webp style="width:100%;image-rendering:pixelated"></img>
+    details: 💖⚡️ <img alt="Afdian" name=afdian src=/donate/afdian.png style="width:100%;image-rendering:pixelated"></img>
     link: https://afdian.com/a/Leawind
     icon:
       src: /icons/afdian.png
