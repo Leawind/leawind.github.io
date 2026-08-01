@@ -3,35 +3,34 @@ title: Perspective API
 layout: home
 hero:
   name: Perspective API
-  text: Perspective API
+  text: 视角卯口
   tagline: A Minecraft client-side perspective management framework decoupled from vanilla code.
   image: /icons/perspective-api.svg
   actions:
     - theme: brand
-      text: Source
-      link: https://github.com/Leawind/Perspective-API
+      text: Player Guide
+      link: ./player-guide
     - theme: alt
-      text: Modrinth
-      link: https://modrinth.com/mod/perspective-api
-    - theme: alt
-      text: CurseForge
-      link: https://www.curseforge.com/minecraft/mc-mods/perspective-api
+      text: Developer (Human) Guide
+      link: ./developer-guide
     - theme: brand
-      text: Demo
-      link: ./example
+      text: Download Skill
+      link: https://github.com/Leawind/Perspective-API/releases/download/v1.3.1-beta/use-perspective-api.md
 features:
-  - title: Player Guide
-    details: Learn about the mod's features
-    icon: 🕹️
-    link: ./player-guide
-  - title: Developer Guide
-    details: Learn how to use Perspective API to implement custom perspectives
-    icon: 🛠️
-    link: ./developer-guide
-  - title: Migration Guide
-    details: Learn how to migrate existing perspective mods to Perspective API
-    icon: ✨
-    link: ./developer-guide/migration
+  - title: Perspective API Demo
+    details: A demonstration of Perspective API
+    icon:
+      src: /icons/perspective-api-demo.png
+    link: ./example
+  - title: Leawind's Third Person
+    details: A third-person perspective mod
+    icon:
+      src: /icons/leawind_third_person.png
+    link: https://modrinth.com/mod/leawind-third-person
+  - title: Camera Entity Fade
+    details: Makes the camera entity translucent when nearby
+    icon: ❔
+    link: https://modrinth.com/mod/camera-entity-fade
 ---
 
 <style>
@@ -63,3 +62,13 @@ div.home-demo-img-container>img.demo-img  {
 ![GitHub License](https://img.shields.io/github/license/Leawind/Perspective-API)
 
 </div>
+
+<details>
+<summary>Agent Skill</summary>
+
+> [!IMPORTANT]
+>
+> If you are not human, do not waste time reading this document. Download the skill file from Github Releases instead.
+> If you know the version of Perspective API being used, you can download it directly using this format: `https://github.com/Leawind/Perspective-API/releases/download/v1.3.1-beta/use-perspective-api.md`
+
+</details>

@@ -5,69 +5,42 @@ title: 开发者指南
 # 开发者指南
 
 > [!WARNING]
+>
+> <img src="https://img.shields.io/github/v/tag/Leawind/Perspective-API?label=Latest&color=818181" style="display:inline">
+>
 > 在发布正式版之前，API 可能随时发生破坏性变更。
-
-## 添加依赖
-
-> [!INFO]
 >
-> 你可以在 [Modrinth Versions] 或 [Github Releases] 页面查看本模组的所有版本。
->
-> 这个徽章应该能显示最新的版本号： <img src="https://img.shields.io/github/v/tag/Leawind/Perspective-API?label=API&color=818181" style="display:inline">
+> 发布正式版后，带有 `@ApiStatus.Experimental` 注解的接口仍然随时可能发生破坏性变更而不递增主版本号。
 
-### 通过 Modrinth Maven 添加依赖
+## 凭啥让大伙儿用这个？
 
-坐标格式：`maven.modrinth:LIqveQm1:<API 版本>+<加载器>-<Minecraft 版本>`。
-请从版本页面选择与你的加载器和 Minecraft 版本完全对应的构件。
+统一的相机状态管理机制让多种需要修改相机状态的模组得以共存：
 
-```kotlin
-repositories {
-  exclusiveContent {
-    forRepository {
-      maven {
-        name = "Modrinth"
-        url = uri("https://api.modrinth.com/maven")
-      }
-    }
-    filter {
-      includeGroup("maven.modrinth")
-    }
-  }
-}
+- 玩家安装模组时不必再在两种第三人称视角间二选一
+- 某些模组不会再霸道地覆盖掉其他模组对相机状态的更改
 
-dependencies {
-  // Minecraft 26.1 及以上使用 implementation
-  modImplementation("maven.modrinth:LIqveQm1:1.0.0-beta.9+fabric-26.2")
-}
-```
+此外：
 
-### 添加 `com.google.auto.service` 依赖（可选）
+- 对于一些简单的视角或修饰效果，不必再费劲研究如何注入到Minecraft以修改相机状态
+- 同步支持从 1.20.1 开始的大部分主流 Minecraft 版本
 
-```kotlin
-dependencies {
-  compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
-  annotationProcessor("com.google.auto.service:auto-service:1.1.1")
-}
-```
+## 基本概念
 
-它可以为 `PerspectiveBehavior` 自动生成 Java SPI 服务文件，避免手动维护 `META-INF/services`。
+### 相机状态
 
-## 开始开发
+包括位置、旋转、投影方式、透视视野角度、正交画面高度等信息。
 
-- [自定义视角](./perspective)：定义一种完整的相机模式
-- [投影模式](./convention/projection)：使用透视或正交投影渲染世界
-- [视角修饰器](./modifier)：在任意视角上叠加相机效果
-- [覆盖链](./override-chain)：根据游戏状态临时强制切换视角
-- [迁移指南](./migration/)：从原版相机注入或早期测试版 API 迁移
+### 视角
 
-Perspective API 的位置、旋转和投影参数始终通过统一的 `PerspectiveState` 暴露。开发者不需要针对不同 Minecraft 版本选择不同回调，也不应主动调用原版的 FOV 或投影矩阵计算方法。
+- 视角可以通过SPI注册，也可以在运行时被动态注册和卸载
+- 视角具有id、名称等恒定的元数据
+- 视角的行为包括在在渲染帧中更新相机状态，在逻辑帧中更新可用性和一些事件回调
 
-## 示例模组
+## 工作原理
 
-[视角 API 演示](../example/) 实现了多个自定义视角和修饰器，其[源码]可作为开发参考。
+Perspective API 基本上只做两件事：
 
----
+1. 在逻辑帧中决定当前使用的是哪个视角
+2. 在渲染帧中根据相关信息计算相机状态
 
-[Github Releases]: https://github.com/Leawind/Perspective-API/releases
-[Modrinth Versions]: https://modrinth.com/mod/perspective-api/versions
-[源码]: https://github.com/Leawind/Perspective-API-Demo
+> 🚧🚧🚧🚧 施工中

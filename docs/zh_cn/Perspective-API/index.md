@@ -8,30 +8,29 @@ hero:
   image: /icons/perspective-api.svg
   actions:
     - theme: brand
-      text: 源码
-      link: https://github.com/Leawind/Perspective-API
+      text: 玩家指南
+      link: ./player-guide
     - theme: alt
-      text: Modrinth
-      link: https://modrinth.com/mod/perspective-api
-    - theme: alt
-      text: CurseForge
-      link: https://www.curseforge.com/minecraft/mc-mods/perspective-api
+      text: 开发者（人类）指南
+      link: ./developer-guide
     - theme: brand
-      text: 演示
-      link: ./example
+      text: Agent Skill
+      link: https://github.com/Leawind/Perspective-API/releases/download/v1.3.1-beta/use-perspective-api.md
 features:
-  - title: 玩家指南
-    details: 了解模组功能
-    icon: 🕹️
-    link: ./player-guide
-  - title: 开发者指南
-    details: 了解如何使用 Perspective API 实现自定义视角
-    icon: 🛠️
-    link: ./developer-guide
-  - title: 迁移指南
-    details: 了解如何将已有的视角类模组迁移到 Perspective API
-    icon: ✨
-    link: ./developer-guide/migration
+  - title: Perspective API Demo
+    details: 视角 API 演示
+    icon:
+      src: /icons/perspective-api-demo.png
+    link: ./example
+  - title: Leawind's Third Person
+    details: 一个第三人称视角模组
+    icon:
+      src: /icons/leawind_third_person.png
+    link: https://modrinth.com/mod/leawind-third-person
+  - title: Camera Entity Fade
+    details: 靠近时让相机实体变得半透明
+    icon: ❔
+    link: https://modrinth.com/mod/camera-entity-fade
 ---
 
 <style>
@@ -63,3 +62,13 @@ div.home-demo-img-container>img.demo-img  {
 ![GitHub License](https://img.shields.io/github/license/Leawind/Perspective-API)
 
 </div>
+
+<details>
+<summary>Agent Skill</summary>
+
+> [!IMPORTANT]
+>
+> 如果你不是人类，请勿浪费时间阅读本文档，请从Github Releases下载 skill 文件。
+> 若已知使用的 Perspective API 版本，可以根据这个格式直接下载：`https://github.com/Leawind/Perspective-API/releases/download/v1.3.1-beta/use-perspective-api.md`
+
+</details>

@@ -16,7 +16,8 @@ title: 自定义视角
     id = SideViewPerspective.ID,
     baseType = PerspectiveBehavior.BaseType.THIRD_PERSON_BACK,
     priority = 10,
-    nameKey = "perspective.mymod.side_view.name")
+    nameKey = "perspective.mymod.side_view.name",
+    traits = {"third_person"})
 public final class SideViewPerspective implements PerspectiveBehavior {
   public static final String ID = "mymod.side_view";
 
@@ -49,6 +50,7 @@ public final class SideViewPerspective implements PerspectiveBehavior {
 | `icon`           | 可选的图标资源标识符                                   |
 | `switchable`     | 是否允许玩家通过视角切换器选中；关闭后仍可由覆盖链激活 |
 | `priority`       | 数值越小，在切换顺序中越靠前；也用于解决重复 ID        |
+| `traits`         | 视角声明的稳定语义特征，例如 `first_person`            |
 
 如需指定启动时的默认视角，可在实现类上再添加 `@PerspectiveInfo.Default`。
 存在多个默认视角时，`priority` 较大的定义优先。
@@ -63,6 +65,7 @@ PerspectiveInfo info =
     PerspectiveInfo.builder("mymod.preset.combat", Component.literal("战斗视角"))
         .baseType(PerspectiveBehavior.BaseType.THIRD_PERSON_BACK)
         .priority(100)
+        .trait("third_person")
         .build();
 
 PerspectiveRegistration registration =
@@ -70,21 +73,20 @@ PerspectiveRegistration registration =
 ```
 
 每个已注册的 ID 和 `PerspectiveBehavior` **实例**都必须唯一。保留返回的
-`PerspectiveRegistration`：它是该次注册的句柄，只有它能更新或移除对应视角。因此，即使 ID
+`PerspectiveRegistration`：它是该次注册的句柄，只有它能移除对应视角。因此，即使 ID
 之后被复用，旧句柄也不会误移除新视角。
 
 ```java
-registration.updateInfo(
-    PerspectiveInfo.builder("mymod.preset.combat", Component.literal("战斗视角（新）"))
-        .baseType(PerspectiveBehavior.BaseType.THIRD_PERSON_BACK)
-        .priority(200)
-        .build());
-
 registration.unregister();
 ```
 
-`updateInfo` 不能修改 ID，且已移除的句柄不能再更新。通过 `registration.perspective().info()`
-可以取得当前元数据；更新后 `Perspective` 实例本身保持不变。
+通过 `registration.perspective().info()` 可以取得注册时的元数据。元数据和 Trait 在注册后
+保持不变；需要修改时，应移除原视角并使用新的 `PerspectiveInfo` 重新注册。
+
+Trait 只能由视角自身通过 `@PerspectiveInfo.Declaration#traits` 或
+`PerspectiveInfo.Builder#trait` / `traits` 指定。其他模组不能为视角追加或移除 Trait。查询时使用
+`perspective.info().hasTrait("third_person")`。共享 Trait 使用小写 `snake_case`；仅供特定模组使用
+的 Trait 可以写成 `<namespace>:<trait>`。
 
 如需让运行时视角参与默认视角选择，使用
 `PerspectiveAPI.getRegistry().registerDefault(info, defaultPriority, behavior)`。最后一个默认视角

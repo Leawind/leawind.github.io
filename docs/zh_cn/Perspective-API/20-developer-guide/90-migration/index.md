@@ -40,13 +40,15 @@ public void applyCameraState(
 
 ```java
 PerspectiveAPI.runWhenReady("mymod.initialize_camera", () -> {
-  PerspectiveAPI.getModifierChain().register(KEY, PRIORITY, modifier);
+  modifierRegistration =
+      PerspectiveAPI.getModifierChain().register(PRIORITY, modifier);
 });
 ```
 
 固定的视角通常仍通过 Java SPI 发现；玩家预设等运行时数据则可在这里调用
 `PerspectiveRegistry.register(info, behavior)`，并保存返回的 `PerspectiveRegistration`，以便在预设
-被编辑或删除时调用 `updateInfo` 或 `unregister`。
+被删除时调用 `unregister`。视角元数据注册后不可修改；编辑预设时应移除原注册，再使用新的
+`PerspectiveInfo` 注册。
 
 ## 检查临时对象的生命周期
 

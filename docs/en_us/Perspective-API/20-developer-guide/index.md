@@ -5,67 +5,42 @@ title: Developer Guide
 # Developer Guide
 
 > [!WARNING]
-> Before the release of the stable version, the API is subject to breaking changes at any time.
-
-## Adding the Dependency
-
-> [!INFO]
 >
-> You can find all versions on the [Modrinth Versions] or [GitHub Releases] page.
+> <img src="https://img.shields.io/github/v/tag/Leawind/Perspective-API?label=Latest&color=818181" style="display:inline">
 >
-> This badge should display the latest version: <img src="https://img.shields.io/github/v/tag/Leawind/Perspective-API?label=API&color=818181" style="display:inline">
+> Before the official release, the API is subject to breaking changes at any time.
+>
+> After the official release, APIs annotated with `@ApiStatus.Experimental` may still undergo breaking changes without incrementing the major version.
 
-### Via Modrinth Maven
+## Why Would I Use This?
 
-Format: `maven.modrinth:LIqveQm1:<API version>+<loader>-<Minecraft version>`. Choose the artifact that exactly matches your loader and Minecraft version from the versions page.
+A unified camera state management mechanism allows multiple mods that modify camera states to coexist harmoniously:
 
-```kotlin
-repositories {
-  exclusiveContent {
-    forRepository {
-      maven {
-        name = "Modrinth"
-        url = uri("https://api.modrinth.com/maven")
-      }
-    }
-    filter {
-      includeGroup("maven.modrinth")
-    }
-  }
-}
+- Players no longer have to choose between two third-person perspective mods when installing mods
+- No single mod can aggressively override camera state changes made by others
 
-dependencies {
-  // Use `implementation` for Minecraft 26.1 and later.
-  modImplementation("maven.modrinth:LIqveQm1:1.0.0-beta.9+fabric-26.2")
-}
-```
+Additionally:
 
-### Adding `com.google.auto.service` (Optional)
+- For simple perspectives or visual effects, you no longer need to figure out how to inject into Minecraft to modify camera states
+- Supports most mainstream Minecraft versions starting from 1.20.1 simultaneously
 
-```kotlin
-dependencies {
-  compileOnly("com.google.auto.service:auto-service-annotations:1.1.1")
-  annotationProcessor("com.google.auto.service:auto-service:1.1.1")
-}
-```
+## Basic Concepts
 
-This automatically generates Java SPI service files for `PerspectiveBehavior`, avoiding manual maintenance of `META-INF/services`.
+### Camera State
 
-## Getting Started
+Includes position, rotation, projection type, perspective FOV, orthographic view height, etc.
 
-- [Custom Perspective](./perspective): define a complete camera mode
-- [Projection Modes](./convention/projection): use perspective or orthographic projection
-- [Perspective Modifier](./modifier): layer camera effects on any perspective
-- [Override Chain](./override-chain): force a perspective temporarily based on game state
-- [Migration Guide](./migration/): migrate from vanilla camera injections or the early test API
+### Perspective
 
-Perspective API exposes position, rotation, and projection parameters through a unified `PerspectiveState`. Your mod does not need version-specific callbacks or vanilla FOV/projection calculations.
+- Perspectives can be registered via SPI or dynamically registered/unregistered at runtime
+- Perspectives have constant metadata such as ID and name
+- Perspective behavior includes updating the camera state during render ticks, updating availability during client ticks, and various event callbacks
 
-## Demo Mod
+## How It Works
 
-[Perspective API Demo](../example/) implements several custom perspectives and modifiers. Its [source code](https://github.com/Leawind/Perspective-API-Demo) is available as a development reference.
+Perspective API essentially does two things:
 
----
+1. Determines which perspective is currently active during the client tick
+2. Computes the camera state based on the relevant information during the render tick
 
-[GitHub Releases]: https://github.com/Leawind/Perspective-API/releases
-[Modrinth Versions]: https://modrinth.com/mod/perspective-api/versions
+> 🚧🚧🚧🚧 Under Construction

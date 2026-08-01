@@ -37,24 +37,25 @@ public final class CameraShakeModifier implements PerspectiveModifier {
 
 ## 注册和移除
 
-修饰器本身没有 ID。注册时由调用方提供唯一的 `key`：
+注册会返回一个拥有该条目的句柄：
 
 ```java
 CameraShakeModifier shake = new CameraShakeModifier();
-
-PerspectiveAPI.runWhenReady(
-    "mymod.camera_shake",
-    () -> PerspectiveAPI.getModifierChain().register(
-        "mymod.camera_shake", 100, shake));
+PerspectiveModifierRegistration registration =
+    PerspectiveAPI.getModifierChain().register(100, shake);
 ```
 
-不再需要时可移除：
+如果初始化时运行时服务可能尚未就绪，请在 `runWhenReady` 中注册并把句柄保存到模组自己的
+状态中。
+
+不再需要时通过句柄移除：
 
 ```java
-PerspectiveAPI.getModifierChain().unregister("mymod.camera_shake");
+registration.unregister();
 ```
 
-使用相同 `key` 再次注册会替换旧条目，并按一次新注册重新确定同优先级下的顺序。
+同一个修饰器实例可以注册多次，每次注册都是独立条目，并拥有独立句柄。同优先级的条目按
+注册顺序执行。
 
 ## 可用性与容错
 

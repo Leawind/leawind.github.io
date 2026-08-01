@@ -9,26 +9,23 @@ title: 覆盖链
 ## 注册覆盖项
 
 ```java
-PerspectiveAPI.runWhenReady(
-    "mymod.cutscene_override",
-    () -> PerspectiveAPI.getOverrideChain().register(
-        "mymod.cutscene",
+PerspectiveOverrideRegistration registration =
+    PerspectiveAPI.getOverrideChain().register(
         1000,
-        () -> isCutsceneActive ? "mymod.cutscene_camera" : null));
+        () -> isCutsceneActive ? "mymod.cutscene_camera" : null);
 ```
 
 供应商返回视角 ID 时尝试覆盖当前视角，返回 `null` 时跳过该项。覆盖项按优先级从大到小求值，第一个指向“已注册且当前可用”视角的结果生效；无效或不可用的候选项不会阻止后续条目继续求值。
 
 每个供应商在 Perspective API 启用期间每个客户端游戏刻最多求值一次。供应商应快速完成，不应修改游戏状态，也不应依赖具体的调用次数。
 
-## 移除和查询
+注册会返回一个拥有该覆盖项的句柄。若初始化时运行时服务可能尚未就绪，请在
+`runWhenReady` 中注册并把句柄保存到模组自己的状态中。
+
+## 移除
 
 ```java
-PerspectiveOverrideChain overrides = PerspectiveAPI.getOverrideChain();
-
-if (overrides.contains("mymod.cutscene")) {
-  overrides.unregister("mymod.cutscene");
-}
+registration.unregister();
 ```
 
-使用相同 `key` 再次 `push` 会替换原条目。优先级相同时按插入顺序求值；替换条目视为一次新的插入。
+每次注册都是独立条目，并拥有独立句柄。优先级相同时按注册顺序求值。
