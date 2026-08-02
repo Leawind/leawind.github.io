@@ -1,5 +1,5 @@
 ---
-title: 💰捐赠
+title: 💰赞助
 
 layout: home
 hero:

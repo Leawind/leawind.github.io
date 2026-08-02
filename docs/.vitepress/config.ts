@@ -121,7 +121,7 @@ gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
     ],
     footer: {
       message:
-        '<a href=/zh_cn/donate>💰捐赠</a> <br> 本文档使用 <a href=https://vitepress.dev>vitepress</a> 构建',
+        '<a href=/zh_cn/donate>💰赞助</a> <br> 本文档使用 <a href=https://vitepress.dev>vitepress</a> 构建',
       copyright: 'Copyright © 2024 Leawind',
     },
   },

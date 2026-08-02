@@ -9,7 +9,7 @@ hero:
   image:
   actions:
     - theme: alt
-      text: 💰捐赠
+      text: 💰赞助
       link: ./donate
 features:
   - title: Perspective API

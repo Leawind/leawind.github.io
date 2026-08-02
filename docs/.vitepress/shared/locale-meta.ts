@@ -30,7 +30,7 @@ const locales: Record<string, LocaleEntry> = {
     title: 'Leawind的文档',
     description: '',
     nav: [
-      { text: '💰捐赠', link: '/zh_cn/donate' },
+      { text: '💰赞助', link: '/zh_cn/donate' },
       {
         text: 'Minecraft 模组',
         items: [
