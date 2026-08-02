@@ -22,6 +22,11 @@ features:
     link: ./Third-Person
     icon:
       src: /icons/leawind_third_person.png
+  - title: Luau
+    details: A lib mod that lets other mods compile and run sandboxed Luau scripts
+    link: https://github.com/SuterXOM/luau
+    icon:
+      src: /icons/luau.32x.png
   - title: System Storage Lib
     details: A system-level persistent storage library mod
     link: ./SystemStorageLib

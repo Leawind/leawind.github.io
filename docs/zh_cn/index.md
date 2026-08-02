@@ -22,6 +22,11 @@ features:
     link: ./Third-Person
     icon:
       src: /icons/leawind_third_person.png
+  - title: Luau
+    details: 一个让其他模组能编译并运行 Luau 脚本的模组
+    link: https://github.com/SuterXOM/luau
+    icon:
+      src: /icons/luau.32x.png
   - title: System Storage Lib
     details: 一个用于存储系统级持久化数据的库模组
     link: ./SystemStorageLib
