@@ -45,7 +45,7 @@ jobs:
           done
 
       - name: Check and build documentation
-        run: deno task check
+        run: deno task docs:build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
