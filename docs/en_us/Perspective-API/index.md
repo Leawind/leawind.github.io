@@ -8,29 +8,24 @@ hero:
   image: /icons/perspective-api.svg
   actions:
     - theme: brand
-      text: Player Guide
-      link: ./player-guide
+      text: Source Code
+      link: https://github.com/Leawind/Perspective-API
     - theme: alt
-      text: Developer (Human) Guide
-      link: ./developer-guide
-    - theme: brand
-      text: Download Skill
-      link: https://github.com/Leawind/Perspective-API/releases/download/v1.3.1-beta/use-perspective-api.md
+      text: Demo
+      link: ./example
 features:
-  - title: Perspective API Demo
-    details: A demonstration of Perspective API
-    icon:
-      src: /icons/perspective-api-demo.png
-    link: ./example
-  - title: Leawind's Third Person
-    details: A third-person perspective mod
-    icon:
-      src: /icons/leawind_third_person.png
-    link: https://modrinth.com/mod/leawind-third-person
-  - title: Camera Entity Fade
-    details: Makes the camera entity translucent when nearby
-    icon: ❔
-    link: https://modrinth.com/mod/camera-entity-fade
+  - title: Player Guide
+    details: Learn about the mod's basic features
+    icon: 🕹️
+    link: ./player-guide
+  - title: Agent Skill
+    details: "Download the skill file from Github Releases: use-perspective-api.md"
+    icon: 🤖
+    link: https://github.com/Leawind/Perspective-API/releases
+  - title: Developer (Human) Guide
+    details: Learn more details about Perspective API usage and internals
+    icon: 🛠️
+    link: ./developer-guide
 ---
 
 <style>
