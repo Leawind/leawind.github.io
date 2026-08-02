@@ -19,7 +19,7 @@ features:
     icon: 🕹️
     link: ./player-guide
   - title: Agent Skill
-    details: "Download the skill file from Github Releases: use-perspective-api.md"
+    details: 'Download the skill file from Github Releases: use-perspective-api.md'
     icon: 🤖
     link: https://github.com/Leawind/Perspective-API/releases
   - title: Developer (Human) Guide
