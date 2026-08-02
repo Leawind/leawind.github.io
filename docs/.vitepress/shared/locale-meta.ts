@@ -37,10 +37,7 @@ const locales: Record<string, LocaleEntry> = {
           { text: '视角 API', link: '/zh_cn/Perspective-API' },
           { text: '视角 API 演示', link: '/zh_cn/Perspective-API/example' },
           { text: 'SystemStorageLib', link: '/zh_cn/SystemStorageLib' },
-          {
-            text: 'Leawind的第三人称',
-            link: 'https://leawind.github.io/Third-Person/zh_cn/?autolang',
-          },
+          { text: 'Leawind的第三人称', link: '/zh_cn/Third-Person' },
         ],
       },
       {
@@ -97,10 +94,7 @@ const locales: Record<string, LocaleEntry> = {
             link: '/en_us/Perspective-API/example',
           },
           { text: 'SystemStorageLib', link: '/en_us/SystemStorageLib' },
-          {
-            text: "Leawind's Third-Person",
-            link: 'https://leawind.github.io/Third-Person/en_us/?autolang',
-          },
+          { text: "Leawind's Third-Person", link: '/en_us/Third-Person' },
         ],
       },
       {

@@ -19,7 +19,7 @@ features:
       src: /icons/perspective-api.svg
   - title: Leawind's Third Person
     details: A third-person mod for Minecraft
-    link: https://modrinth.com/mod/leawind-third-person
+    link: ./Third-Person
     icon:
       src: /icons/leawind_third_person.png
   - title: System Storage Lib

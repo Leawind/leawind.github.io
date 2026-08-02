@@ -19,7 +19,7 @@ features:
       src: /icons/perspective-api.svg
   - title: Leawind 的第三人称
     details: 一个 Minecraft 第三人称模组
-    link: https://modrinth.com/mod/leawind-third-person
+    link: ./Third-Person
     icon:
       src: /icons/leawind_third_person.png
   - title: System Storage Lib
