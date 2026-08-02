@@ -81,14 +81,14 @@ function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', '${GOOGLE_ANALYTICS_ID}');`,
     ],
-    ['link', { rel: 'icon', href: '/icons/LTP_mid.png' }],
+    ['link', { rel: 'icon', href: '/icons/leawind.128x.png' }],
   ],
 
   lastUpdated: true,
 
   themeConfig: {
     externalLinkIcon: true,
-    logo: '/icons/LTP_mid.png',
+    logo: '/icons/leawind.128x.png',
     search: {
       provider: 'local',
     },
