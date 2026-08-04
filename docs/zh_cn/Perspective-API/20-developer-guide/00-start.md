@@ -62,6 +62,10 @@ dependencies {
 
 Perspective API 的位置、旋转和投影参数始终通过统一的 `PerspectiveState` 暴露。开发者不需要针对不同 Minecraft 版本选择不同回调，也不应主动调用原版的 FOV 或投影矩阵计算方法。
 
+视角切换的连续状态过渡由 `PerspectiveAPI.getTransition()` 控制。它提供全局过渡时长和缓动
+函数设置；位置、旋转、FOV 与正交视野高度使用同一时间进度，投影模式则是离散切换。该接口
+属于实验性 API。
+
 ## 示例模组
 
 [视角 API 演示](../example/) 实现了多个自定义视角和修饰器，其[源码]可作为开发参考。

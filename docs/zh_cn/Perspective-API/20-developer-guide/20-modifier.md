@@ -42,7 +42,8 @@ public final class CameraShakeModifier implements PerspectiveModifier {
 ```java
 CameraShakeModifier shake = new CameraShakeModifier();
 PerspectiveModifierRegistration registration =
-    PerspectiveAPI.getModifierChain().register(100, shake);
+    PerspectiveAPI.getModifierChain().register(
+        "mymod.camera_shake", 100, shake);
 ```
 
 如果初始化时运行时服务可能尚未就绪，请在 `runWhenReady` 中注册并把句柄保存到模组自己的
@@ -54,8 +55,8 @@ PerspectiveModifierRegistration registration =
 registration.unregister();
 ```
 
-同一个修饰器实例可以注册多次，每次注册都是独立条目，并拥有独立句柄。同优先级的条目按
-注册顺序执行。
+修饰器 ID 是全局唯一的诊断标识符；同一个 ID 不能同时注册两次。不同 ID 的条目按优先级
+从小到大执行，同优先级的条目按注册顺序执行。每个注册条目都有独立句柄。
 
 ## 可用性与容错
 

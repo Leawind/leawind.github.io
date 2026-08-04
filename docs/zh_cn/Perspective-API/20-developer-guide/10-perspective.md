@@ -25,8 +25,6 @@ public final class SideViewPerspective implements PerspectiveBehavior {
   public void applyCameraState(
       PerspectiveState.Mutable state, PerspectiveContext context) {
     Entity entity = context.cameraEntity();
-    if (entity == null) return;
-
     Vec3 eye = entity.getEyePosition(context.partialTicks());
     state.position().set(eye.x + 3.0, eye.y, eye.z);
     state.setFovDeg(70.0f);
@@ -51,6 +49,15 @@ public final class SideViewPerspective implements PerspectiveBehavior {
 | `switchable`     | 是否允许玩家通过视角切换器选中；关闭后仍可由覆盖链激活 |
 | `priority`       | 数值越小，在切换顺序中越靠前；也用于解决重复 ID        |
 | `traits`         | 视角声明的稳定语义特征，例如 `first_person`            |
+
+`baseType` 只与原版 `CameraType` 一一对应，用于控制原版依赖相机类型的行为。它不是对视角
+语义的细分，接入模组不应根据某个 Minecraft 版本中的手部渲染、玩家实体渲染或望远镜界面等
+行为推断其含义。
+
+常用 Trait 包括 `first_person`、`third_person` 和 `controllable`。其中 `controllable` 只表示
+该视角的可见朝向会持续、可预测地响应标准鼠标视角输入，并不表示当前一定正在捕获鼠标，
+也不授予视角对输入的独占控制权。需要通过鼠标输入闭环控制画面目标的模组可以据此判断
+视角是否声明了这一稳定能力。
 
 如需指定启动时的默认视角，可在实现类上再添加 `@PerspectiveInfo.Default`。
 存在多个默认视角时，`priority` 较大的定义优先。
@@ -110,6 +117,20 @@ public void applyCameraState(
 
 `state` 和 `ctx` 都只在本次回调期间有效。不要保存它们，也不要保存
 `state.position()` 或 `state.rotation()` 返回对象的引用；若需要跨帧使用，请复制数值。
+
+如果需要读取上一次完整相机管线写入的最终状态，可调用：
+
+```java
+PerspectiveState previous = PerspectiveAPI.getPreviousCameraState();
+if (previous != null) {
+  cachedPosition.set(previous.position());
+  cachedRotation.set(previous.rotation());
+  cachedFovDeg = previous.getFovDeg();
+}
+```
+
+该快照包含当前视角、全部修饰器和过渡插值后的结果，可以跨回调保存。第一次完成相机更新
+之前、或 Perspective API 被禁用时，返回值为 `null`。
 
 ## 生命周期
 

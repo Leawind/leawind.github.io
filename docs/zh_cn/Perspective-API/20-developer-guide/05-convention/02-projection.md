@@ -4,40 +4,48 @@ title: 投影模式
 
 # 投影模式
 
-`PerspectiveState` 可分别控制相机变换和世界的投影方式。默认使用与原版一致的透视投影（`ProjectionMode.PERSPECTIVE`）；实验性的正交投影（`ProjectionMode.ORTHOGRAPHIC`）则会移除近大远小的透视效果，适合俯视地图、等距视角和二维化的游戏画面。
+本页规定投影相关数值的单位、合法范围和作用范围。相机的位置与旋转属于独立的状态，投影
+参数不会改变它们的坐标含义。
 
-## 使用正交投影
+## 透视视场角
 
-在 `applyCameraState` 或 `PerspectiveModifier.apply` 中设置投影模式和正交视图高度：
+透视视场角以角度为单位。合法值必须满足：
 
-```java
-@Override
-public void applyCameraState(
-    PerspectiveState.Mutable state, PerspectiveContext context) {
-  state.setProjectionMode(ProjectionMode.ORTHOGRAPHIC);
-  state.setOrthographicHeight(24.0f);
-}
-```
+$$
+0 < \mathrm{FOV} < 180
+$$
 
-`orthographicHeight` 是可见区域在世界坐标中的垂直跨度，必须为有限的正数。水平方向跨度由窗口宽高比决定：
+上下边界均不包含在合法范围内。视场角还必须是有限数，不能是非数值或正、负无穷。
+视场角只对透视投影有意义；处于正交投影时，视场角数值仍可保存在相机状态中，但不参与
+世界画面的投影计算。
 
-```text
-horizontal span = orthographicHeight × viewport aspect ratio
-```
+## 正交视野高度
 
-例如，高度为 `24`、窗口宽高比为 `16:9` 时，可见区域约为 `42.67 × 24` 个方块。该值越小，画面中的物体越大；它相当于正交投影中的缩放级别，而不是 FOV。
+正交视野高度以世界坐标单位表示可见区域的垂直跨度。合法值必须满足：
 
-正交视图以相机前方轴为中心，仍使用 `state.position()` 和 `state.rotation()` 决定观察位置与方向。相机碰撞、第三人称基础位置等仍由所选 `baseType` 的原版相机状态提供；如有需要，再在回调中修改状态。
+$$
+\mathrm{height} \geq 0.0001
+$$
 
-## 切回透视投影
+该值也必须是有限数；项目没有规定上限。窗口的水平跨度由垂直跨度和视口宽高比共同决定：
 
-```java
-state.setProjectionMode(ProjectionMode.PERSPECTIVE);
-state.setFovDeg(70.0f);
-```
+$$
+\mathrm{width}=\mathrm{height}\times\frac{\mathrm{viewport\ width}}
+{\mathrm{viewport\ height}}
+$$
 
-FOV 仅在透视投影时生效，正交高度仅在正交投影时生效。两项数值会保留在状态中，因此切换模式时建议同时明确设置当前模式所需的参数。
+正交视野高度越小，单位世界距离在画面中占据的比例越大。它是正交投影的缩放尺度，不是
+角度，也不应与透视视场角互相换算。
+
+正交投影以相机位置为中心，并沿相机朝向观察。相机位置、旋转和正交视野高度分别控制观察
+中心、观察方向和可见范围。
+
+## 无效值
+
+无效的视场角或正交视野高度不会成为最终相机状态。相机状态管线会拒绝该字段，并恢复到
+当前阶段开始前的有效值；因此调用方不能通过非有限值或越界值关闭某个投影参数。
 
 ## 过渡
 
-在视角切换过渡中，位置、旋转、FOV 和正交高度会插值；投影模式会直接切换，不能在透视和正交之间渐变。
+视角切换过渡中，视场角和正交视野高度分别作为独立的连续数值处理；投影模式本身是离散
+选择，在透视投影与正交投影之间直接切换，不能对两种投影做数值插值。

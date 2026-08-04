@@ -41,7 +41,8 @@ public void applyCameraState(
 ```java
 PerspectiveAPI.runWhenReady("mymod.initialize_camera", () -> {
   modifierRegistration =
-      PerspectiveAPI.getModifierChain().register(PRIORITY, modifier);
+      PerspectiveAPI.getModifierChain().register(
+          "mymod.camera_effect", PRIORITY, modifier);
 });
 ```
 
