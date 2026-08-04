@@ -1,53 +1,44 @@
-# Repository Guidelines
+# 仓库指南
 
-## Project Structure & Module Organization
+## 项目结构与模块组织
 
-This repository builds Leawind's documentation site with VitePress and Deno.
-Content lives in `docs/`: language trees use `docs/en_us/` and `docs/zh_cn/`,
-while `docs/public/` contains static images, GIFs, and icons. VitePress
-configuration, custom theme components, sidebar generation, and tests live in
-`docs/.vitepress/`. Keep reusable navigation and metadata logic in its
-`server/` and `shared/` directories rather than duplicating it in pages.
+本仓库使用 VitePress 和 Deno 构建文档网站。
+文档内容位于 `docs/`，其中 `docs/en_us/` 和 `docs/zh_cn/` 分别保存英文与中文文档，`docs/public/` 保存图片、GIF 和图标等静态资源。
+VitePress 配置、自定义主题组件、侧边栏生成逻辑和测试位于 `docs/.vitepress/`；
+可复用的导航与元数据逻辑应放在其中的 `server/` 或 `shared/` 目录，避免复制到具体页面中。
 
-Numeric filename or directory prefixes control sidebar order. They are omitted
-from generated URLs: `20-developer-guide/00-start.md` routes below
-`/20-developer-guide/start`.
+## 侧边栏生成规则
 
-## Build, Test, and Development Commands
+`buildSidebars` 扫描 `docs/<语言>/` 的直接子目录，为每个子目录生成一份独立的侧边栏配置。`buildSidebar` 递归读取其中的子目录和 `.md` 文件；板块根目录中的普通页面保留在根分组内，根目录的直接子目录则被提升为与根分组并列的顶层分组，更深层的目录继续保持嵌套。
 
-- `deno task docs:dev` starts the local VitePress development server.
-- `deno task docs:build` produces the production site in `docs/.vitepress/dist`.
-- `deno task docs:preview` serves the built output for a local check.
-- `deno task check` runs formatting, linting, type checks, unit tests, and a
-  production build. Run it before proposing a completed documentation change.
-- `deno task check:test` runs the VitePress tests with the required read/write
-  permissions.
+- `index.md` 不会作为子项出现。它的 frontmatter `title` 用作目录标题；没有该标题时，使用去掉数字前缀的目录名。普通页面同样优先使用 frontmatter `title`，否则使用去掉数字前缀和扩展名的文件名。
+- 板块根分组始终链接到该目录首页并默认展开。其他目录只有在其 `index.md` 的正文非空时才带有目录首页链接，并默认折叠。
+- 同一目录内的子目录和 Markdown 页面先按名称开头的“数字 + `-`”前缀数值升序排列；前缀数值相同时按原名称排序，没有前缀的项目排在最后。根目录排序后还会执行上述顶层分组提升。
+- 公开链接会移除每个路径片段的数字前缀以及文件扩展名，例如 `docs/zh_cn/Perspective-API/20-developer-guide/00-start.md` 对应 `/zh_cn/Perspective-API/developer-guide/start`。重写规则仅扫描 `.md` 文件。
+- 同一目录内，两个非 `index.md` 的 Markdown 文件若在去掉数字前缀后同名，构建会因公开路径冲突而失败；侧边栏读取的 frontmatter 无法解析时也会终止构建。其他文件不会出现在侧边栏中。
 
-## Coding Style & Naming Conventions
+## 构建、测试与开发命令
 
-Use Deno formatting as the source of truth: two spaces, LF line endings,
-single quotes, no semicolons, and an 80-column target for TypeScript. Run
-`deno fmt` on edited supported files when needed. Write Markdown headings and
-paths consistently with nearby pages. Use lowercase, hyphenated page names;
-prefix ordered pages with two digits such as `10-player-guide.md`. Maintain
-parallel English and Chinese documentation structure when the topic is shared.
+- `deno task docs:dev`：启动本地 VitePress 开发服务器。
+- `deno task docs:build`：将生产站点构建到 `docs/.vitepress/dist`。
+- `deno task docs:preview`：启动构建结果的本地预览。
+- `deno task check`：依次执行格式检查、Lint、类型检查、单元测试和生产构建；提交文档改动前应运行此命令。
+- `deno task check:test`：使用测试所需的读写权限运行 VitePress 测试。
 
-## Testing Guidelines
+## 编码风格与命名约定
 
-Tests are Deno tests, currently concentrated in
-`docs/.vitepress/server/sidebar_test.ts`. Add or update a focused test whenever
-changing sidebar ordering, URL generation, frontmatter handling, or navigation.
-Test names should describe the observable behavior. There is no separate
-coverage threshold; the full `deno task check` is the required validation.
+以 Deno 格式化规则为准：使用两个空格缩进、LF 换行、单引号、不使用分号，TypeScript 行宽目标为 80 列；
+必要时对修改过的受支持文件运行 `deno fmt`。
+Markdown 标题和路径应与相邻页面保持一致。
+页面文件名使用小写和连字符，需排序的页面使用两位数字前缀，例如 `10-player-guide.md`；
+除非用户明确要求，不要求保持英文与中文文档的目录结构同步。
 
-## Commit & Pull Request Guidelines
+## 测试
 
-Recent history follows concise Conventional Commit-style subjects, for example
-`docs: add luau`, `fix: follow sidebar order for next-page links`, and
-`ci: retry and cache Deno dependency installs`. Use an appropriate type such as
-`docs`, `fix`, `test`, `build`, `ci`, or `style`, followed by a specific
-imperative summary. Keep commits scoped to one concern.
+测试使用 Deno，目前主要位于 `docs/.vitepress/server/sidebar_test.ts`。修改侧边栏排序、URL 生成、frontmatter 处理或页面导航时，应添加或更新针对性测试。测试名称应描述可观察的行为；项目没有单独的覆盖率门槛，完整的 `deno task check` 是必要的验证步骤。
 
-Pull requests should explain the user-visible or tooling change, identify
-affected language trees, and list validation performed. Include screenshots or
-preview links for visual/theme changes, and link relevant issues when present.
+## 提交
+
+提交使用简洁的 Conventional Commit 风格主题，例如 `docs: add luau`、`fix: follow sidebar order for next-page links` 和 `ci: retry and cache Deno dependency installs`。
+使用 `docs`、`fix`、`test`、`build`、`ci` 或 `style` 等合适类型，后接明确的祈使句摘要；
+每次提交应只处理一个主题。
