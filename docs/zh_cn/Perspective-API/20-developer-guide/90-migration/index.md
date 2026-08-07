@@ -24,7 +24,7 @@ title: 迁移指南
 
 ```java
 @Override
-public void applyCameraState(
+public void computeCameraState(
     PerspectiveState.Mutable state, PerspectiveContext ctx) {
   state.position().add(offsetX, offsetY, offsetZ);
   state.rotation().set(targetRotation);
@@ -32,7 +32,7 @@ public void applyCameraState(
 }
 ```
 
-将原有的位置、旋转和 FOV 计算集中到 `applyCameraState`。这样同一份相机逻辑可以用于所有受支持的 Minecraft 版本。
+将原有的位置、旋转和 FOV 计算集中到 `computeCameraState`。这样同一份相机逻辑可以用于所有受支持的 Minecraft 版本。
 
 ## 调整初始化代码
 
@@ -61,12 +61,23 @@ cachedRotation.set(state.rotation());
 cachedFovDeg = state.getFovDeg();
 ```
 
+## 从早期测试版 API 迁移
+
+早期测试版的 `PerspectiveBehavior` 和 `PerspectiveSwitcherBehavior` 提供
+`clientTickWhenActive` 回调，在视角激活期间每个客户端游戏刻被调用；可用性结果也会按客户端
+刻缓存。这两个机制已被移除：
+
+- 需要每刻更新状态的实现，应在 `init` 或 `onActivate` 中订阅自己的加载器客户端刻事件，
+  将状态保存为缓存字段；
+- 在 `isAvailable()`、`getSelectedPerspectiveId()` 或覆盖链供应商中返回该缓存值；
+- 不要依赖 API 在特定时间点或固定次数调用这些回调。
+
 ## 迁移检查清单
 
 - 删除对原版相机方法的 Mixin 和主动 FOV 计算
 - 为 SPI 视角实现添加 `@PerspectiveInfo.Declaration` 和 SPI 注册
 - 对运行时创建的视角使用 `PerspectiveRegistry.register`，并保存注册句柄
-- 将完整相机状态集中到 `applyCameraState`
+- 将完整相机状态集中到 `computeCameraState`
 - 将通用叠加效果拆分为修饰器
 - 将临时强制切换改为覆盖链
 - 使用 `runWhenReady` 访问运行时服务

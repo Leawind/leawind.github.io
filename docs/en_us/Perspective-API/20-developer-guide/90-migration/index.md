@@ -24,7 +24,7 @@ The current API uses one callback for the complete camera state:
 
 ```java
 @Override
-public void applyCameraState(
+public void computeCameraState(
     PerspectiveState.Mutable state, PerspectiveContext ctx) {
   state.position().add(offsetX, offsetY, offsetZ);
   state.rotation().set(targetRotation);
@@ -32,7 +32,7 @@ public void applyCameraState(
 }
 ```
 
-Consolidate existing position, rotation, and FOV calculations in `applyCameraState`. This allows the same camera logic to serve every supported Minecraft version.
+Consolidate existing position, rotation, and FOV calculations in `computeCameraState`. This allows the same camera logic to serve every supported Minecraft version.
 
 ## Updating initialization code
 
@@ -40,11 +40,13 @@ Do not assume Perspective API runtime services are available when your mod entry
 
 ```java
 PerspectiveAPI.runWhenReady("mymod.initialize_camera", () -> {
-  PerspectiveAPI.getModifierChain().register(KEY, PRIORITY, modifier);
+  modifierRegistration =
+      PerspectiveAPI.getModifierChain().register(
+          "mymod.camera_effect", PRIORITY, modifier);
 });
 ```
 
-Fixed perspectives are normally still discovered through Java SPI. For runtime data such as player presets, call `PerspectiveRegistry.register(info, behavior)` here and retain the returned `PerspectiveRegistration`, so `updateInfo` or `unregister` can be called when the preset is edited or deleted.
+Fixed perspectives are normally still discovered through Java SPI. For runtime data such as player presets, call `PerspectiveRegistry.register(info, behavior)` here and retain the returned `PerspectiveRegistration`, so `unregister` can be called when the preset is deleted. Perspective metadata cannot be modified after registration; when a preset is edited, remove the existing registration and register a new `PerspectiveInfo`.
 
 ## Checking temporary-object lifetimes
 
@@ -56,12 +58,20 @@ cachedRotation.set(state.rotation());
 cachedFovDeg = state.getFovDeg();
 ```
 
+## Migrating from early beta API
+
+Early beta versions of `PerspectiveBehavior` and `PerspectiveSwitcherBehavior` provided a `clientTickWhenActive` callback that ran every client game tick while the perspective was active, and availability results were cached per client tick. Both mechanisms have been removed:
+
+- Implementations that need per-tick state updates should subscribe to their own loader's client-tick event in `init` or `onActivate` and store the state in a cached field;
+- Return that cached value from `isAvailable()`, `getSelectedPerspectiveId()`, or override-chain providers;
+- Do not depend on the API calling these callbacks at specific times or a fixed number of times.
+
 ## Migration checklist
 
 - Remove vanilla camera method Mixins and manual FOV calculations.
 - Add `@PerspectiveInfo.Declaration` and SPI registration to fixed perspective implementations.
 - Use `PerspectiveRegistry.register` for runtime-created perspectives and retain their registration handles.
-- Consolidate complete camera state in `applyCameraState`.
+- Consolidate complete camera state in `computeCameraState`.
 - Split reusable overlay effects into modifiers.
 - Convert temporary forced switches to the override chain.
 - Use `runWhenReady` to access runtime services.

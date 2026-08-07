@@ -4,39 +4,41 @@ title: Projection Modes
 
 # Projection Modes
 
-`PerspectiveState` controls both the camera transform and the projection used to render the world. The default is vanilla-compatible perspective projection (`ProjectionMode.PERSPECTIVE`). Experimental orthographic projection (`ProjectionMode.ORTHOGRAPHIC`) removes perspective foreshortening and is useful for top-down maps, isometric views, and 2D-style scenes.
+This page defines the units, valid ranges, and scope of projection-related values. Camera position and rotation are separate state; projection parameters do not change their coordinate meanings.
 
-## Using orthographic projection
+## Perspective field of view
 
-Set the projection mode and orthographic view height in `applyCameraState` or `PerspectiveModifier.apply`:
+Perspective field of view is measured in degrees. Valid values must satisfy:
 
-```java
-@Override
-public void applyCameraState(PerspectiveState.Mutable state, PerspectiveContext context) {
-  state.setProjectionMode(ProjectionMode.ORTHOGRAPHIC);
-  state.setOrthographicHeight(24.0f);
-}
-```
+$$
+0 < \mathrm{FOV} < 180
+$$
 
-`orthographicHeight` is the vertical span visible in world coordinates and must be a finite positive number. The horizontal span is determined by the viewport aspect ratio:
+Both bounds are exclusive. The field of view must also be finite, not NaN or positive or negative infinity. Field of view is meaningful only for perspective projection; when orthographic projection is active, the value can remain in the camera state but does not participate in world-projection calculations.
 
-```text
-horizontal span = orthographicHeight × viewport aspect ratio
-```
+## Orthographic view height
 
-For example, with a height of `24` and a `16:9` viewport, the visible area is about `42.67 × 24` blocks. The smaller the value, the larger objects appear. It acts as the orthographic zoom level, not as FOV.
+Orthographic view height is the vertical span of the visible area, measured in world-coordinate units. Valid values must satisfy:
 
-The orthographic view is centered on the camera's forward axis; `state.position()` and `state.rotation()` still determine its position and direction. Camera collision and the base third-person position still come from the vanilla camera state for the selected `baseType`; modify the state further in the callback if needed.
+$$
+\mathrm{height} \geq 0.0001
+$$
 
-## Returning to perspective projection
+The value must also be finite; there is no specified upper bound. The viewport's horizontal span is determined by the vertical span and the viewport aspect ratio:
 
-```java
-state.setProjectionMode(ProjectionMode.PERSPECTIVE);
-state.setFovDeg(70.0f);
-```
+$$
+\mathrm{width}=\mathrm{height}\times\frac{\mathrm{viewport\ width}}
+{\mathrm{viewport\ height}}
+$$
 
-FOV applies only to perspective projection; orthographic height applies only to orthographic projection. Since both values remain in the state, set the parameters needed by the active mode explicitly when switching modes.
+The smaller the orthographic view height, the more screen space a unit of world distance occupies. It is the scale of orthographic projection, not an angle, and must not be converted to or from perspective field of view.
+
+Orthographic projection is centered on the camera position and looks along the camera direction. Camera position, rotation, and orthographic view height respectively control the view center, view direction, and visible range.
+
+## Invalid values
+
+An invalid field of view or orthographic view height cannot become the final camera state. The camera-state pipeline rejects that field and restores the valid value from before the current stage began; callers therefore cannot disable a projection parameter with a non-finite or out-of-range value.
 
 ## Transitions
 
-During transitions, position, rotation, FOV, and orthographic height are interpolated. The projection mode switches directly and cannot be smoothly interpolated.
+During perspective-switch transitions, field of view and orthographic view height are treated as separate continuous values. Projection mode itself is a discrete selection: switching between perspective and orthographic projection happens directly, and the two projections cannot be numerically interpolated.

@@ -22,7 +22,7 @@ public final class SideViewPerspective implements PerspectiveBehavior {
   public static final String ID = "mymod.side_view";
 
   @Override
-  public void applyCameraState(
+  public void computeCameraState(
       PerspectiveState.Mutable state, PerspectiveContext context) {
     Entity entity = context.cameraEntity();
     Vec3 eye = entity.getEyePosition(context.partialTicks());
@@ -101,11 +101,11 @@ Trait 只能由视角自身通过 `@PerspectiveInfo.Declaration#traits` 或
 
 ## 修改相机状态
 
-`applyCameraState` 每个渲染帧调用一次。传入的 `state` 初始包含原版相机状态，可以就地修改：
+`computeCameraState` 每个渲染帧调用一次。传入的 `state` 初始包含原版相机状态，可以就地修改：
 
 ```java
 @Override
-public void applyCameraState(
+public void computeCameraState(
     PerspectiveState.Mutable state, PerspectiveContext ctx) {
   state.position().add(0.0, 1.0, 0.0);
   state.rotation().rotateLocalY((float) Math.toRadians(15.0));
@@ -134,20 +134,23 @@ if (previous != null) {
 
 ## 生命周期
 
-| 回调                    | 调用时机                                                     |
-| ----------------------- | ------------------------------------------------------------ |
-| `init`                  | 视角完成注册和初始化时调用一次                               |
-| `onActivate`            | 视角成为当前视角时调用                                       |
-| `onDeactivate`          | 视角不再是当前视角时调用                                     |
-| `clientTickWhenActive`  | 视角激活期间，每个客户端游戏刻调用                           |
-| `applyCameraState`      | 修改本帧的目标相机状态                                       |
-| `afterApplyCameraState` | 最终状态写入相机后调用，适合依赖实际渲染视点的射线检测等操作 |
+| 回调                       | 调用时机                                                     |
+| -------------------------- | ------------------------------------------------------------ |
+| `init`                     | 视角完成注册和初始化时调用一次                               |
+| `onActivate`               | 视角成为当前视角时调用                                       |
+| `onDeactivate`             | 视角不再是当前视角时调用                                     |
+| `computeCameraState`       | 修改本帧的目标相机状态                                       |
+| `afterCameraStateResolved` | 最终状态写入相机后调用，适合依赖实际渲染视点的射线检测等操作 |
 
-通常在 `clientTickWhenActive` 更新游戏逻辑，在 `applyCameraState` 中读取逐帧输入并计算相机状态；如需依赖实际写入相机的最终状态，可使用 `afterApplyCameraState`。
+需要按客户端刻更新游戏逻辑时，应订阅自己的加载器客户端刻事件并保存状态，再在
+`isAvailable()` 等回调中返回缓存值；在 `computeCameraState` 中读取逐帧输入并计算相机状态。
+如需依赖实际写入相机的最终状态，可使用 `afterCameraStateResolved`。
 
 ## 可用性与过渡
 
-`isAvailable()` 返回 `false` 时，切换器和覆盖链会跳过该视角。该结果在一个有效客户端游戏刻内最多计算一次，因此实现不应依赖调用次数或副作用。
+`isAvailable()` 返回 `false` 时，切换器和覆盖链会跳过该视角。API 在每次需要可用性时调用
+该方法，包括主相机渲染解析和切换器交互，不会缓存结果或按客户端刻调度调用。实现不应依赖
+调用次数或副作用；若状态在客户端刻中更新，应订阅自己的加载器事件并在此返回便宜的缓存值。
 
 `allowTransitionIn()` 和 `allowTransitionOut()` 分别控制进入和离开该视角时是否允许平滑过渡。只要任一侧不允许，切换时就不会使用平滑过渡。
 

@@ -9,26 +9,22 @@ title: Override Chain
 ## Registering an override
 
 ```java
-PerspectiveAPI.runWhenReady(
-    "mymod.cutscene_override",
-    () -> PerspectiveAPI.getOverrideChain().register(
-        "mymod.cutscene",
+PerspectiveOverrideRegistration registration =
+    PerspectiveAPI.getOverrideChain().register(
         1000,
-        () -> isCutsceneActive ? "mymod.cutscene_camera" : null));
+        () -> isCutsceneActive ? "mymod.cutscene_camera" : null);
 ```
 
 When a provider returns a perspective ID, it attempts to override the current perspective; returning `null` skips that entry. Entries are evaluated in descending priority order. The first result that names a registered and currently available perspective takes effect; invalid or unavailable candidates do not prevent subsequent entries from being evaluated.
 
-Each provider is evaluated at most once per client game tick while Perspective API is enabled. Providers should complete quickly, not modify game state, and not depend on their exact invocation count.
+Each provider that is accessed is evaluated at most once per main-camera render update. Providers should complete quickly, not modify game state, and not depend on their exact invocation count. If the selection state changes during client ticks, return a cached value here.
 
-## Removing and querying
+Registration returns a handle that owns the override. If runtime services might not be ready during initialization, register inside `runWhenReady` and retain the handle in your mod's own state.
+
+## Removing
 
 ```java
-PerspectiveOverrideChain overrides = PerspectiveAPI.getOverrideChain();
-
-if (overrides.contains("mymod.cutscene")) {
-  overrides.unregister("mymod.cutscene");
-}
+registration.unregister();
 ```
 
-Registering the same `key` again replaces the old entry. Equal priorities are evaluated in insertion order; replacing an entry counts as a new insertion.
+Each registration is an independent entry with its own handle. Equal priorities are evaluated in registration order.

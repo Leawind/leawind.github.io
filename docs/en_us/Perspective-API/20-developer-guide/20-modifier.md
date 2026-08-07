@@ -37,27 +37,27 @@ public final class CameraShakeModifier implements PerspectiveModifier {
 
 ## Registering and removing
 
-Modifiers do not have IDs themselves. The caller supplies a unique `key` when registering one:
+Registration returns a handle that owns the entry:
 
 ```java
 CameraShakeModifier shake = new CameraShakeModifier();
-
-PerspectiveAPI.runWhenReady(
-    "mymod.camera_shake",
-    () -> PerspectiveAPI.getModifierChain().register(
-        "mymod.camera_shake", 100, shake));
+PerspectiveModifierRegistration registration =
+    PerspectiveAPI.getModifierChain().register(
+        "mymod.camera_shake", 100, shake);
 ```
 
-Remove it when it is no longer needed:
+If runtime services might not be ready during initialization, register inside `runWhenReady` and retain the handle in your mod's own state.
+
+Remove it through the handle when it is no longer needed:
 
 ```java
-PerspectiveAPI.getModifierChain().unregister("mymod.camera_shake");
+registration.unregister();
 ```
 
-Registering the same `key` again replaces the old entry and establishes a new same-priority insertion order.
+Modifier IDs are globally unique diagnostic identifiers: an ID cannot be registered twice at the same time. Entries with different IDs run in ascending priority order, and equal priorities run in registration order. Every registered entry has its own handle.
 
 ## Availability and fault tolerance
 
-When `isAvailable()` returns `false`, the modifier is skipped for the current frame but remains in the chain.
+When `isAvailable()` returns `false`, the modifier is skipped for the current frame but remains in the chain. The API does not schedule client ticks for modifiers; implementations that need per-tick state updates should subscribe to their own loader's event and return cached values here.
 
 Each modifier runs in an isolated protection boundary. If a modifier throws an exception or writes an invalid position, rotation, or FOV, its changes are rolled back and logged, and later modifiers still run. Do not rely on this for normal control flow; proactively avoid non-finite values and invalid quaternions in `apply`.

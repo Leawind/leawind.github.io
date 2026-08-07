@@ -62,6 +62,12 @@ It automatically generates Java SPI service files for `PerspectiveBehavior`, eli
 
 Perspective API consistently exposes position, rotation, and projection parameters via a unified `PerspectiveState`. Developers do not need to choose different callbacks for different Minecraft versions, nor should they call vanilla FOV or projection matrix calculation methods directly.
 
+Continuous state transitions between perspectives are controlled by
+`PerspectiveAPI.getTransition()`. It provides global transition-duration and
+easing-function settings; position, rotation, FOV, and orthographic view height
+share one time progression, while projection mode switches discretely. This is
+an experimental API.
+
 ## Example Mod
 
 The [Perspective API Demo](../example/) implements multiple custom perspectives and modifiers. Its [source code] can serve as a development reference.

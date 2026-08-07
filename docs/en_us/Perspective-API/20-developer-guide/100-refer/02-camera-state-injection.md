@@ -5,7 +5,7 @@ description: Camera state injection points
 
 # Camera State Injection Points
 
-Perspective API supports multiple Minecraft versions. Different versions calculate camera position, rotation, and field of view (FOV) at different times, so the mod selects different injection points for each version in the `bridge` layer, then passes them to the `logic` layer via a unified event.
+Perspective API supports multiple Minecraft versions. Different versions calculate camera position, rotation, field of view (FOV), and projection matrices at different times, so the mod selects different injection points for each version in the `bridge` layer, then passes them to the `logic` layer via a unified event.
 
 These version differences are not exposed to the public API. `PerspectiveBehavior` and `PerspectiveModifier` consistently read and modify camera position, rotation, and projection parameters through the complete `PerspectiveState` across all versions.
 
@@ -18,7 +18,6 @@ Vanilla camera state
   -> Current perspective
   -> Modifier chain
   -> Perspective transition
-  -> Validity check
   -> Write back to the vanilla camera and world projection
 ```
 
