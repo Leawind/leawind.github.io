@@ -9,8 +9,6 @@ title: 开发者指南
 > <img src="https://img.shields.io/github/v/tag/Leawind/Perspective-API?label=Latest&color=818181" style="display:inline">
 >
 > 在发布正式版之前，API 可能随时发生破坏性变更。
->
-> 发布正式版后，带有 `@ApiStatus.Experimental` 注解的接口仍然随时可能发生破坏性变更而不递增主版本号。
 
 ## 凭啥让大伙儿用这个？
 

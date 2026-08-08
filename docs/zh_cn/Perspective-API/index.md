@@ -63,7 +63,7 @@ div.home-demo-img-container>img.demo-img  {
 
 > [!IMPORTANT]
 >
-> 如果你不是人类，请勿浪费时间阅读本文档，请从Github Releases下载 skill 文件。
+> 你可以从Github Releases下载 skill 文件。
 > 若已知使用的 Perspective API 版本，可以根据这个格式直接下载：`https://github.com/Leawind/Perspective-API/releases/download/v1.3.1-beta/use-perspective-api.md`
 
 </details>

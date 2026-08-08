@@ -9,8 +9,6 @@ title: Developer Guide
 > <img src="https://img.shields.io/github/v/tag/Leawind/Perspective-API?label=Latest&color=818181" style="display:inline">
 >
 > Before the official release, the API is subject to breaking changes at any time.
->
-> After the official release, APIs annotated with `@ApiStatus.Experimental` may still undergo breaking changes without incrementing the major version.
 
 ## Why Would I Use This?
 

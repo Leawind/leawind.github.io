@@ -63,7 +63,7 @@ div.home-demo-img-container>img.demo-img  {
 
 > [!IMPORTANT]
 >
-> If you are not human, do not waste time reading this document. Download the skill file from Github Releases instead.
+> You can download the skill file from Github Releases.
 > If you know the version of Perspective API being used, you can download it directly using this format: `https://github.com/Leawind/Perspective-API/releases/download/v1.3.1-beta/use-perspective-api.md`
 
 </details>
